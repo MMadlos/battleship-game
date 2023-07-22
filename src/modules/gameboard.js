@@ -1,16 +1,6 @@
 import { Ship } from "./ship"
 
 export function Gameboard(player) {
-	// Ship names -> size
-	/* 
-    - Carrier: 5
-    - Battleship: 4
-    - Destroyer: 3
-    - Submarine: 3
-    - Patrol Boat: 2
-
-    */
-
 	let playerName = player
 	let gameboard = setGameboard()
 	const availableShips = {
@@ -36,17 +26,16 @@ export function Gameboard(player) {
 
 		const position = ship.getPosition()
 		if (position === "horizontal") {
-			for (let i = coordY; i <= coordX + shipLength; i++) {
+			for (let i = coordY; i < coordY + shipLength; i++) {
 				gameboard[coordX][i] = shipType
 			}
 		}
 
 		if (position === "vertical") {
-			for (let i = coordX; i <= coordY + shipLength; i++) {
+			for (let i = coordX; i < coordX + shipLength; i++) {
 				gameboard[i][coordY] = shipType
 			}
 		}
-
 		availableShips[shipType] = false
 	}
 
@@ -60,8 +49,35 @@ export function Gameboard(player) {
 	}
 
 	const getShipCoordinates = (shipType) => {
-		// Buscar en gameboard[i][j] si existe el tipo de barco
-		// Buscar la posición
+		const columnIndexes = []
+		const rowIndexes = []
+		gameboard.forEach((row, index) => {
+			// Para cada fila [...], tengo que buscar si aparece shipType y guardar su índice (segundo num).
+			let shipFound = false
+			for (const [index, element] of row.entries()) {
+				if (element === shipType) {
+					if (!columnIndexes.includes(index)) columnIndexes.push(index)
+					shipFound = true
+				}
+			}
+
+			if (shipFound === true) rowIndexes.push(index)
+		})
+
+		const shipNotFound = columnIndexes.length === 0 && rowIndexes.length === 0
+		if (shipNotFound) return "Not placed in gameboard"
+
+		const coordinates = []
+		const shipVertical = columnIndexes.length > 1
+		const shipHorizontal = rowIndexes.length > 1
+
+		if (shipVertical) {
+			columnIndexes.forEach((columnIndex) => coordinates.push([rowIndexes[0], columnIndex]))
+		}
+		if (shipHorizontal) {
+			rowIndexes.forEach((rowIndex) => coordinates.push([rowIndex, columnIndexes[0]]))
+		}
+		return coordinates
 	}
 
 	return { getPlayer, getGameboard, setShip, getShipCoordinates, getAvailableShips }
@@ -80,19 +96,3 @@ function setGameboard() {
 
 	return rows
 }
-
-/*
-gameboard = [
-    [0] -> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    [1] -> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    [2] -> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    [3] -> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    [4] -> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    [5] -> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    [6] -> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    [7] -> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    [8] -> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    [9] -> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-]
-
-*/

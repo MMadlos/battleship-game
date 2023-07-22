@@ -24,6 +24,8 @@ describe("It returns the ship name when placing it at the begining of the gamebo
 
 		expect(gameBoard[0][0]).toBe("PatrolBoat")
 		expect(gameBoard[0][1]).toBe("PatrolBoat")
+		expect(gameBoard[0][2]).not.toBe("PatrolBoat")
+		expect(gameBoard[0][3]).not.toBe("PatrolBoat")
 	})
 
 	test("in vertical position, it should return PatrolBoat when checking coordinates (0, 0) and (1, 0)", () => {
@@ -34,6 +36,8 @@ describe("It returns the ship name when placing it at the begining of the gamebo
 
 		expect(gameBoard[1][0]).toBe("PatrolBoat")
 		expect(gameBoard[2][0]).toBe("PatrolBoat")
+		expect(gameBoard[3][0]).not.toBe("PatrolBoat")
+		expect(gameBoard[4][0]).not.toBe("PatrolBoat")
 	})
 })
 
@@ -43,8 +47,10 @@ describe("It returns the ship name when placing ships in the middle of the gameb
 		playerOne.setShip("PatrolBoat", [3, 3], "vertical")
 		let gameBoard = playerOne.getGameboard()
 
+		expect(gameBoard[2][3]).not.toBe("PatrolBoat")
 		expect(gameBoard[3][3]).toBe("PatrolBoat")
 		expect(gameBoard[4][3]).toBe("PatrolBoat")
+		expect(gameBoard[5][3]).not.toBe("PatrolBoat")
 	})
 
 	test("in horizontal position, it returns 'PatrolBoat' in coordinates  [7, 6] and [7, 8]", () => {
@@ -53,7 +59,7 @@ describe("It returns the ship name when placing ships in the middle of the gameb
 		let gameBoard = playerOne.getGameboard()
 
 		expect(gameBoard[7][6]).toBe("PatrolBoat")
-		expect(gameBoard[7][8]).toBe("PatrolBoat")
+		expect(gameBoard[7][7]).toBe("PatrolBoat")
 	})
 })
 
@@ -99,5 +105,63 @@ describe("setShip() should only be able to set once each type of ship", () => {
 	test("if a ship has been placed already, it should return 'It's already placed'", () => {
 		secondPlayer.setShip("PatrolBoat", [0, 0], "horizontal")
 		expect(secondPlayer.setShip("PatrolBoat", [0, 0], "horizontal")).toBe("It's already placed in the gameboard")
+	})
+
+	test("check if a certain type of ship is available or not", () => {
+		secondPlayer.setShip("PatrolBoat", [0, 0], "horizontal")
+		secondPlayer.setShip("Carrier", [2, 1], "horizontal")
+
+		const availableShips = secondPlayer.getAvailableShips()
+
+		expect(availableShips).toEqual(["Battleship", "Destroyer", "Submarine"])
+		expect(availableShips.includes("PatrolBoat")).toBe(false)
+		expect(availableShips.includes("Carrier")).toBe(false)
+		expect(availableShips.includes("Submarine")).toBe(true)
+		expect(availableShips.includes("Battleship")).toBe(true)
+	})
+})
+
+describe("Get ship coordinates if its been placed and return 'Not placed in gameboard'", () => {
+	test("if we get the coordinates of 'PatrolBoat', it will return [0, 0]", () => {
+		const secondPlayer = Gameboard("Player 2")
+		secondPlayer.setShip("PatrolBoat", [0, 0], "horizontal")
+		expect(secondPlayer.getShipCoordinates("PatrolBoat")).toEqual([
+			[0, 0],
+			[0, 1],
+		])
+	})
+
+	test("in the middle of the gameboard", () => {
+		const secondPlayer = Gameboard("Player 2")
+		secondPlayer.setShip("PatrolBoat", [5, 3], "horizontal")
+		expect(secondPlayer.getShipCoordinates("PatrolBoat")).toEqual([
+			[5, 3],
+			[5, 4],
+		])
+	})
+
+	test("when ship is vertical", () => {
+		const secondPlayer = Gameboard("Player 2")
+		secondPlayer.setShip("PatrolBoat", [5, 3], "vertical")
+		expect(secondPlayer.getShipCoordinates("PatrolBoat")).toEqual([
+			[5, 3],
+			[6, 3],
+		])
+	})
+
+	test("if we get the coordinates of 'Submarine', it will return [5, 5]", () => {
+		const secondPlayer = Gameboard("Player 2")
+		secondPlayer.setShip("Submarine", [5, 5], "vertical")
+		expect(secondPlayer.getShipCoordinates("Submarine")).toEqual([
+			[5, 5],
+			[6, 5],
+			[7, 5],
+		])
+	})
+
+	test("if we get the coordinates of 'Carrier', it will return 'Not placed in gameboard'", () => {
+		const secondPlayer = Gameboard("Player 2")
+
+		expect(secondPlayer.getShipCoordinates("Carrier")).toBe("Not placed in gameboard")
 	})
 })
