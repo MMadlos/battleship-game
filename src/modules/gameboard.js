@@ -98,6 +98,7 @@ export function Gameboard(player) {
 			const shipName = gameboard[coordX][coordY]
 			shipsPlaced[shipName].hit()
 
+			gameboard[coordX][coordY] = "Hit"
 			return isThereAShip
 		}
 	}
@@ -125,6 +126,10 @@ function setGameboard() {
 	for (let i = 0; i < rows.length; i++) {
 		const columns = new Array()
 		columns.length = 10
+
+		for (let j = 0; i < 10; j++) {
+			columns[j] = "Empty"
+		}
 
 		rows[i] = columns
 	}

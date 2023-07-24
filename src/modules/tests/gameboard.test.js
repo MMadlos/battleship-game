@@ -3,7 +3,6 @@ import { Gameboard } from "../gameboard"
 describe("Get player's name and initiate gameboard", () => {
 	const playerOne = Gameboard("Player 1")
 	const gameBoard = playerOne.getGameboard()
-
 	test("Player's name", () => {
 		expect(playerOne.getPlayer()).toBe("Player 1")
 	})
@@ -14,6 +13,13 @@ describe("Get player's name and initiate gameboard", () => {
 		expect(gameBoard[4].length).toBe(10)
 		expect(gameBoard[5].length).toBe(10)
 	})
+
+	// test.skip("Gameboard has in each cell 'Empty'", () => {
+	// 	expect(gameBoard[0][0]).toBe("Empty")
+	// 	expect(gameBoard[3][3]).toBe("Empty")
+	// 	expect(gameBoard[7][4]).toBe("Empty")
+	// 	expect(gameBoard[9][9]).toBe("Empty")
+	// })
 })
 
 describe("It returns the ship name when placing it at the begining of the gameboard (0,0)", () => {
