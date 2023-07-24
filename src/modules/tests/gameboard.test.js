@@ -173,13 +173,51 @@ describe("If a ship is attacked, check if a a ship has been hit or record the co
 		expect(secondPlayer.receiveAttack([0, 0])).toBe("Missed in [0, 0]")
 	})
 
+	test("The attack missed is recorded", () => {
+		expect(secondPlayer.getGameboard()[0][0]).toBe("Missed")
+	})
+
 	test("The attack hit a ship", () => {
 		secondPlayer.setShip("PatrolBoat", [0, 0], "horizontal")
-
 		expect(secondPlayer.receiveAttack([0, 0])).toBe(true)
 	})
 
-	// test("If a ship has been hit, the ship records it", () => {
-	// 	expect(secondPlayer.getShip).toBe(true)
-	// })
+	test("If a ship has been hit, the ship records it", () => {
+		expect(secondPlayer.shipsPlaced.PatrolBoat.getHits()).toBe(1)
+	})
+})
+
+describe("All of the ships are sunk", () => {
+	const secondPlayer = Gameboard("Player 2")
+	secondPlayer.setShip("PatrolBoat", [0, 0])
+	secondPlayer.setShip("Submarine", [1, 0])
+	secondPlayer.setShip("Destroyer", [2, 0])
+	secondPlayer.setShip("Battleship", [3, 0])
+	secondPlayer.setShip("Carrier", [4, 0])
+
+	test("If one of the ships are not sunk, return 'It's not over'", () => {
+		expect(secondPlayer.checkGameOver()).toBe("It's not over yet")
+	})
+
+	test("If all ships are sunk, return 'Game over'", () => {
+		secondPlayer.receiveAttack([0, 0])
+		secondPlayer.receiveAttack([0, 1])
+		secondPlayer.receiveAttack([1, 0])
+		secondPlayer.receiveAttack([1, 1])
+		secondPlayer.receiveAttack([1, 2])
+		secondPlayer.receiveAttack([2, 0])
+		secondPlayer.receiveAttack([2, 1])
+		secondPlayer.receiveAttack([2, 2])
+		secondPlayer.receiveAttack([3, 0])
+		secondPlayer.receiveAttack([3, 1])
+		secondPlayer.receiveAttack([3, 2])
+		secondPlayer.receiveAttack([3, 3])
+		secondPlayer.receiveAttack([4, 0])
+		secondPlayer.receiveAttack([4, 1])
+		secondPlayer.receiveAttack([4, 2])
+		secondPlayer.receiveAttack([4, 3])
+		secondPlayer.receiveAttack([4, 4])
+
+		expect(secondPlayer.checkGameOver()).toBe("Game over")
+	})
 })

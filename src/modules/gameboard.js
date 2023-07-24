@@ -1,5 +1,7 @@
 import { Ship } from "./ship"
 
+const shipNames = ["Carrier", "Battleship", "Destroyer", "Submarine", "PatrolBoat"]
+
 export function Gameboard(player) {
 	let playerName = player
 	let gameboard = setGameboard()
@@ -10,6 +12,8 @@ export function Gameboard(player) {
 		Submarine: true,
 		PatrolBoat: true,
 	}
+
+	const shipsPlaced = {}
 
 	const getPlayer = () => playerName
 	const getGameboard = () => gameboard
@@ -36,7 +40,9 @@ export function Gameboard(player) {
 				gameboard[i][coordY] = shipType
 			}
 		}
+
 		availableShips[shipType] = false
+		shipsPlaced[shipType] = ship
 	}
 
 	const getAvailableShips = () => {
@@ -84,13 +90,32 @@ export function Gameboard(player) {
 		const [coordX, coordY] = coordinates
 		const isThereAShip = typeof gameboard[coordX][coordY] === "string" ? true : false
 
-		if (!isThereAShip) return `Missed in [${coordX}, ${coordY}]`
+		if (!isThereAShip) {
+			gameboard[coordX][coordY] = "Missed"
+			return `Missed in [${coordX}, ${coordY}]`
+		}
 		if (isThereAShip) {
+			const shipName = gameboard[coordX][coordY]
+			shipsPlaced[shipName].hit()
+
 			return isThereAShip
 		}
 	}
 
-	return { getPlayer, getGameboard, setShip, getShipCoordinates, getAvailableShips, receiveAttack }
+	function checkGameOver() {
+		// Comprobar que todos los barcos están hundidos
+		const shipCounter = shipNames.length
+		let shipSunkCounter = 0
+
+		shipNames.forEach((shipName) => {
+			const isShipSunk = shipsPlaced[shipName].getIsSunk()
+			if (isShipSunk) shipSunkCounter++
+		})
+
+		return shipCounter === shipSunkCounter ? "Game over" : "It's not over yet"
+	}
+
+	return { shipsPlaced, getPlayer, getGameboard, setShip, getShipCoordinates, getAvailableShips, receiveAttack, checkGameOver }
 }
 
 function setGameboard() {
