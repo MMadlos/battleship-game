@@ -52,7 +52,7 @@ export function Gameboard(player) {
 		const columnIndexes = []
 		const rowIndexes = []
 		gameboard.forEach((row, index) => {
-			// Para cada fila [...], tengo que buscar si aparece shipType y guardar su índice (segundo num).
+			// Finds a ship in each index of each row and stores its index
 			let shipFound = false
 			for (const [index, element] of row.entries()) {
 				if (element === shipType) {
@@ -80,7 +80,17 @@ export function Gameboard(player) {
 		return coordinates
 	}
 
-	return { getPlayer, getGameboard, setShip, getShipCoordinates, getAvailableShips }
+	function receiveAttack(coordinates) {
+		const [coordX, coordY] = coordinates
+		const isThereAShip = typeof gameboard[coordX][coordY] === "string" ? true : false
+
+		if (!isThereAShip) return `Missed in [${coordX}, ${coordY}]`
+		if (isThereAShip) {
+			return isThereAShip
+		}
+	}
+
+	return { getPlayer, getGameboard, setShip, getShipCoordinates, getAvailableShips, receiveAttack }
 }
 
 function setGameboard() {

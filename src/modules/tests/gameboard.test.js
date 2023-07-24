@@ -1,14 +1,14 @@
 import { Gameboard } from "../gameboard"
 
-describe("it contains functions to get who's player gameboard is and to get the gameboard", () => {
+describe("Get player's name and initiate gameboard", () => {
 	const playerOne = Gameboard("Player 1")
 	const gameBoard = playerOne.getGameboard()
 
-	test("it returns player's name when using getPlayer()", () => {
+	test("Player's name", () => {
 		expect(playerOne.getPlayer()).toBe("Player 1")
 	})
 
-	test("If gameboard is set, it will contain 10 rows and 10 columns", () => {
+	test("Gameboard has 10 rows and 10 columns", () => {
 		expect(gameBoard.length).toBe(10)
 		expect(gameBoard[0].length).toBe(10)
 		expect(gameBoard[4].length).toBe(10)
@@ -85,7 +85,7 @@ describe("It returns a message when placing a ship out of the scope of the gameb
 	})
 })
 
-describe("setShip() should only be able to set once each type of ship", () => {
+describe("Place a ship at specific coordinates", () => {
 	const secondPlayer = Gameboard("Player 2")
 
 	test("if no ship has been placed, getAvailableShips() should display all ship names", () => {
@@ -164,4 +164,22 @@ describe("Get ship coordinates if its been placed and return 'Not placed in game
 
 		expect(secondPlayer.getShipCoordinates("Carrier")).toBe("Not placed in gameboard")
 	})
+})
+
+describe("If a ship is attacked, check if a a ship has been hit or record the coordinates of the missed shot. If a ship has bit hit, it records the hit into the ship object", () => {
+	const secondPlayer = Gameboard("Player 2")
+
+	test("The attack didn't hit a ship", () => {
+		expect(secondPlayer.receiveAttack([0, 0])).toBe("Missed in [0, 0]")
+	})
+
+	test("The attack hit a ship", () => {
+		secondPlayer.setShip("PatrolBoat", [0, 0], "horizontal")
+
+		expect(secondPlayer.receiveAttack([0, 0])).toBe(true)
+	})
+
+	// test("If a ship has been hit, the ship records it", () => {
+	// 	expect(secondPlayer.getShip).toBe(true)
+	// })
 })
