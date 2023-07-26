@@ -4,9 +4,9 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"test": "jest --watch",
+		"test": "jest player --watch",
 		"build": "webpack  --mode=development",
-		"watch": "webpack  --watch",
+		"watch": "webpack  --watch --mode=development",
 		"start": "webpack serve --mode=development"
 	},
 	"repository": {
@@ -21,9 +21,6 @@
 	},
 	"homepage": "https://github.com/MMadlos/battleship-game#readme",
 	"devDependencies": {
-		"@babel/core": "^7.22.9",
-		"@babel/plugin-transform-modules-commonjs": "^7.22.5",
-		"@babel/preset-env": "^7.22.9",
 		"babel-jest": "^29.6.1",
 		"css-loader": "^6.8.1",
 		"html-webpack-plugin": "^5.5.3",

@@ -5,6 +5,7 @@ const shipNames = ["Carrier", "Battleship", "Destroyer", "Submarine", "PatrolBoa
 export function Gameboard(player) {
 	let playerName = player
 	let gameboard = setGameboard()
+
 	const availableShips = {
 		Carrier: true,
 		Battleship: true,
@@ -120,19 +121,15 @@ export function Gameboard(player) {
 }
 
 function setGameboard() {
-	const rows = new Array()
-	rows.length = 10
+	let rows = []
+	let columns = []
 
-	for (let i = 0; i < rows.length; i++) {
-		const columns = new Array()
-		columns.length = 10
-
-		for (let j = 0; i < 10; j++) {
-			columns[j] = "Empty"
-		}
-
-		rows[i] = columns
+	for (let i = 0; i < 10; i++) {
+		columns[i] = "Empty"
 	}
 
+	for (let i = 0; i < 10; i++) {
+		rows[i] = columns
+	}
 	return rows
 }
