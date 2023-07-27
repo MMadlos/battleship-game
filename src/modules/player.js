@@ -8,7 +8,7 @@ export function Player(name) {
 	const getName = () => playerName
 	const setTurnToPlay = () => (turnToPlay = true)
 	const getPlayerTurn = () => turnToPlay
-	const getGameboard = () => gameboard
+	const getGameboard = () => gameboard.getGameboard()
 
 	const attack = (enemy, coordinates) => {
 		let [coordX, coordY] = coordinates
