@@ -22,22 +22,35 @@ createGameboard()
 const gameboardOne = playerOne.gameboard
 const gameboardTwo = playerTwo.gameboard
 
-const defaultShips = {
-	Carrier: [0, 0],
-	Battleship: [1, 0],
-	Destroyer: [2, 0],
-	Submarine: [3, 0],
-	PatrolBoat: [4, 0],
-}
+const defaultShipsOne = [
+	["Carrier", [0, 0]],
+	["Battleship", [1, 0]],
+	["Destroyer", [2, 0]],
+	["Submarine", [3, 0]],
+	["PatrolBoat", [4, 0]],
+]
 
-gameboardOne.setShip("Carrier", [0, 0], "horizontal")
+const defaultShipsTwo = [
+	["Carrier", [0, 5]],
+	["Battleship", [4, 0]],
+	["Destroyer", [3, 3]],
+	["Submarine", [6, 6]],
+	["PatrolBoat", [7, 1]],
+]
+
+defaultShipsOne.forEach((ship) => {
+	gameboardOne.setShip(ship[0], ship[1])
+})
+
+defaultShipsTwo.forEach((ship) => {
+	gameboardTwo.setShip(ship[0], ship[1])
+})
 
 // Quiero que revise el contenido de la posición de la celda y lo exponga en la tabla
 // Get gameboard object:
 
 displayGameboardContent(gameboardOne.getGameboard())
 displayGameboardContent(gameboardTwo.getGameboard())
-console.log({ gameboardOne: gameboardOne.getGameboard() })
 
 function displayGameboardContent(playerGameboard) {
 	const playerBoard = playerGameboard === gameboardOne.getGameboard() ? "gameboard-one" : "gameboard-two"
@@ -47,6 +60,8 @@ function displayGameboardContent(playerGameboard) {
 		row.forEach((col, colIndex) => {
 			const cell = document.querySelector(`#${playerBoard} > [data-row="${rowIndex}"] > [data-col="${colIndex}"]`)
 			cell.textContent = col
+
+			if (col !== "Empty") cell.classList.add("ship-placed")
 		})
 	})
 }

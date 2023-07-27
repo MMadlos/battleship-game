@@ -19,37 +19,34 @@ export function Gameboard(player) {
 	const getPlayer = () => playerName
 	const getGameboard = () => gameboard
 	const setShip = (shipType, coordinates, shipPosition = "horizontal") => {
-		gameboard[0][0] = shipType
+		if (!availableShips[shipType]) return `It's already placed in the gameboard`
 
-		// if (!availableShips[shipType]) return `It's already placed in the gameboard`
+		const ship = Ship(shipType)
+		ship.togglePosition(shipPosition)
 
-		// const ship = Ship(shipType)
-		// ship.togglePosition(shipPosition)
+		const [coordX, coordY] = coordinates
+		const shipLength = ship.getLength()
+		const boardLimit = 9
 
-		// const [coordX, coordY] = coordinates
-		// const shipLength = ship.getLength()
-		// const boardLimit = 9
+		//TODO - Revisar board limits
+		if ((coordX || coordY) + shipLength > boardLimit) return console.log(`${shipType} can't be placed at [${coordX}, ${coordY}]`)
 
-		// if ((coordX || coordY) + shipLength > boardLimit) return "It can't be placed"
+		const position = ship.getPosition()
 
-		// const position = ship.getPosition()
+		if (position === "horizontal") {
+			for (let i = coordY; i < coordY + shipLength; i++) {
+				gameboard[coordX][i] = shipType
+			}
+		}
 
-		// if (position === "horizontal") {
-		// 	for (let i = coordY; i < coordY + shipLength; i++) {
-		// 		console.log({ coordX, coordY, i })
+		if (position === "vertical") {
+			for (let i = coordX; i < coordX + shipLength; i++) {
+				gameboard[i][coordY] = shipType
+			}
+		}
 
-		// 		gameboard[coordX][i] = shipType
-		// 	}
-		// }
-
-		// if (position === "vertical") {
-		// 	for (let i = coordX; i < coordX + shipLength; i++) {
-		// 		gameboard[i][coordY] = shipType
-		// 	}
-		// }
-
-		// availableShips[shipType] = false
-		// shipsPlaced[shipType] = ship
+		availableShips[shipType] = false
+		shipsPlaced[shipType] = ship
 	}
 
 	const getAvailableShips = () => {
@@ -129,7 +126,6 @@ export function Gameboard(player) {
 function setGameboard() {
 	let rows = []
 
-	// Pasa por cada row, y en cada uno de los rows, pasa por cada celda para añadir Empty
 	for (let i = 0; i < 10; i++) {
 		let columns = []
 		for (let j = 0; j < 10; j++) {
