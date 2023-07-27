@@ -46,7 +46,7 @@ export function Player(name) {
 
 	const checkGameOver = () => gameboard.checkGameOver()
 
-	return { turnToPlay, setTurnToPlay, getName, getPlayerTurn, getGameboard, attack, checkGameOver }
+	return { turnToPlay, gameboard, setTurnToPlay, getName, getPlayerTurn, getGameboard, attack, checkGameOver }
 }
 
 function getRandomIndex() {
