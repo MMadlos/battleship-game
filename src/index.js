@@ -23,15 +23,15 @@ const gameboardOne = playerOne.gameboard
 const gameboardTwo = playerTwo.gameboard
 
 const defaultShipsOne = [
-	["Carrier", [0, 0]],
+	["Carrier", [0, 5]],
 	["Battleship", [1, 0]],
 	["Destroyer", [2, 0]],
-	["Submarine", [3, 0]],
-	["PatrolBoat", [4, 0]],
+	["Submarine", [5, 6]],
+	["PatrolBoat", [9, 4]],
 ]
 
 const defaultShipsTwo = [
-	["Carrier", [5, 5], "vertical"],
+	["Carrier", [0, 9], "vertical"],
 	["Battleship", [4, 0]],
 	["Destroyer", [3, 3]],
 	["Submarine", [6, 6]],
@@ -39,15 +39,12 @@ const defaultShipsTwo = [
 ]
 
 defaultShipsOne.forEach((ship) => {
-	gameboardOne.setShip(ship[0], ship[1])
+	gameboardOne.setShip(ship[0], ship[1], ship[2])
 })
 
 defaultShipsTwo.forEach((ship) => {
 	gameboardTwo.setShip(ship[0], ship[1], ship[2])
 })
-
-// Quiero que revise el contenido de la posición de la celda y lo exponga en la tabla
-// Get gameboard object:
 
 displayGameboardContent(gameboardOne.getGameboard())
 displayGameboardContent(gameboardTwo.getGameboard())
