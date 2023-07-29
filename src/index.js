@@ -24,18 +24,18 @@ const gameboardTwo = playerTwo.gameboard
 
 const defaultShipsOne = [
 	["Carrier", [0, 5]],
-	["Battleship", [1, 0]],
+	["Battleship", [0, 0]],
 	["Destroyer", [2, 0]],
 	["Submarine", [5, 6]],
 	["PatrolBoat", [9, 4]],
 ]
 
 const defaultShipsTwo = [
-	["Carrier", [0, 9], "vertical"],
+	["Carrier", [3, 9], "vertical"],
 	["Battleship", [4, 0]],
 	["Destroyer", [3, 3]],
 	["Submarine", [6, 6]],
-	["PatrolBoat", [7, 8]],
+	["PatrolBoat", [9, 7]],
 ]
 
 defaultShipsOne.forEach((ship) => {

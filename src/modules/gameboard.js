@@ -28,22 +28,28 @@ export function Gameboard(player) {
 		const shipLength = ship.getLength()
 		const boardLimit = 9
 
-		/*
-		PatrolBoat.length = 2
-		setShip("PatrolBoat", [9, 0], "horizontal") -> gameboard[9][0] = "PatrolBoat" && gameboard[9][1] = "PatrolBoat"
-
-		setShip("PatrolBoat", [9, 8], "horizontal") -> gameboard[9][8] = "PatrolBoat" && gameboard[9][9] = "PatrolBoat"
-		*/
-
-		// if ((coordX || coordY) + shipLength - 1 > boardLimit) return console.log(`${shipType} can't be placed at [${coordX}, ${coordY}]`)
-
 		const position = ship.getPosition()
 
+		// TODO -> Falta lógica para determinar si un ya hay un barco ocupando alguna celda, que no se pueda añadir el barco.
+
+		let areAllCellsEmpty
 		if (position === "horizontal") {
 			if (coordY + shipLength - 1 > boardLimit) return console.log(`${shipType} can't be placed at [${coordX}, ${coordY}]`)
 
 			for (let i = coordY; i < coordY + shipLength; i++) {
-				gameboard[coordX][i] = shipType
+				if (gameboard[coordX][i] !== "Empty") {
+					areAllCellsEmpty = false
+					console.log(`There is another ship placed in [${coordX}, ${i}]`)
+					return
+				} else {
+					areAllCellsEmpty = true
+				}
+			}
+
+			if (areAllCellsEmpty) {
+				for (let i = coordY; i < coordY + shipLength; i++) {
+					gameboard[coordX][i] = shipType
+				}
 			}
 		}
 
@@ -51,7 +57,19 @@ export function Gameboard(player) {
 			if (coordX + shipLength - 1 > boardLimit) return console.log(`${shipType} can't be placed at [${coordX}, ${coordY}]`)
 
 			for (let i = coordX; i < coordX + shipLength; i++) {
-				gameboard[i][coordY] = shipType
+				if (gameboard[i][coordY] !== "Empty") {
+					areAllCellsEmpty = false
+					console.log(`There is another ship placed in [${i}, ${coordY}]`)
+					return
+				} else {
+					areAllCellsEmpty = true
+				}
+			}
+
+			if (areAllCellsEmpty) {
+				for (let i = coordX; i < coordX + shipLength; i++) {
+					gameboard[i][coordY] = shipType
+				}
 			}
 		}
 
