@@ -1,6 +1,7 @@
 import { Ship } from "./ship"
 
 const shipNames = ["Carrier", "Battleship", "Destroyer", "Submarine", "PatrolBoat"]
+const boardLimit = 9
 
 export function Gameboard(player) {
 	let playerName = player
@@ -26,55 +27,42 @@ export function Gameboard(player) {
 
 		const [coordX, coordY] = coordinates
 		const shipLength = ship.getLength()
-		const boardLimit = 9
-
 		const position = ship.getPosition()
 
-		// TODO -> Falta lógica para determinar si un ya hay un barco ocupando alguna celda, que no se pueda añadir el barco.
+		// Check that the ship won't be outside of the board.
+		const isOutOfBoardHor = position === "horizontal" && coordY + shipLength - 1 > boardLimit
+		const isOutOfBoardVer = position === "vertical" && coordX + shipLength - 1 > boardLimit
+		const msgError = `${shipType} can't be placed at [${coordX}, ${coordY}]`
 
-		let areAllCellsEmpty
+		if (isOutOfBoardHor || isOutOfBoardVer) return console.log(msgError)
+
+		// Check if all cells where we want to place the ship are empty
+		let allCells = []
 		if (position === "horizontal") {
-			if (coordY + shipLength - 1 > boardLimit) return console.log(`${shipType} can't be placed at [${coordX}, ${coordY}]`)
-
 			for (let i = coordY; i < coordY + shipLength; i++) {
-				if (gameboard[coordX][i] !== "Empty") {
-					areAllCellsEmpty = false
-					console.log(`There is another ship placed in [${coordX}, ${i}]`)
-					return
-				} else {
-					areAllCellsEmpty = true
-				}
-			}
-
-			if (areAllCellsEmpty) {
-				for (let i = coordY; i < coordY + shipLength; i++) {
-					gameboard[coordX][i] = shipType
-				}
+				allCells.push(gameboard[coordX][i])
 			}
 		}
 
 		if (position === "vertical") {
-			if (coordX + shipLength - 1 > boardLimit) return console.log(`${shipType} can't be placed at [${coordX}, ${coordY}]`)
-
 			for (let i = coordX; i < coordX + shipLength; i++) {
-				if (gameboard[i][coordY] !== "Empty") {
-					areAllCellsEmpty = false
-					console.log(`There is another ship placed in [${i}, ${coordY}]`)
-					return
-				} else {
-					areAllCellsEmpty = true
-				}
-			}
-
-			if (areAllCellsEmpty) {
-				for (let i = coordX; i < coordX + shipLength; i++) {
-					gameboard[i][coordY] = shipType
-				}
+				allCells.push(gameboard[i][coordY])
 			}
 		}
+		const isThereAnotherShip = allCells.some((cell) => cell !== "Empty")
+		if (isThereAnotherShip) return console.log(msgError)
 
-		availableShips[shipType] = false
-		shipsPlaced[shipType] = ship
+		// Put the name of the ship in all cells after verification
+		if (position === "horizontal") {
+			for (let i = coordY; i < coordY + shipLength; i++) {
+				gameboard[coordX][i] = shipType
+			}
+		}
+		if (position === "vertical") {
+			for (let i = coordX; i < coordX + shipLength; i++) {
+				gameboard[i][coordY] = shipType
+			}
+		}
 	}
 
 	const getAvailableShips = () => {

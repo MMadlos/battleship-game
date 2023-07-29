@@ -31,11 +31,11 @@ const defaultShipsOne = [
 ]
 
 const defaultShipsTwo = [
-	["Carrier", [3, 9], "vertical"],
+	["Carrier", [5, 8], "vertical"],
 	["Battleship", [4, 0]],
 	["Destroyer", [3, 3]],
-	["Submarine", [6, 6]],
-	["PatrolBoat", [9, 7]],
+	["Submarine", [0, 7]],
+	["PatrolBoat", [9, 4]],
 ]
 
 defaultShipsOne.forEach((ship) => {
