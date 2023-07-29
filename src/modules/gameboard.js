@@ -28,8 +28,7 @@ export function Gameboard(player) {
 		const shipLength = ship.getLength()
 		const boardLimit = 9
 
-		//TODO - Revisar board limits
-		if ((coordX || coordY) + shipLength > boardLimit) return console.log(`${shipType} can't be placed at [${coordX}, ${coordY}]`)
+		if ((coordX || coordY) + shipLength - 1 > boardLimit) return console.log(`${shipType} can't be placed at [${coordX}, ${coordY}]`)
 
 		const position = ship.getPosition()
 

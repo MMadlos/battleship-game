@@ -31,11 +31,11 @@ const defaultShipsOne = [
 ]
 
 const defaultShipsTwo = [
-	["Carrier", [0, 5]],
+	["Carrier", [5, 5], "vertical"],
 	["Battleship", [4, 0]],
 	["Destroyer", [3, 3]],
 	["Submarine", [6, 6]],
-	["PatrolBoat", [7, 1]],
+	["PatrolBoat", [7, 8]],
 ]
 
 defaultShipsOne.forEach((ship) => {
@@ -43,7 +43,7 @@ defaultShipsOne.forEach((ship) => {
 })
 
 defaultShipsTwo.forEach((ship) => {
-	gameboardTwo.setShip(ship[0], ship[1])
+	gameboardTwo.setShip(ship[0], ship[1], ship[2])
 })
 
 // Quiero que revise el contenido de la posición de la celda y lo exponga en la tabla
