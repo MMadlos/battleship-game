@@ -1,37 +1,48 @@
 import { Ship } from "../ship"
 const ship = Ship("Submarine")
 
-test("should return its properties if we call them", () => {
-	expect(ship.getLength()).toBe(3)
-	expect(ship.hitsReceived).toBe(0)
-	expect(ship.isSunk).toBe(false)
-})
-
-test("if we call the hit() method, it increases the hitsReceived property from Ship()", () => {
-	ship.hit()
-	expect(ship.getHits()).toBe(1)
-})
-
-describe("It should contain a getIsSunk() that transform isSunk property into false when the number of hits are equal to its length", () => {
-	test("it contains getIsSunk() function", () => {
-		expect(typeof ship.getIsSunk).toBe("function")
+describe("Ship is an object that include their length, number of times they've been hit and wether or not they've been sunk", () => {
+	test("it returns its name", () => {
+		expect(ship.shipName).toBe("Submarine")
 	})
 
-	test("if hitsReceived are not equal to Ship length, it should return false", () => {
+	test("it returns its length", () => {
+		expect(ship.getLength()).toBe(3)
+	})
+
+	test("it returns hits", () => {
+		expect(ship.getHits()).toBe(0)
+	})
+
+	test("it returns false when checking if it is sunk", () => {
 		expect(ship.getIsSunk()).toBe(false)
 	})
+})
 
-	test("if hitsReceived is equal to ship length, it should return true", () => {
+describe("If the ship receives hits and it gets to the same number of length, the ship sinks", () => {
+	test("if it gets hit, the hitsReceived will increase", () => {
 		ship.hit()
-		ship.hit()
+		expect(ship.getHits()).toBe(1)
 
+		ship.hit()
+		expect(ship.getHits()).toBe(2)
+		expect(ship.getIsSunk()).toBe(false)
+
+		ship.hit()
+		expect(ship.getHits()).toBe(3)
 		expect(ship.getIsSunk()).toBe(true)
 	})
 })
 
-test("it change position when calling changePosition() to vertical", () => {
-	expect(ship.getPosition()).toBe("horizontal")
+describe("Ships can be placed horizontally or vertically", () => {
+	test("default position is 'horizontal", () => {
+		expect(ship.getPosition()).toBe("horizontal")
+	})
+	test("after toggleing position, it change its position", () => {
+		ship.togglePosition()
+		expect(ship.getPosition()).toBe("vertical")
 
-	ship.togglePosition("vertical")
-	expect(ship.getPosition()).toBe("vertical")
+		ship.togglePosition()
+		expect(ship.getPosition()).toBe("horizontal")
+	})
 })

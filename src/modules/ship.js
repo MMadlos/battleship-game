@@ -25,13 +25,11 @@ export function Ship(shipType) {
 	const getShipType = () => shipType
 	const getLength = () => length
 	const getPosition = () => position
-	const togglePosition = (newPosition) => (position = newPosition)
+	const togglePosition = () => (position = position === "horizontal" ? "vertical" : "horizontal")
 	const getHits = () => hitsReceived
 
 	return {
 		shipName,
-		hitsReceived,
-		isSunk,
 		hit,
 		getShipType,
 		getLength,

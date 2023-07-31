@@ -37,7 +37,7 @@ h1 {
 	font-size: 2rem;
 	font-weight: 700;
 	text-align: center;
-	margin-top: 40px;
+	margin-top: 20px;
 }
 
 /* GAME CONTAINER */
@@ -53,7 +53,7 @@ section > p {
 	gap: 80px;
 	justify-content: center;
 
-	margin-top: 80px;
+	margin-top: 40px;
 }
 
 .row {
@@ -61,7 +61,7 @@ section > p {
 }
 
 .cell {
-	width: 50px;
+	width: 65px;
 	aspect-ratio: 1 / 1;
 
 	display: flex;

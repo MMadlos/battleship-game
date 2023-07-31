@@ -4,9 +4,9 @@ import { createGameboard } from "./modules/DOM"
 
 /* Instructions from The Odin Project:
 
-- The game loop should set up a new game by creating Players and Gameboards. For now just populate each Gameboard with predetermined coordinates. You can implement a system for allowing players to place their ships later.
+* - The game loop should set up a new game by creating Players and Gameboards. For now just populate each Gameboard with predetermined coordinates. You can implement a system for allowing players to place their ships later.
 
-- You should display both the player’s boards and render them using information from the Gameboard class
+* - You should display both the player’s boards and render them using information from the Gameboard class
 
 - You need methods to render the gameboards and to take user input for attacking. For attacks, let the user click on a coordinate in the enemy Gameboard.
 
@@ -62,3 +62,32 @@ function displayGameboardContent(playerGameboard) {
 		})
 	})
 }
+
+// Click cell to attack
+/*
+* - Click event
+* - Store row
+* - Store column
+- Check coords in the gameboard
+- Attack
+- Display style
+- Check if a ship has been sunk
+- Check if gameover
+*/
+
+// Gameboard One
+// const gameboardOneDOM = document.getElementById("gameboard-one")
+// const allRowsDOM = gameboardOneDOM.querySelectorAll(".row:not(.coordY)")
+// allRowsDOM.forEach((row) => {
+// 	row.addEventListener("click", (e) => {
+// 		if (e.target === undefined) return
+
+// 		const rowIndex = row.dataset.row
+// 		const colDOM = e.target
+// 		const colIndex = colDOM.dataset.col
+
+// 		playerTwo.attack(playerOne, [rowIndex, colIndex])
+
+// 		console.table(gameboardOne.getGameboard())
+// 	})
+// })

@@ -12,7 +12,7 @@ export function Player(name) {
 
 	const attack = (enemy, coordinates) => {
 		let [coordX, coordY] = coordinates
-		const enemyGameboard = enemy.getGameboard()
+		const enemyGameboard = enemy.gameboard
 
 		if (enemy !== "Computer") enemyGameboard.receiveAttack([coordX, coordY])
 		if (enemy === "Computer") {
