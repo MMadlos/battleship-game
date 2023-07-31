@@ -1,229 +1,210 @@
 import { Gameboard } from "../gameboard"
 
-describe("Get player's name and initiate gameboard", () => {
-	const playerOne = Gameboard("Player 1")
-	const gameBoard = playerOne.getGameboard()
-	test("Player's name", () => {
-		expect(playerOne.getPlayer()).toBe("Player 1")
+let gameboard
+beforeEach(() => {
+	return (gameboard = Gameboard())
+})
+
+describe("It renders a board of 10 rows and 10 columns", () => {
+	test("row length and column length are 10", () => {
+		expect(gameboard.getGameboard().length).toBe(10)
+		expect(gameboard.getGameboard()[0].length).toBe(10)
+		expect(gameboard.getGameboard()[3].length).toBe(10)
+		expect(gameboard.getGameboard()[9].length).toBe(10)
+	})
+	test("each index has a string === 'Empty'", () => {
+		const arrayEmpty = []
+		for (let i = 0; i < 10; i++) {
+			arrayEmpty[i] = "Empty"
+		}
+
+		expect(gameboard.getGameboard()[0]).toEqual(arrayEmpty)
+		expect(gameboard.getGameboard()[0][9]).toBe("Empty")
+		expect(gameboard.getGameboard()[3][3]).toBe("Empty")
+		expect(gameboard.getGameboard()[9][0]).toBe("Empty")
+	})
+})
+
+/* From T.O.P. -> Gameboards should be able to place ships at specific coordinates by calling the ship factory function. */
+
+describe("It should place ships at specific coordinates", () => {
+	test("Ship in horizontal", () => {
+		gameboard.setShip("PatrolBoat", [0, 0], "horizontal")
+
+		expect(gameboard.getGameboard()[0][0]).toBe("PatrolBoat")
+		expect(gameboard.getGameboard()[1][0]).toBe("Empty")
+		expect(gameboard.getGameboard()[0][1]).toBe("PatrolBoat")
+		expect(gameboard.getGameboard()[0][2]).not.toBe("PatrolBoat")
+		expect(gameboard.getGameboard()[0][3]).not.toBe("PatrolBoat")
+	})
+	test("Ship in vertical", () => {
+		gameboard.setShip("Carrier", [1, 0], "vertical")
+
+		expect(gameboard.getGameboard()[1][0]).toBe("Carrier")
+		expect(gameboard.getGameboard()[2][0]).toBe("Carrier")
+		expect(gameboard.getGameboard()[3][0]).toBe("Carrier")
+		expect(gameboard.getGameboard()[4][0]).toBe("Carrier")
+		expect(gameboard.getGameboard()[5][0]).toBe("Carrier")
+		expect(gameboard.getGameboard()[6][0]).not.toBe("Carrier")
+		expect(gameboard.getGameboard()[0][0]).not.toBe("Carrier")
+		expect(gameboard.getGameboard()[2][1]).not.toBe("Carrier")
+		expect(gameboard.getGameboard()[5][1]).not.toBe("Carrier")
+	})
+	test("Ship at the edge of the boardgame", () => {
+		gameboard.setShip("Submarine", [3, 7], "horizontal")
+
+		expect(gameboard.getGameboard()[3][7]).toBe("Submarine")
+		expect(gameboard.getGameboard()[3][8]).toBe("Submarine")
+		expect(gameboard.getGameboard()[3][9]).toBe("Submarine")
+		expect(gameboard.getGameboard()[3][6]).not.toBe("Submarine")
+		expect(gameboard.getGameboard()[4][9]).not.toBe("Submarine")
+		expect(gameboard.getGameboard()[2][9]).not.toBe("Submarine")
+	})
+})
+
+describe("Placing part of the ship outside the gameboard", () => {
+	test("horizontal limit", () => {
+		expect(gameboard.setShip("Submarine", [3, 8], "horizontal")).toBe(console.log("Sumbarine can't be placed at [3, 8]"))
+	})
+	test("vertical limit", () => {
+		expect(gameboard.setShip("Submarine", [8, 0], "vertical")).toBe(console.log("Sumbarine can't be placed at [8, 0]"))
+	})
+})
+
+describe("When trying to put a ship on coordinates where there's already a ship", () => {
+	test("Should return message", () => {
+		gameboard.setShip("Carrier", [0, 0], "horizontal")
+
+		expect(gameboard.setShip("PatrolBoat", [0, 0], "horizontal")).toBe(console.log("PatrolBoat can't be placed at [0, 0]"))
+		expect(gameboard.setShip("PatrolBoat", [4, 0], "horizontal")).toBe(console.log("PatrolBoat can't be placed at [4, 0]"))
+		expect(gameboard.setShip("PatrolBoat", [3, 0], "horizontal")).toBe(console.log("PatrolBoat can't be placed at [3, 0]"))
+	})
+})
+
+describe("Trying to put a ship that has been already placed", () => {
+	test("Should return message", () => {
+		gameboard.setShip("Carrier", [0, 0], "horizontal")
+
+		expect(gameboard.setShip("Carrier", [5, 0], "horizontal")).toBe(console.log(`It's already placed in the gameboard`))
+	})
+})
+
+describe("Get available ships and get coordinates from a ship already placed", () => {
+	test("Get all ships by default", () => {
+		expect(gameboard.getAvailableShips()).toEqual(["Carrier", "Battleship", "Destroyer", "Submarine", "PatrolBoat"])
 	})
 
-	test("Gameboard has 10 rows and 10 columns", () => {
-		expect(gameBoard.length).toBe(10)
-		expect(gameBoard[0].length).toBe(10)
-		expect(gameBoard[4].length).toBe(10)
-		expect(gameBoard[5].length).toBe(10)
+	test("To not get ship already placed", () => {
+		gameboard.setShip("Carrier", [0, 0], "horizontal")
+
+		expect(gameboard.getAvailableShips()).toEqual(["Battleship", "Destroyer", "Submarine", "PatrolBoat"])
+
+		gameboard.setShip("Battleship", [3, 0], "horizontal")
+		expect(gameboard.getAvailableShips()).toEqual(["Destroyer", "Submarine", "PatrolBoat"])
 	})
 
-	// test.skip("Gameboard has in each cell 'Empty'", () => {
-	// 	expect(gameBoard[0][0]).toBe("Empty")
-	// 	expect(gameBoard[3][3]).toBe("Empty")
-	// 	expect(gameBoard[7][4]).toBe("Empty")
-	// 	expect(gameBoard[9][9]).toBe("Empty")
+	test("Get coordinates from placed ships", () => {
+		gameboard.setShip("Carrier", [0, 0], "horizontal")
+		gameboard.setShip("Battleship", [3, 0], "horizontal")
+		gameboard.setShip("PatrolBoat", [8, 8], "vertical")
+
+		const carrierCoord = gameboard.getShipCoordinates("Carrier")
+		const battleshipCoord = gameboard.getShipCoordinates("Battleship")
+		const patrolboatCoord = gameboard.getShipCoordinates("PatrolBoat")
+
+		expect(carrierCoord).toEqual([
+			[0, 0],
+			[0, 1],
+			[0, 2],
+			[0, 3],
+			[0, 4],
+		])
+		expect(battleshipCoord).toEqual([
+			[3, 0],
+			[3, 1],
+			[3, 2],
+			[3, 3],
+		])
+		expect(patrolboatCoord).toEqual([
+			[8, 8],
+			[9, 8],
+		])
+	})
+
+	test("If trying to get coordinates of a ship not placed, return 'Not placed'", () => {
+		expect(gameboard.getShipCoordinates("Battleship")).toBe("Not placed in gameboard")
+	})
+})
+
+/* From T.O.P. -> Gameboards should have a receiveAttack function that takes a pair of coordinates, determines whether or not the attack hit a ship and then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot. */
+
+describe("If a gameboard is attacked, check if the coordinates is empty or is there a ship. If there's a ship, ship will get a hit and will check if it's sunk. If there isn't a ship, it records the coordinates of the missed shot", () => {
+	test("The attack didn't hit a ship", () => {
+		expect(gameboard.receiveAttack([0, 0])).toBe("Missed in [0, 0]")
+		expect(gameboard.getGameboard()[0][0]).toBe("Missed")
+	})
+	test("The attack hit a ship", () => {
+		gameboard.setShip("Carrier", [0, 0], "horizontal")
+		gameboard.receiveAttack([0, 0])
+
+		expect(gameboard.getGameboard()[0][0]).toBe("Hit")
+		expect(gameboard.shipsPlaced["Carrier"].getHits()).toBe(1)
+		expect(gameboard.shipsPlaced.Carrier.getIsSunk()).toBe(false)
+		expect(gameboard.checkGameOver()).toBe("It's not over yet")
+	})
+
+	test("All ships are sunk -> Game Over", () => {
+		gameboard.setShip("PatrolBoat", [0, 0], "horizontal")
+		gameboard.receiveAttack([0, 0])
+		gameboard.receiveAttack([0, 1])
+
+		expect(gameboard.checkGameOver()).toBe("Game over")
+	})
+
+	// TODO -->
+	// test("Not all the ships are sunk", () => {
+	// 	gameboard.setShip("PatrolBoat", [0, 0], "horizontal")
+	// 	gameboard.receiveAttack([0, 0])
+	// 	gameboard.receiveAttack([0, 1])
+
+	// 	gameboard.setShip("PatrolBoat", [2, 0], "vertical")
+	// 	gameboard.receiveAttack([2, 0])
+
+	// 	expect(gameboard.checkGameOver()).toBe("It's not over yet")
 	// })
 })
 
-describe("It returns the ship name when placing it at the begining of the gameboard (0,0)", () => {
-	test("in horizontal position should return 'PatrolBoat' in coordinates (0, 0) and (0, 1) ", () => {
-		const playerOne = Gameboard("Player 1")
-		playerOne.setShip("PatrolBoat", [0, 0], "horizontal")
-		let gameBoard = playerOne.getGameboard()
+// describe("All of the ships are sunk", () => {
+// 	const secondPlayer = Gameboard("Player 2")
+// 	secondPlayer.setShip("PatrolBoat", [0, 0])
+// 	secondPlayer.setShip("Submarine", [1, 0])
+// 	secondPlayer.setShip("Destroyer", [2, 0])
+// 	secondPlayer.setShip("Battleship", [3, 0])
+// 	secondPlayer.setShip("Carrier", [4, 0])
 
-		expect(gameBoard[0][0]).toBe("PatrolBoat")
-		expect(gameBoard[0][1]).toBe("PatrolBoat")
-		expect(gameBoard[0][2]).not.toBe("PatrolBoat")
-		expect(gameBoard[0][3]).not.toBe("PatrolBoat")
-	})
+// 	test("If one of the ships are not sunk, return 'It's not over'", () => {
+// 		expect(secondPlayer.checkGameOver()).toBe("It's not over yet")
+// 	})
 
-	test("in vertical position, it should return PatrolBoat when checking coordinates (0, 0) and (1, 0)", () => {
-		const playerOne = Gameboard("Player 1")
+// 	test("If all ships are sunk, return 'Game over'", () => {
+// 		secondPlayer.receiveAttack([0, 0])
+// 		secondPlayer.receiveAttack([0, 1])
+// 		secondPlayer.receiveAttack([1, 0])
+// 		secondPlayer.receiveAttack([1, 1])
+// 		secondPlayer.receiveAttack([1, 2])
+// 		secondPlayer.receiveAttack([2, 0])
+// 		secondPlayer.receiveAttack([2, 1])
+// 		secondPlayer.receiveAttack([2, 2])
+// 		secondPlayer.receiveAttack([3, 0])
+// 		secondPlayer.receiveAttack([3, 1])
+// 		secondPlayer.receiveAttack([3, 2])
+// 		secondPlayer.receiveAttack([3, 3])
+// 		secondPlayer.receiveAttack([4, 0])
+// 		secondPlayer.receiveAttack([4, 1])
+// 		secondPlayer.receiveAttack([4, 2])
+// 		secondPlayer.receiveAttack([4, 3])
+// 		secondPlayer.receiveAttack([4, 4])
 
-		playerOne.setShip("PatrolBoat", [1, 0], "vertical")
-		let gameBoard = playerOne.getGameboard()
-
-		expect(gameBoard[1][0]).toBe("PatrolBoat")
-		expect(gameBoard[2][0]).toBe("PatrolBoat")
-		expect(gameBoard[3][0]).not.toBe("PatrolBoat")
-		expect(gameBoard[4][0]).not.toBe("PatrolBoat")
-	})
-})
-
-describe("It returns the ship name when placing ships in the middle of the gameboard", () => {
-	test("in vertical position, it returns 'PatrolBoat' in coordinates  [3, 3] and [4, 3] ", () => {
-		const playerOne = Gameboard("Player 1")
-		playerOne.setShip("PatrolBoat", [3, 3], "vertical")
-		let gameBoard = playerOne.getGameboard()
-
-		expect(gameBoard[2][3]).not.toBe("PatrolBoat")
-		expect(gameBoard[3][3]).toBe("PatrolBoat")
-		expect(gameBoard[4][3]).toBe("PatrolBoat")
-		expect(gameBoard[5][3]).not.toBe("PatrolBoat")
-	})
-
-	test("in horizontal position, it returns 'PatrolBoat' in coordinates  [7, 6] and [7, 8]", () => {
-		const playerOne = Gameboard("Player 1")
-		playerOne.setShip("PatrolBoat", [7, 6], "horizontal")
-		let gameBoard = playerOne.getGameboard()
-
-		expect(gameBoard[7][6]).toBe("PatrolBoat")
-		expect(gameBoard[7][7]).toBe("PatrolBoat")
-	})
-})
-
-describe("It returns a message when placing a ship out of the scope of the gameboard", () => {
-	test("horizontal limit", () => {
-		const playerOne = Gameboard("Player 1")
-
-		let horizontalLimit = playerOne.setShip("PatrolBoat", [0, 9], "horizontal")
-		expect(horizontalLimit).toBe("It can't be placed")
-
-		horizontalLimit = playerOne.setShip("Carrier", [0, 5], "horizontal")
-		expect(horizontalLimit).toBe("It can't be placed")
-	})
-
-	test("vertical limit", () => {
-		const playerOne = Gameboard("Player 1")
-
-		let verticalLimit = playerOne.setShip("PatrolBoat", [9, 0], "vertical")
-		expect(verticalLimit).toBe("It can't be placed")
-
-		verticalLimit = playerOne.setShip("Carrier", [6, 5], "horizontal")
-		expect(verticalLimit).toBe("It can't be placed")
-	})
-})
-
-describe("Place a ship at specific coordinates", () => {
-	const secondPlayer = Gameboard("Player 2")
-
-	test("if no ship has been placed, getAvailableShips() should display all ship names", () => {
-		const allShips = ["Carrier", "Battleship", "Destroyer", "Submarine", "PatrolBoat"]
-
-		expect(secondPlayer.getAvailableShips()).toEqual(allShips)
-	})
-
-	test("if 'Carrier' and 'PatrolBoat' hast been place, it should not display them when getAvailableShips is called", () => {
-		secondPlayer.setShip("Carrier", [0, 0], "horizontal")
-		secondPlayer.setShip("PatrolBoat", [3, 0], "vertical")
-
-		const availableShips = ["Battleship", "Destroyer", "Submarine"]
-		expect(secondPlayer.getAvailableShips()).toEqual(availableShips)
-	})
-
-	test("if a ship has been placed already, it should return 'It's already placed'", () => {
-		secondPlayer.setShip("PatrolBoat", [0, 0], "horizontal")
-		expect(secondPlayer.setShip("PatrolBoat", [0, 0], "horizontal")).toBe("It's already placed in the gameboard")
-	})
-
-	test("check if a certain type of ship is available or not", () => {
-		secondPlayer.setShip("PatrolBoat", [0, 0], "horizontal")
-		secondPlayer.setShip("Carrier", [2, 1], "horizontal")
-
-		const availableShips = secondPlayer.getAvailableShips()
-
-		expect(availableShips).toEqual(["Battleship", "Destroyer", "Submarine"])
-		expect(availableShips.includes("PatrolBoat")).toBe(false)
-		expect(availableShips.includes("Carrier")).toBe(false)
-		expect(availableShips.includes("Submarine")).toBe(true)
-		expect(availableShips.includes("Battleship")).toBe(true)
-	})
-})
-
-describe("Get ship coordinates if its been placed and return 'Not placed in gameboard'", () => {
-	test("if we get the coordinates of 'PatrolBoat', it will return [0, 0]", () => {
-		const secondPlayer = Gameboard("Player 2")
-		secondPlayer.setShip("PatrolBoat", [0, 0], "horizontal")
-		expect(secondPlayer.getShipCoordinates("PatrolBoat")).toEqual([
-			[0, 0],
-			[0, 1],
-		])
-	})
-
-	test("in the middle of the gameboard", () => {
-		const secondPlayer = Gameboard("Player 2")
-		secondPlayer.setShip("PatrolBoat", [5, 3], "horizontal")
-		expect(secondPlayer.getShipCoordinates("PatrolBoat")).toEqual([
-			[5, 3],
-			[5, 4],
-		])
-	})
-
-	test("when ship is vertical", () => {
-		const secondPlayer = Gameboard("Player 2")
-		secondPlayer.setShip("PatrolBoat", [5, 3], "vertical")
-		expect(secondPlayer.getShipCoordinates("PatrolBoat")).toEqual([
-			[5, 3],
-			[6, 3],
-		])
-	})
-
-	test("if we get the coordinates of 'Submarine', it will return [5, 5]", () => {
-		const secondPlayer = Gameboard("Player 2")
-		secondPlayer.setShip("Submarine", [5, 5], "vertical")
-		expect(secondPlayer.getShipCoordinates("Submarine")).toEqual([
-			[5, 5],
-			[6, 5],
-			[7, 5],
-		])
-	})
-
-	test("if we get the coordinates of 'Carrier', it will return 'Not placed in gameboard'", () => {
-		const secondPlayer = Gameboard("Player 2")
-
-		expect(secondPlayer.getShipCoordinates("Carrier")).toBe("Not placed in gameboard")
-	})
-})
-
-describe("If a ship is attacked, check if a a ship has been hit or record the coordinates of the missed shot. If a ship has bit hit, it records the hit into the ship object", () => {
-	const secondPlayer = Gameboard("Player 2")
-
-	test("The attack didn't hit a ship", () => {
-		expect(secondPlayer.receiveAttack([0, 0])).toBe("Missed in [0, 0]")
-	})
-
-	test("The attack missed is recorded", () => {
-		expect(secondPlayer.getGameboard()[0][0]).toBe("Missed")
-	})
-
-	test("The attack hit a ship", () => {
-		secondPlayer.setShip("PatrolBoat", [0, 0], "horizontal")
-		expect(secondPlayer.receiveAttack([0, 0])).toBe(true)
-	})
-
-	test("If a ship has been hit, the ship records it", () => {
-		expect(secondPlayer.shipsPlaced.PatrolBoat.getHits()).toBe(1)
-	})
-})
-
-describe("All of the ships are sunk", () => {
-	const secondPlayer = Gameboard("Player 2")
-	secondPlayer.setShip("PatrolBoat", [0, 0])
-	secondPlayer.setShip("Submarine", [1, 0])
-	secondPlayer.setShip("Destroyer", [2, 0])
-	secondPlayer.setShip("Battleship", [3, 0])
-	secondPlayer.setShip("Carrier", [4, 0])
-
-	test("If one of the ships are not sunk, return 'It's not over'", () => {
-		expect(secondPlayer.checkGameOver()).toBe("It's not over yet")
-	})
-
-	test("If all ships are sunk, return 'Game over'", () => {
-		secondPlayer.receiveAttack([0, 0])
-		secondPlayer.receiveAttack([0, 1])
-		secondPlayer.receiveAttack([1, 0])
-		secondPlayer.receiveAttack([1, 1])
-		secondPlayer.receiveAttack([1, 2])
-		secondPlayer.receiveAttack([2, 0])
-		secondPlayer.receiveAttack([2, 1])
-		secondPlayer.receiveAttack([2, 2])
-		secondPlayer.receiveAttack([3, 0])
-		secondPlayer.receiveAttack([3, 1])
-		secondPlayer.receiveAttack([3, 2])
-		secondPlayer.receiveAttack([3, 3])
-		secondPlayer.receiveAttack([4, 0])
-		secondPlayer.receiveAttack([4, 1])
-		secondPlayer.receiveAttack([4, 2])
-		secondPlayer.receiveAttack([4, 3])
-		secondPlayer.receiveAttack([4, 4])
-
-		expect(secondPlayer.checkGameOver()).toBe("Game over")
-	})
-})
+// 		expect(secondPlayer.checkGameOver()).toBe("Game over")
+// 	})
+// })

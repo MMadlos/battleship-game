@@ -3,8 +3,7 @@ import { Ship } from "./ship"
 const shipNames = ["Carrier", "Battleship", "Destroyer", "Submarine", "PatrolBoat"]
 const boardLimit = 9
 
-export function Gameboard(player) {
-	let playerName = player
+export function Gameboard() {
 	let gameboard = setGameboard()
 
 	const availableShips = {
@@ -16,14 +15,13 @@ export function Gameboard(player) {
 	}
 
 	const shipsPlaced = {}
-
-	const getPlayer = () => playerName
+	const getShipsPlaced = () => shipsPlaced
 	const getGameboard = () => gameboard
 	const setShip = (shipType, coordinates, shipPosition = "horizontal") => {
-		if (!availableShips[shipType]) return `It's already placed in the gameboard`
+		if (!availableShips[shipType]) return console.log(`It's already placed in the gameboard`)
 
 		const ship = Ship(shipType)
-		ship.togglePosition(shipPosition)
+		ship.setPosition(shipPosition)
 
 		const [coordX, coordY] = coordinates
 		const shipLength = ship.getLength()
@@ -63,6 +61,9 @@ export function Gameboard(player) {
 				gameboard[i][coordY] = shipType
 			}
 		}
+
+		availableShips[shipType] = false
+		shipsPlaced[shipType] = ship
 	}
 
 	const getAvailableShips = () => {
@@ -108,7 +109,7 @@ export function Gameboard(player) {
 
 	function receiveAttack(coordinates) {
 		const [coordX, coordY] = coordinates
-		const isThereAShip = typeof gameboard[coordX][coordY] === "string" ? true : false
+		const isThereAShip = gameboard[coordX][coordY] !== "Empty" ? true : false
 
 		if (!isThereAShip) {
 			gameboard[coordX][coordY] = "Missed"
@@ -125,18 +126,19 @@ export function Gameboard(player) {
 
 	function checkGameOver() {
 		// Comprobar que todos los barcos están hundidos
-		const shipCounter = shipNames.length
-		let shipSunkCounter = 0
+		const shipStatuses = []
 
-		shipNames.forEach((shipName) => {
-			const isShipSunk = shipsPlaced[shipName].getIsSunk()
-			if (isShipSunk) shipSunkCounter++
-		})
+		for (const shipPlaced in shipsPlaced) {
+			const isSunk = shipsPlaced[shipPlaced].getIsSunk()
+			shipStatuses.push(isSunk)
+		}
 
-		return shipCounter === shipSunkCounter ? "Game over" : "It's not over yet"
+		const areNotAllSunk = shipStatuses.some((status) => status === false)
+
+		return areNotAllSunk ? "It's not over yet" : "Game over"
 	}
 
-	return { shipsPlaced, getPlayer, getGameboard, setShip, getShipCoordinates, getAvailableShips, receiveAttack, checkGameOver }
+	return { shipsPlaced, getShipsPlaced, getGameboard, setShip, getShipCoordinates, getAvailableShips, receiveAttack, checkGameOver }
 }
 
 function setGameboard() {

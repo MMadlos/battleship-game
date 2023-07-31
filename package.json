@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"test": "jest ship.test.js --watch",
+		"test": "jest gameboard.test.js --watch",
 		"build": "webpack  --mode=development",
 		"watch": "webpack  --watch --mode=development",
 		"start": "webpack serve --mode=development",

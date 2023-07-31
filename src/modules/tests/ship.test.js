@@ -39,10 +39,10 @@ describe("Ships can be placed horizontally or vertically", () => {
 		expect(ship.getPosition()).toBe("horizontal")
 	})
 	test("after toggleing position, it change its position", () => {
-		ship.togglePosition()
+		ship.setPosition("vertical")
 		expect(ship.getPosition()).toBe("vertical")
 
-		ship.togglePosition()
+		ship.setPosition("horizontal")
 		expect(ship.getPosition()).toBe("horizontal")
 	})
 })
