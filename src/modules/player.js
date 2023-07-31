@@ -7,15 +7,15 @@ export function Player(name) {
 
 	const getName = () => playerName
 	const setTurnToPlay = () => (turnToPlay = true)
-	const getPlayerTurn = () => turnToPlay
+	const isTurn = () => turnToPlay
 	const getGameboard = () => gameboard.getGameboard()
 
 	const attack = (enemy, coordinates) => {
-		let [coordX, coordY] = coordinates
+		const enemyName = enemy.getName()
 		const enemyGameboard = enemy.gameboard
 
-		if (enemy !== "Computer") enemyGameboard.receiveAttack([coordX, coordY])
-		if (enemy === "Computer") {
+		if (enemyName === "Computer") enemyGameboard.receiveAttack(coordinates)
+		if (enemyName !== "Computer") {
 			// MAKE COMPUTER RANDOM MOVES
 			/*
 			* IDEA
@@ -26,13 +26,13 @@ export function Player(name) {
 			TODO --> Si la fila no tiene ningún espacio "Empty", seleccionar la siguiente fila y el siguiente espacio empty
 			*/
 
-			coordX = getRandomIndex()
-			coordY = getRandomIndex()
+			const coordX = getRandomIndex()
+			const coordY = getRandomIndex()
 
 			// Check what's in those coordinates
-			const boardContent = enemyGameboard[coordX][coordY]
+			const boardContent = enemy.getGameboard()[coordX][coordY]
 
-			if (boardContent === "Empty") enemy[gameboard].receiveAttack([coordX, coordY])
+			if (boardContent === "Empty") enemy.gameboard.receiveAttack([coordX, coordY])
 			if (boardContent !== "Empty") {
 				const rowElements = enemyGameboard[coordX]
 				const emptyColumnIndex = rowElements.indexOf("Empty")
@@ -42,11 +42,12 @@ export function Player(name) {
 		}
 
 		turnToPlay = false
+		enemy.setTurnToPlay()
 	}
 
 	const checkGameOver = () => gameboard.checkGameOver()
 
-	return { turnToPlay, gameboard, setTurnToPlay, getName, getPlayerTurn, getGameboard, attack, checkGameOver }
+	return { gameboard, setTurnToPlay, getName, isTurn, getGameboard, attack, checkGameOver }
 }
 
 function getRandomIndex() {
