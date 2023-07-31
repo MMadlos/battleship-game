@@ -161,50 +161,19 @@ describe("If a gameboard is attacked, check if the coordinates is empty or is th
 		expect(gameboard.checkGameOver()).toBe("Game over")
 	})
 
-	// TODO -->
-	// test("Not all the ships are sunk", () => {
-	// 	gameboard.setShip("PatrolBoat", [0, 0], "horizontal")
-	// 	gameboard.receiveAttack([0, 0])
-	// 	gameboard.receiveAttack([0, 1])
+	test("Not all the ships are sunk", () => {
+		gameboard.setShip("PatrolBoat", [0, 0], "horizontal")
+		gameboard.receiveAttack([0, 0])
+		gameboard.receiveAttack([0, 1])
 
-	// 	gameboard.setShip("PatrolBoat", [2, 0], "vertical")
-	// 	gameboard.receiveAttack([2, 0])
+		gameboard.setShip("Submarine", [2, 0], "vertical")
+		gameboard.receiveAttack([2, 0])
 
-	// 	expect(gameboard.checkGameOver()).toBe("It's not over yet")
-	// })
+		const shipsPlaced = gameboard.getShipsPlaced()
+		const { PatrolBoat, Submarine } = shipsPlaced
+
+		expect(PatrolBoat.getIsSunk()).toBe(true)
+		expect(Submarine.getIsSunk()).toBe(false)
+		expect(gameboard.checkGameOver()).toBe("It's not over yet")
+	})
 })
-
-// describe("All of the ships are sunk", () => {
-// 	const secondPlayer = Gameboard("Player 2")
-// 	secondPlayer.setShip("PatrolBoat", [0, 0])
-// 	secondPlayer.setShip("Submarine", [1, 0])
-// 	secondPlayer.setShip("Destroyer", [2, 0])
-// 	secondPlayer.setShip("Battleship", [3, 0])
-// 	secondPlayer.setShip("Carrier", [4, 0])
-
-// 	test("If one of the ships are not sunk, return 'It's not over'", () => {
-// 		expect(secondPlayer.checkGameOver()).toBe("It's not over yet")
-// 	})
-
-// 	test("If all ships are sunk, return 'Game over'", () => {
-// 		secondPlayer.receiveAttack([0, 0])
-// 		secondPlayer.receiveAttack([0, 1])
-// 		secondPlayer.receiveAttack([1, 0])
-// 		secondPlayer.receiveAttack([1, 1])
-// 		secondPlayer.receiveAttack([1, 2])
-// 		secondPlayer.receiveAttack([2, 0])
-// 		secondPlayer.receiveAttack([2, 1])
-// 		secondPlayer.receiveAttack([2, 2])
-// 		secondPlayer.receiveAttack([3, 0])
-// 		secondPlayer.receiveAttack([3, 1])
-// 		secondPlayer.receiveAttack([3, 2])
-// 		secondPlayer.receiveAttack([3, 3])
-// 		secondPlayer.receiveAttack([4, 0])
-// 		secondPlayer.receiveAttack([4, 1])
-// 		secondPlayer.receiveAttack([4, 2])
-// 		secondPlayer.receiveAttack([4, 3])
-// 		secondPlayer.receiveAttack([4, 4])
-
-// 		expect(secondPlayer.checkGameOver()).toBe("Game over")
-// 	})
-// })

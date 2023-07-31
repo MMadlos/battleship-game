@@ -125,7 +125,6 @@ export function Gameboard() {
 	}
 
 	function checkGameOver() {
-		// Comprobar que todos los barcos están hundidos
 		const shipStatuses = []
 
 		for (const shipPlaced in shipsPlaced) {
