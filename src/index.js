@@ -43,59 +43,52 @@ const gameboardTwoDOM = document.getElementById("gameboard-two")
 const gameboardPlayerTwo = gameboardTwo.getGameboard()
 renderGameboard(gameboardTwoDOM, gameboardPlayerTwo)
 
-// Click cell to attack
-/*
-* - Click event (Event bubbling)
-* - Store row
-* - Store column
-- Check coords in the gameboard
-- Attack
-- Display style
-- Check if a ship has been sunk
-- Check if gameover
-*/
+const opponentGameboard = document.getElementById("gameboard-two")
+opponentGameboard.addEventListener("click", (e) => {
+	const cell = e.target.closest("div.cell")
+	const isCoord = cell.classList.contains("coordY") || cell.classList.contains("coordX")
 
-const gameboardBoth = document.querySelectorAll(".gameboard")
-gameboardBoth.forEach((gameboard) => {
-	gameboard.addEventListener("click", (e) => {
-		const cell = e.target.closest("div.cell")
-		const isCoord = cell.classList.contains("coordY") || cell.classList.contains("coordX")
+	if (isCoord) return
 
-		if (isCoord) return
+	const coordX = cell.dataset.row
+	const coordY = cell.dataset.col
 
-		const playerGameboard = cell.parentElement.id
-		const coordX = cell.dataset.row
-		const coordY = cell.dataset.col
-		const coordinates = [coordX, coordY]
+	const gameboardContent = gameboardPlayerTwo[coordX][coordY]
+	const isAlreadyAttacked = gameboardContent === "Hit" || gameboardContent === "Missed"
 
-		if (playerGameboard === "gameboard-two") {
-			const gameboardContent = gameboardPlayerTwo[coordX][coordY]
-			const isAlreadyAttacked = gameboardContent === "Hit" || gameboardContent === "Missed"
+	if (isAlreadyAttacked) return console.log("You already attacked these coordinates")
 
-			if (isAlreadyAttacked) return console.log("You already attacked these coordinates")
+	playerOne.attack(playerTwo, [coordX, coordY])
+	cell.textContent = gameboardPlayerTwo[coordX][coordY]
+	cell.classList.add(cell.textContent.toLowerCase())
 
-			playerOne.attack(playerTwo, coordinates)
-			cell.textContent = gameboardPlayerTwo[coordX][coordY]
-			cell.classList.add(cell.textContent.toLowerCase())
+	// Check gameover for PlayerTwo
+	console.log({ Computer: playerTwo.checkGameOver() })
 
-			// Starting here, it's the computers move
-			// TODO -> Should show more stuff before the computer attacks the player (eg. animation )
-			// [...]
+	// Starting here, it's the computers move
+	// TODO -> Should show more stuff before the computer attacks the player (eg. animation )
+	// [...]
 
-			const randomCoordX = getRandomIndex()
-			const randomCoordY = getRandomIndex()
+	const randomCoordX = getRandomIndex()
+	const randomCoordY = getRandomIndex()
 
-			const gameboardContentOne = gameboardPlayerOne[randomCoordX][randomCoordY]
-			const isAlreadyAttackedOne = gameboardContentOne === "Hit" || gameboardContent === "Missed"
+	const gameboardContentOne = gameboardPlayerOne[randomCoordX][randomCoordY]
+	const isAlreadyAttackedOne = gameboardContentOne === "Hit" || gameboardContent === "Missed"
 
-			if (!isAlreadyAttackedOne) {
-				playerTwo.attack(playerOne, [randomCoordX, randomCoordY])
-				const playerOneCellDOM = document.querySelector(`[data-row="${randomCoordX}"][data-col="${randomCoordY}"]`)
-				playerOneCellDOM.textContent = gameboardPlayerOne[randomCoordX][randomCoordY]
-				playerOneCellDOM.classList.add(playerOneCellDOM.textContent.toLowerCase())
-			}
-		}
-	})
+	if (!isAlreadyAttackedOne) {
+		playerTwo.attack(playerOne, [randomCoordX, randomCoordY])
+		const playerOneCellDOM = document.querySelector(`[data-row="${randomCoordX}"][data-col="${randomCoordY}"]`)
+		playerOneCellDOM.textContent = gameboardPlayerOne[randomCoordX][randomCoordY]
+		playerOneCellDOM.classList.add(playerOneCellDOM.textContent.toLowerCase())
+
+		// Check gameover for Player One
+		console.log({ PlayerOne: playerOne.checkGameOver() })
+	}
+
+	if (isAlreadyAttackedOne) {
+		// TODO --> If its already attacked, add logic to check for another Empty spot
+		console.log("There's already been attacked")
+	}
 })
 
 function getRandomIndex() {
