@@ -83,3 +83,11 @@ section > p {
 	grid-template-columns: repeat(11, 1fr);
 	grid-template-rows: repeat(11, 1fr);
 }
+
+.hit {
+	background-color: lightgreen;
+}
+
+.missed {
+	background-color: lightcoral;
+}
