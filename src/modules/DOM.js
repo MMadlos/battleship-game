@@ -1,48 +1,28 @@
-const gameboardOne = document.getElementById("gameboard-one")
-const gameboardTwo = document.getElementById("gameboard-two")
-
-export function renderGameboard() {
-	createRowsAndCols(gameboardOne)
-	createRowsAndCols(gameboardTwo)
-
-	addCellIndex("gameboard-one")
-	addCellIndex("gameboard-two")
-}
-
-function createRowsAndCols(gameboard) {
-	const gridSize = 10
-	for (let i = 0; i <= gridSize; i++) {
-		const row = document.createElement("div")
-		row.classList.add("row")
-		gameboard.append(row)
-
-		if (i === 0) row.classList.add("coordY")
-
-		for (let j = 0; j <= gridSize; j++) {
-			const cell = document.createElement("div")
-			cell.classList.add("cell")
-			row.appendChild(cell)
-
-			if (j === 0) {
-				cell.classList.add("coordX")
-				if (i > 0) cell.textContent = i
-			}
-			if (i === 0) {
-				cell.classList.add("coordY")
-				if (j > 0) cell.textContent = j
-			}
-		}
+export function renderGameboard(gameboardDOM, playerGameboard) {
+	for (let i = 0; i <= 10; i++) {
+		const div = document.createElement("div")
+		if (i !== 0) div.textContent = i
+		div.classList.add("cell", "coordY")
+		gameboardDOM.append(div)
 	}
-}
 
-function addCellIndex(gameboard) {
-	const allRows = document.querySelectorAll(`#${gameboard} > .row:not(.coordY)`)
-	allRows.forEach((row, index) => {
-		row.dataset.row = index
+	playerGameboard.forEach((row, rowIndex) => {
+		row.forEach((col, colIndex) => {
+			if (colIndex === 0) {
+				const div = document.createElement("div")
+				gameboardDOM.append(div)
+				div.textContent = rowIndex + 1
+				div.classList.add("cell", "coordX")
+			}
 
-		const allCells = row.querySelectorAll(".cell:not(.coordX)")
-		allCells.forEach((cell, index) => {
-			cell.dataset.col = index
+			const div = document.createElement("div")
+			div.textContent = col
+			div.dataset.row = rowIndex
+			div.dataset.col = colIndex
+			div.classList.add("cell")
+			if (col !== "Empty") div.classList.add("ship-placed")
+
+			gameboardDOM.append(div)
 		})
 	})
 }

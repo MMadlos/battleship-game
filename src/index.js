@@ -35,87 +35,13 @@ defaultShipsTwo.forEach((ship) => {
 
 // "START OF THE GAME"
 
-// Gameboard One
 const gameboardOneDOM = document.getElementById("gameboard-one")
-const gameboardTwoDOM = document.getElementById("gameboard-two")
-
 const gameboardPlayerOne = gameboardOne.getGameboard()
+renderGameboard(gameboardOneDOM, gameboardPlayerOne)
+
+const gameboardTwoDOM = document.getElementById("gameboard-two")
 const gameboardPlayerTwo = gameboardTwo.getGameboard()
-
-// Crear div y recuperar índice de fila e índice de columna
-for (let i = 0; i <= 10; i++) {
-	const div = document.createElement("div")
-	div.textContent = i
-	div.classList.add("cell", "coordY")
-	gameboardOneDOM.append(div)
-}
-
-gameboardPlayerOne.forEach((row, rowIndex) => {
-	row.forEach((col, colIndex) => {
-		if (colIndex === 0) {
-			const div = document.createElement("div")
-			gameboardOneDOM.append(div)
-			div.textContent = rowIndex + 1
-			div.classList.add("cell", "coordX")
-		}
-
-		const div = document.createElement("div")
-		div.textContent = col
-		div.dataset.row = rowIndex
-		div.dataset.col = colIndex
-		div.classList.add("cell")
-		if (col !== "Empty") div.classList.add("ship-placed")
-
-		gameboardOneDOM.append(div)
-	})
-})
-
-for (let i = 0; i <= 10; i++) {
-	const div = document.createElement("div")
-	div.textContent = i
-	div.classList.add("cell", "coordY")
-	gameboardTwoDOM.append(div)
-}
-
-gameboardPlayerTwo.forEach((row, rowIndex) => {
-	row.forEach((col, colIndex) => {
-		if (colIndex === 0) {
-			const div = document.createElement("div")
-			gameboardTwoDOM.append(div)
-			div.textContent = rowIndex + 1
-			div.classList.add("cell", "coordX")
-		}
-
-		const div = document.createElement("div")
-		div.textContent = col
-		div.dataset.row = rowIndex
-		div.dataset.col = colIndex
-		div.classList.add("cell")
-		if (col !== "Empty") div.classList.add("ship-placed")
-
-		gameboardTwoDOM.append(div)
-	})
-})
-
-// OLD
-// renderGameboard()
-
-// displayGameboardContent(gameboardOne.getGameboard())
-// displayGameboardContent(gameboardTwo.getGameboard())
-
-// function displayGameboardContent(playerGameboard) {
-// 	const playerBoard = playerGameboard === gameboardOne.getGameboard() ? "gameboard-one" : "gameboard-two"
-
-// 	// Recorrer el objeto y guardar el índice de la fila y el índice de la columna
-// 	playerGameboard.forEach((row, rowIndex) => {
-// 		row.forEach((col, colIndex) => {
-// 			const cell = document.querySelector(`#${playerBoard} > [data-row="${rowIndex}"] > [data-col="${colIndex}"]`)
-// 			cell.textContent = col
-
-// 			if (col !== "Empty") cell.classList.add("ship-placed")
-// 		})
-// 	})
-// }
+renderGameboard(gameboardTwoDOM, gameboardPlayerTwo)
 
 // Click cell to attack
 /*
