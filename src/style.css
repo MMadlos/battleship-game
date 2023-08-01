@@ -15,6 +15,7 @@ html {
 }
 
 body {
+	height: 100vh;
 	max-height: 100vh;
 	font-family: "Inter", sans-serif;
 }
@@ -56,17 +57,14 @@ section > p {
 	margin-top: 40px;
 }
 
-.row {
+/* .row {
 	display: flex;
-}
+} */
 
 .cell {
-	width: 65px;
-	aspect-ratio: 1 / 1;
-
-	display: flex;
+	/* display: flex;
 	justify-content: center;
-	align-items: center;
+	align-items: center; */
 	padding: 8px;
 	font-size: 12px;
 }
@@ -77,4 +75,11 @@ section > p {
 
 .ship-placed {
 	background-color: lightblue;
+}
+
+/* TEST */
+.gameboard {
+	display: grid;
+	grid-template-columns: repeat(11, 1fr);
+	grid-template-rows: repeat(11, 1fr);
 }
