@@ -68,8 +68,6 @@ gameboardBoth.forEach((gameboard) => {
 		const coordY = cell.dataset.col
 		const coordinates = [coordX, coordY]
 
-		console.log({ playerGameboard })
-
 		if (playerGameboard === "gameboard-two") {
 			const gameboardContent = gameboardPlayerTwo[coordX][coordY]
 			const isAlreadyAttacked = gameboardContent === "Hit" || gameboardContent === "Missed"
@@ -79,32 +77,27 @@ gameboardBoth.forEach((gameboard) => {
 			playerOne.attack(playerTwo, coordinates)
 			cell.textContent = gameboardPlayerTwo[coordX][coordY]
 			cell.classList.add(cell.textContent.toLowerCase())
-		} else {
-			// TODO -> Check when the computer attacks (random moves)
-			const gameboardContent = gameboardPlayerOne[coordX][coordY]
-			const isAlreadyAttacked = gameboardContent === "Hit" || gameboardContent === "Missed"
 
-			if (isAlreadyAttacked) return console.log("You already attacked these coordinates")
-			playerTwo.attack(playerOne, coordinates)
-			cell.textContent = gameboardPlayerOne[coordX][coordY]
+			// Starting here, it's the computers move
+			// TODO -> Should show more stuff before the computer attacks the player (eg. animation )
+			// [...]
+
+			const randomCoordX = getRandomIndex()
+			const randomCoordY = getRandomIndex()
+
+			const gameboardContentOne = gameboardPlayerOne[randomCoordX][randomCoordY]
+			const isAlreadyAttackedOne = gameboardContentOne === "Hit" || gameboardContent === "Missed"
+
+			if (!isAlreadyAttackedOne) {
+				playerTwo.attack(playerOne, [randomCoordX, randomCoordY])
+				const playerOneCellDOM = document.querySelector(`[data-row="${randomCoordX}"][data-col="${randomCoordY}"]`)
+				playerOneCellDOM.textContent = gameboardPlayerOne[randomCoordX][randomCoordY]
+				playerOneCellDOM.classList.add(playerOneCellDOM.textContent.toLowerCase())
+			}
 		}
 	})
 })
 
-// !OLD
-// // Gameboard One
-// const gameboardOneDOM = document.getElementById("gameboard-one")
-// const allRowsDOM = gameboardOneDOM.querySelectorAll(".row:not(.coordY)")
-// allRowsDOM.forEach((row) => {
-// 	row.addEventListener("click", (e) => {
-// 		if (e.target === undefined) return
-
-// 		const rowIndex = row.dataset.row
-// 		const colDOM = e.target
-// 		const colIndex = colDOM.dataset.col
-
-// 		playerTwo.attack(playerOne, [rowIndex, colIndex])
-
-// 		console.table(gameboardOne.getGameboard())
-// 	})
-// })
+function getRandomIndex() {
+	return Math.floor(Math.random() * 10)
+}
