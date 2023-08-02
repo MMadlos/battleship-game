@@ -66,56 +66,45 @@ opponentGameboard.addEventListener("click", (e) => {
 	console.log({ "Computer Gameover": playerTwo.checkGameOver() })
 	if (playerTwo.checkGameOver()) return console.log("YOU WON :)")
 
+	// TODO -> Should show more stuff before the computer attacks the player (eg. animation )
+	// [...]
 	computerAttacks()
 })
 
-function computerAttacks(coords) {
-	// Starting here, it's the computers move
-	// TODO -> Should show more stuff before the computer attacks the player (eg. animation )
-	// [...]
-	let randomCoordX
-	let randomCoordY
+function computerAttacks(coords = [undefined, undefined]) {
+	const [_coordX, _coordY] = coords
 
-	if (coords) {
-		const [coordX, coordY] = coords
-		randomCoordX = coordX
-		randomCoordY = coordY
-	}
+	const coordX = _coordX || getRandomIndex()
+	const coordY = _coordY || getRandomIndex()
 
-	if (!coords) {
-		randomCoordX = coords || getRandomIndex()
-		randomCoordY = coords || getRandomIndex()
-	}
+	const isHit = gameboardPlayerOne[coordX][coordY] === "Hit"
+	const isMissed = gameboardPlayerOne[coordX][coordY] === "Missed"
+	const canAttack = !isHit && !isMissed
 
-	const gameboardContentOne = gameboardPlayerOne[randomCoordX][randomCoordY]
-	const isAlreadyAttacked = gameboardContentOne === "Hit" || gameboardContentOne === "Missed"
+	if (canAttack) {
+		playerTwo.attack(playerOne, [coordX, coordY])
 
-	if (!isAlreadyAttacked) {
-		playerTwo.attack(playerOne, [randomCoordX, randomCoordY])
-		const playerOneCellDOM = document.querySelector(`[data-row="${randomCoordX}"][data-col="${randomCoordY}"]`)
-		playerOneCellDOM.textContent = gameboardPlayerOne[randomCoordX][randomCoordY]
+		const playerOneCellDOM = document.querySelector(`[data-row="${coordX}"][data-col="${coordY}"]`)
+		playerOneCellDOM.textContent = gameboardPlayerOne[coordX][coordY]
 		playerOneCellDOM.classList.add(playerOneCellDOM.textContent.toLowerCase())
 
-		// Check gameover for Player One
-		console.log({ randomCoordX, randomCoordY, gameboardContentOne })
-		console.log({ "PlayerOne Gameover": playerOne.checkGameOver() })
 		if (playerOne.checkGameOver()) return console.log("The opponent wins :(")
 	}
 
-	if (isAlreadyAttacked) {
-		console.log("There's already been attacked")
+	if (!canAttack) {
+		// It first searches if there's a spot that can be attacked in the same row. If not, it searches the first spot in the  gameboard.
 
-		const currentRow = gameboardPlayerOne[randomCoordX] // Array(10)
-		const newCoordY = currentRow.findIndex((element) => element !== "Hit" && element !== "Missed")
-		if (newCoordY !== -1) return computerAttacks([randomCoordX, newCoordY])
-		let coordYForEach, coordXForEach
+		const currentRow = gameboardPlayerOne[coordX]
+		const canAttackCell = (element) => element !== "Hit" && element !== "Missed"
+
+		const newCoordY = currentRow.findIndex(canAttackCell)
+		if (newCoordY !== -1) return computerAttacks([coordX, newCoordY])
+
 		for (let i = 0; i < 10; i++) {
 			const row = gameboardPlayerOne[i]
-			const colIndex = row.findIndex((element) => element !== "Hit" && element !== "Missed")
+			const colIndex = row.findIndex(canAttackCell)
 
-			coordXForEach = i
-			coordYForEach = colIndex
-			if (colIndex !== -1) return computerAttacks([coordXForEach, coordYForEach])
+			if (colIndex !== -1) return computerAttacks([i, colIndex])
 		}
 	}
 }
