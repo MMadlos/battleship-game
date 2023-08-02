@@ -68,23 +68,17 @@ section > p {
 .game-container {
 	display: flex;
 	gap: 80px;
-	justify-content: center;
+	justify-content: space-evenly;
 
 	height: 100%;
+	width: 100%;
 
 	margin-top: 40px;
 }
 
-/* .row {
-	display: flex;
-} */
-
 .cell {
-	/* display: flex;
-	justify-content: center;
-	align-items: center; */
-	padding: 8px;
-	font-size: 12px;
+	min-width: 50px;
+	aspect-ratio: 1/1;
 }
 
 .cell:not(.coordX):not(.coordY) {

@@ -16,11 +16,11 @@ export function renderGameboard(gameboardDOM, playerGameboard) {
 			}
 
 			const div = document.createElement("div")
-			div.textContent = col
+
 			div.dataset.row = rowIndex
 			div.dataset.col = colIndex
 			div.classList.add("cell")
-			if (col !== "Empty") div.classList.add("ship-placed")
+			div.classList.toggle("ship-placed", col !== "Empty")
 
 			gameboardDOM.append(div)
 		})

@@ -68,8 +68,7 @@ opponentGameboard.addEventListener("click", (e) => {
 	if (isAlreadyAttacked) return console.log("You already attacked these coordinates")
 
 	playerOne.attack(playerTwo, [coordX, coordY])
-	cell.textContent = gameboardPlayerTwo[coordX][coordY]
-	cell.classList.add(cell.textContent.toLowerCase())
+	cell.classList.add(gameboardPlayerTwo[coordX][coordY].toLowerCase())
 
 	// Check gameover for PlayerTwo
 	console.log({ "Computer Gameover": playerTwo.checkGameOver() })
@@ -95,8 +94,7 @@ function computerAttacks(coords = [undefined, undefined]) {
 		playerTwo.attack(playerOne, [coordX, coordY])
 
 		const playerOneCellDOM = document.querySelector(`[data-row="${coordX}"][data-col="${coordY}"]`)
-		playerOneCellDOM.textContent = gameboardPlayerOne[coordX][coordY]
-		playerOneCellDOM.classList.add(playerOneCellDOM.textContent.toLowerCase())
+		playerOneCellDOM.classList.add(gameboardPlayerOne[coordX][coordY].toLowerCase())
 
 		if (playerOne.checkGameOver()) return console.log("The opponent wins :(")
 	}
