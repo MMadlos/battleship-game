@@ -134,7 +134,7 @@ export function Gameboard() {
 
 		const areNotAllSunk = shipStatuses.some((status) => status === false)
 
-		return areNotAllSunk ? "It's not over yet" : "Game over"
+		return areNotAllSunk ? false : true
 	}
 
 	return { shipsPlaced, getShipsPlaced, getGameboard, setShip, getShipCoordinates, getAvailableShips, receiveAttack, checkGameOver }
