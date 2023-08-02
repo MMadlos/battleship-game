@@ -1,6 +1,6 @@
 import "./style.css"
 import { Player } from "./modules/player"
-import { renderGameboard } from "./modules/DOM"
+import { renderGameboard, toggleGameContainer } from "./modules/DOM"
 
 // DEFAULT
 const playerOne = Player("Player 1")
@@ -8,39 +8,48 @@ const playerTwo = Player("Computer")
 
 const gameboardOne = playerOne.gameboard
 const gameboardTwo = playerTwo.gameboard
-
-const defaultShipsOne = [
-	["Carrier", [0, 5]],
-	["Battleship", [0, 0]],
-	["Destroyer", [2, 0]],
-	["Submarine", [5, 6]],
-	["PatrolBoat", [9, 4]],
-]
-
-const defaultShipsTwo = [
-	["Carrier", [5, 8], "vertical"],
-	["Battleship", [4, 0]],
-	["Destroyer", [3, 3]],
-	["Submarine", [0, 7]],
-	["PatrolBoat", [9, 4]],
-]
-
-defaultShipsOne.forEach((ship) => {
-	gameboardOne.setShip(ship[0], ship[1], ship[2])
-})
-
-defaultShipsTwo.forEach((ship) => {
-	gameboardTwo.setShip(ship[0], ship[1], ship[2])
-})
+const gameboardPlayerOne = gameboardOne.getGameboard()
+const gameboardPlayerTwo = gameboardTwo.getGameboard()
 
 // INIT GAMEBOARDS
-const gameboardOneDOM = document.getElementById("gameboard-one")
-const gameboardPlayerOne = gameboardOne.getGameboard()
-renderGameboard(gameboardOneDOM, gameboardPlayerOne)
+const startBtn = document.getElementById("start-game")
+startBtn.addEventListener("click", () => {
+	const gameboardOneDOM = document.getElementById("gameboard-one")
+	const gameboardTwoDOM = document.getElementById("gameboard-two")
 
-const gameboardTwoDOM = document.getElementById("gameboard-two")
-const gameboardPlayerTwo = gameboardTwo.getGameboard()
-renderGameboard(gameboardTwoDOM, gameboardPlayerTwo)
+	startBtn.classList.add("none")
+
+	setDefault()
+	toggleGameContainer()
+	renderGameboard(gameboardOneDOM, gameboardPlayerOne)
+	renderGameboard(gameboardTwoDOM, gameboardPlayerTwo)
+})
+
+function setDefault() {
+	const defaultShipsOne = [
+		["Carrier", [0, 5]],
+		["Battleship", [0, 0]],
+		["Destroyer", [2, 0]],
+		["Submarine", [5, 6]],
+		["PatrolBoat", [9, 4]],
+	]
+
+	const defaultShipsTwo = [
+		["Carrier", [5, 8], "vertical"],
+		["Battleship", [4, 0]],
+		["Destroyer", [3, 3]],
+		["Submarine", [0, 7]],
+		["PatrolBoat", [9, 4]],
+	]
+
+	defaultShipsOne.forEach((ship) => {
+		gameboardOne.setShip(ship[0], ship[1], ship[2])
+	})
+
+	defaultShipsTwo.forEach((ship) => {
+		gameboardTwo.setShip(ship[0], ship[1], ship[2])
+	})
+}
 
 // "START OF THE GAME"
 const opponentGameboard = document.getElementById("gameboard-two")
@@ -68,7 +77,8 @@ opponentGameboard.addEventListener("click", (e) => {
 
 	// TODO -> Should show more stuff before the computer attacks the player (eg. animation )
 	// [...]
-	computerAttacks()
+
+	setTimeout(computerAttacks, 500)
 })
 
 function computerAttacks(coords = [undefined, undefined]) {

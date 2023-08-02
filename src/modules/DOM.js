@@ -26,3 +26,10 @@ export function renderGameboard(gameboardDOM, playerGameboard) {
 		})
 	})
 }
+
+export function toggleGameContainer() {
+	const container = document.querySelector(".game-container")
+	const isHidden = container.classList.contains("none")
+	console.log(isHidden)
+	isHidden ? container.classList.remove("none") : container.classList.add("none")
+}
