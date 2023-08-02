@@ -1,6 +1,6 @@
 import "./style.css"
 import { Player } from "./modules/player"
-import { renderGameboard, toggleGameContainer } from "./modules/DOM"
+import { renderGameboard, toggleGameContainer, GameOverDOM } from "./modules/DOM"
 
 // DEFAULT
 const playerOne = Player("Player 1")
@@ -12,18 +12,21 @@ const gameboardPlayerOne = gameboardOne.getGameboard()
 const gameboardPlayerTwo = gameboardTwo.getGameboard()
 
 // INIT GAMEBOARDS
-const startBtn = document.getElementById("start-game")
-startBtn.addEventListener("click", () => {
-	const gameboardOneDOM = document.getElementById("gameboard-one")
-	const gameboardTwoDOM = document.getElementById("gameboard-two")
+initGame()
+function initGame() {
+	const startBtn = document.getElementById("start-game")
+	startBtn.addEventListener("click", () => {
+		const gameboardOneDOM = document.getElementById("gameboard-one")
+		const gameboardTwoDOM = document.getElementById("gameboard-two")
 
-	startBtn.classList.add("none")
+		startBtn.classList.add("none")
 
-	setDefault()
-	toggleGameContainer()
-	renderGameboard(gameboardOneDOM, gameboardPlayerOne)
-	renderGameboard(gameboardTwoDOM, gameboardPlayerTwo)
-})
+		setDefault()
+		toggleGameContainer()
+		renderGameboard(gameboardOneDOM, gameboardPlayerOne)
+		renderGameboard(gameboardTwoDOM, gameboardPlayerTwo)
+	})
+}
 
 function setDefault() {
 	const defaultShipsOne = [
@@ -72,7 +75,7 @@ opponentGameboard.addEventListener("click", (e) => {
 
 	// Check gameover for PlayerTwo
 	console.log({ "Computer Gameover": playerTwo.checkGameOver() })
-	if (playerTwo.checkGameOver()) return console.log("YOU WON :)")
+	if (playerTwo.checkGameOver()) return displayGameOver("Player")
 
 	// TODO -> Should show more stuff before the computer attacks the player (eg. animation )
 	// [...]
@@ -96,7 +99,7 @@ function computerAttacks(coords = [undefined, undefined]) {
 		const playerOneCellDOM = document.querySelector(`[data-row="${coordX}"][data-col="${coordY}"]`)
 		playerOneCellDOM.classList.add(gameboardPlayerOne[coordX][coordY].toLowerCase())
 
-		if (playerOne.checkGameOver()) return console.log("The opponent wins :(")
+		if (playerOne.checkGameOver()) return displayGameOver("Computer")
 	}
 
 	if (!canAttack) {
@@ -119,4 +122,22 @@ function computerAttacks(coords = [undefined, undefined]) {
 
 function getRandomIndex() {
 	return Math.floor(Math.random() * 10)
+}
+
+function displayGameOver(winner) {
+	GameOverDOM(winner)
+	restartGame()
+}
+
+function restartGame() {
+	const restartBtn = document.getElementById("restart-btn")
+	const gameOverText = document.querySelector(".game-over")
+
+	restartBtn.addEventListener("click", () => {
+		console.log("CLICKED")
+		restartBtn.remove()
+		gameOverText.remove()
+
+		initGame()
+	})
 }

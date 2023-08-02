@@ -89,7 +89,6 @@ section > p {
 	background-color: lightblue;
 }
 
-/* TEST */
 .gameboard {
 	display: grid;
 	grid-template-columns: repeat(11, 1fr);
@@ -102,4 +101,11 @@ section > p {
 
 .missed {
 	background-color: lightcoral;
+}
+
+.game-over {
+	font-size: 3rem;
+	font-weight: 800;
+
+	margin-top: 16px;
 }
