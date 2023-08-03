@@ -1,4 +1,5 @@
 export function setDefaultShips(gameboardOne, gameboardTwo) {
+	getRandomIndexes()
 	const defaultShipsOne = [
 		["Carrier", [0, 5], "vertical"],
 		["Battleship", [0, 0]],
@@ -22,4 +23,10 @@ export function setDefaultShips(gameboardOne, gameboardTwo) {
 	defaultShipsTwo.forEach((ship) => {
 		gameboardTwo.setShip(ship[0], ship[1], ship[2])
 	})
+}
+
+function getRandomIndexes() {}
+
+function getRandomIndex() {
+	return Math.floor(Math.random() * 10)
 }

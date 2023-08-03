@@ -23,8 +23,10 @@ function setVariables() {
 // TODO:
 // * - Display everything without the initial "Start game".
 // * - Add logic to start game -> If player hasn't clicked "Start Game", player can't click enemy's grid.
+// - Add logic to be able for the player to change ships position
 // - Add logic to put ships randomly
 // - Add texts for every situation -> Eg. your ships have been placed in your grid randomly. If you want to change it, select the ship and place it in another coordinates
+// - Add styles
 
 initGame()
 
@@ -38,6 +40,52 @@ function initGame() {
 	renderGameboard(gameboardTwoDOM, gameboardPlayerTwo)
 	startBtnListener()
 }
+
+// Enable player to move ships around
+// Get the ship object -> Gameboard().getShipsPlaced.shipName
+const playerGrid = document.getElementById("gameboard-one")
+let shipToMove // Get with the first click
+let newCoordinates // Get with the second click
+playerGrid.addEventListener("click", (e) => {
+	// Click in cell
+	const cell = e.target.closest("div.cell")
+
+	const isCellCoord = cell.classList.contains("coordY") || cell.classList.contains("coordX")
+	if (isCellCoord) return
+
+	const coordX = cell.dataset.row
+	const coordY = cell.dataset.col
+	const shipName = gameboardPlayerOne[coordX][coordY]
+	const shipObject = gameboardOne.getShipsPlaced()[shipName]
+	const shipInfo = { shipName, coordinates: [coordX, coordY], object: shipObject }
+
+	const isCellEmpty = !cell.classList.contains("ship-placed")
+
+	// It restarts the selection in case the player already moved a ship.
+	if (newCoordinates) {
+		shipToMove = undefined
+		newCoordinates = undefined
+	}
+
+	// Checks if the player already clicked a ship to move it. If not, it only allows to click on a ship placed.
+	if (!shipToMove && !isCellEmpty) {
+		shipToMove = shipInfo
+		console.log({ shipToMove, newCoordinates })
+
+		return
+	}
+
+	if (shipToMove && isCellEmpty) {
+		newCoordinates = [coordX, coordY]
+		console.log({ shipToMove, newCoordinates })
+		return
+	}
+
+	// Add conditions when the second click -> If is it possible to add the ship into the new coords
+
+	// Add logic to rotate the ship when pressing R
+	// Remove values if the player selects another ship
+})
 
 function startBtnListener() {
 	// TODO -> Player can't click in the enemy's grid until it clicks the start game
