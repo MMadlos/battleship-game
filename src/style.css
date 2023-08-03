@@ -51,8 +51,39 @@ h1 {
 	display: none !important;
 }
 
-/* BUTTON */
-#start-game {
+/* TEXT CONTAINER */
+.text-container {
+}
+
+/* SHIP CARDS */
+.ship-list {
+	display: flex;
+	gap: 16px;
+	justify-content: space-between;
+
+	padding: 0 80px;
+}
+.ship-card {
+	padding: 8px 32px;
+	border: 1px solid lightblue;
+	border-radius: 4px;
+
+	display: flex;
+	justify-content: space-around;
+	gap: 16px;
+}
+
+.ship-card:hover {
+	border: 2px solid lightseagreen;
+}
+
+.ship-name {
+	font-weight: 600;
+}
+
+/* BUTTONS */
+#start-game,
+#restart-btn {
 	padding: 8px 24px;
 	margin-top: 16px;
 }
