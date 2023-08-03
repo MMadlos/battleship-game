@@ -1,38 +1,45 @@
 import "./style.css"
 import { Player } from "./modules/player"
-import { renderGameboard, toggleGameContainer, GameOverDOM } from "./modules/DOM"
+import { renderGameboard, toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./modules/DOM"
 
 // DEFAULT
-const playerOne = Player("Player 1")
-const playerTwo = Player("Computer")
-
-const gameboardOne = playerOne.gameboard
-const gameboardTwo = playerTwo.gameboard
-const gameboardPlayerOne = gameboardOne.getGameboard()
-const gameboardPlayerTwo = gameboardTwo.getGameboard()
+let playerOne, playerTwo
+let gameboardOne, gameboardTwo // Gameboard factories
+let gameboardPlayerOne, gameboardPlayerTwo // Gameboard content
 
 function setVariables() {
 	playerOne = Player("Player 1")
 	playerTwo = Player("Computer")
+
+	gameboardOne = playerOne.gameboard
+	gameboardTwo = playerTwo.gameboard
+	gameboardPlayerOne = gameboardOne.getGameboard()
+	gameboardPlayerTwo = gameboardTwo.getGameboard()
 }
 
 // INIT GAMEBOARDS
-// TODO --> Al reiniciar juego, tengo que volver a generar los valores Default
-initGame()
 
-function initGame() {
+// TODO --> Al reiniciar juego, tengo que volver a generar los valores Default
+startBtnListener()
+
+function startBtnListener() {
 	const startBtn = document.getElementById("start-game")
 	startBtn.addEventListener("click", () => {
-		const gameboardOneDOM = document.getElementById("gameboard-one")
-		const gameboardTwoDOM = document.getElementById("gameboard-two")
-
 		startBtn.classList.add("none")
-
-		setDefault()
-		toggleGameContainer()
-		renderGameboard(gameboardOneDOM, gameboardPlayerOne)
-		renderGameboard(gameboardTwoDOM, gameboardPlayerTwo)
+		initGame()
 	})
+}
+
+function initGame() {
+	const gameboardOneDOM = document.getElementById("gameboard-one")
+	const gameboardTwoDOM = document.getElementById("gameboard-two")
+
+	startBtnListener()
+	setVariables()
+	setDefault()
+	toggleGameContainer()
+	renderGameboard(gameboardOneDOM, gameboardPlayerOne)
+	renderGameboard(gameboardTwoDOM, gameboardPlayerTwo)
 }
 
 function setDefault() {
@@ -141,10 +148,10 @@ function restartGame() {
 	const gameOverText = document.querySelector(".game-over")
 
 	restartBtn.addEventListener("click", () => {
-		console.log("CLICKED")
 		restartBtn.remove()
 		gameOverText.remove()
 
+		removePreviousGameboard()
 		initGame()
 	})
 }

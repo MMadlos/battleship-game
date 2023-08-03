@@ -30,7 +30,6 @@ export function renderGameboard(gameboardDOM, playerGameboard) {
 export function toggleGameContainer() {
 	const container = document.querySelector(".game-container")
 	const isHidden = container.classList.contains("none")
-	console.log(isHidden)
 	isHidden ? container.classList.remove("none") : container.classList.add("none")
 }
 
@@ -51,4 +50,9 @@ export function GameOverDOM(winner) {
 	restartBtn.id = "restart-btn"
 
 	body.append(restartBtn)
+}
+
+export function removePreviousGameboard() {
+	const cellsAll = document.querySelectorAll(".gameboard  > div")
+	cellsAll.forEach((cell) => cell.remove())
 }
