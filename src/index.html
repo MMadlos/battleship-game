@@ -12,10 +12,14 @@
 	</head>
 	<body id="app">
 		<h1>Battleship</h1>
+		<div class="text-container">
+			<p>Place your ships</p>
+			<br />
+			<p>Are your ships placed?</p>
+			<button id="start-game">Start game</button>
+		</div>
 
-		<button id="start-game">Start game</button>
-
-		<div class="game-container none">
+		<main class="game-container">
 			<section>
 				<p>Your grid</p>
 				<div class="gameboard" id="gameboard-one"></div>
@@ -24,6 +28,6 @@
 				<p>Opponent's grid</p>
 				<div class="gameboard" id="gameboard-two"></div>
 			</section>
-		</div>
+		</main>
 	</body>
 </html>

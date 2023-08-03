@@ -1,5 +1,6 @@
 import "./style.css"
 import { Player } from "./modules/player"
+import { setDefaultShips } from "./modules/defaultShips"
 import { renderGameboard, toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./modules/DOM"
 
 // DEFAULT
@@ -19,82 +20,64 @@ function setVariables() {
 
 // INIT GAMEBOARDS
 
-// TODO --> Al reiniciar juego, tengo que volver a generar los valores Default
-startBtnListener()
+// TODO:
+// * - Display everything without the initial "Start game".
+// * - Add logic to start game -> If player hasn't clicked "Start Game", player can't click enemy's grid.
+// - Add logic to put ships randomly
+// - Add texts for every situation -> Eg. your ships have been placed in your grid randomly. If you want to change it, select the ship and place it in another coordinates
 
-function startBtnListener() {
-	const startBtn = document.getElementById("start-game")
-	startBtn.addEventListener("click", () => {
-		startBtn.remove()
-		initGame()
-	})
-}
+initGame()
 
 function initGame() {
 	const gameboardOneDOM = document.getElementById("gameboard-one")
 	const gameboardTwoDOM = document.getElementById("gameboard-two")
 
 	setVariables()
-	setDefault()
-	toggleGameContainer()
+	setDefaultShips(gameboardOne, gameboardTwo)
 	renderGameboard(gameboardOneDOM, gameboardPlayerOne)
 	renderGameboard(gameboardTwoDOM, gameboardPlayerTwo)
+	startBtnListener()
 }
 
-function setDefault() {
-	const defaultShipsOne = [
-		["Carrier", [0, 5], "vertical"],
-		["Battleship", [0, 0]],
-		["Destroyer", [2, 0]],
-		["Submarine", [5, 6]],
-		["PatrolBoat", [9, 4]],
-	]
-
-	const defaultShipsTwo = [
-		["Carrier", [5, 8], "vertical"],
-		["Battleship", [4, 0]],
-		["Destroyer", [3, 3]],
-		["Submarine", [0, 7]],
-		["PatrolBoat", [9, 4]],
-	]
-
-	defaultShipsOne.forEach((ship) => {
-		gameboardOne.setShip(ship[0], ship[1], ship[2])
-	})
-
-	defaultShipsTwo.forEach((ship) => {
-		gameboardTwo.setShip(ship[0], ship[1], ship[2])
+function startBtnListener() {
+	// TODO -> Player can't click in the enemy's grid until it clicks the start game
+	const startBtn = document.getElementById("start-game")
+	startBtn.addEventListener("click", () => {
+		startBtn.remove()
+		enableAttackEnemy()
 	})
 }
 
 // "START OF THE GAME"
-const opponentGameboard = document.getElementById("gameboard-two")
-opponentGameboard.addEventListener("click", (e) => {
-	const cell = e.target.closest("div.cell")
-	const isNotGameboard = cell.classList.contains("coordY") || cell.classList.contains("coordX")
+function enableAttackEnemy() {
+	const opponentGameboard = document.getElementById("gameboard-two")
+	opponentGameboard.addEventListener("click", (e) => {
+		const cell = e.target.closest("div.cell")
+		const isNotGameboard = cell.classList.contains("coordY") || cell.classList.contains("coordX")
 
-	if (isNotGameboard) return
+		if (isNotGameboard) return
 
-	const coordX = cell.dataset.row
-	const coordY = cell.dataset.col
+		const coordX = cell.dataset.row
+		const coordY = cell.dataset.col
 
-	const gameboardContent = gameboardPlayerTwo[coordX][coordY]
-	const isAlreadyAttacked = gameboardContent === "Hit" || gameboardContent === "Missed"
+		const gameboardContent = gameboardPlayerTwo[coordX][coordY]
+		const isAlreadyAttacked = gameboardContent === "Hit" || gameboardContent === "Missed"
 
-	if (isAlreadyAttacked) return console.log("You already attacked these coordinates")
+		if (isAlreadyAttacked) return console.log("You already attacked these coordinates")
 
-	playerOne.attack(playerTwo, [coordX, coordY])
-	cell.classList.add(gameboardPlayerTwo[coordX][coordY].toLowerCase())
+		playerOne.attack(playerTwo, [coordX, coordY])
+		cell.classList.add(gameboardPlayerTwo[coordX][coordY].toLowerCase())
 
-	// Check gameover for PlayerTwo
-	console.log({ "Computer Gameover": playerTwo.checkGameOver() })
-	if (playerTwo.checkGameOver()) return displayGameOver("Player")
+		// Check gameover for PlayerTwo
+		console.log({ "Computer Gameover": playerTwo.checkGameOver() })
+		if (playerTwo.checkGameOver()) return displayGameOver("Player")
 
-	// TODO -> Should show more stuff before the computer attacks the player (eg. animation )
-	// [...]
+		// TODO -> Should show more stuff before the computer attacks the player (eg. animation )
+		// [...]
 
-	setTimeout(computerAttacks, 500)
-})
+		setTimeout(computerAttacks, 500)
+	})
+}
 
 function computerAttacks(coords = [undefined, undefined]) {
 	const [_coordX, _coordY] = coords
@@ -138,17 +121,23 @@ function getRandomIndex() {
 }
 
 function displayGameOver(winner) {
+	toggleGameContainer()
 	GameOverDOM(winner)
 	restartGame()
 }
 
 function restartGame() {
+	// TODO --> Check how to render the init screen again.
+	// Check classes of game-container and how to init game
 	const restartBtn = document.getElementById("restart-btn")
 	const gameOverText = document.querySelector(".game-over")
 
 	restartBtn.addEventListener("click", () => {
 		restartBtn.remove()
 		gameOverText.remove()
+
+		const textContainer = document.querySelector(".text-container")
+		textContainer.classList.remove("none")
 
 		removePreviousGameboard()
 		initGame()

@@ -34,9 +34,6 @@ export function toggleGameContainer() {
 }
 
 export function GameOverDOM(winner) {
-	const gameContainer = document.querySelector(".game-container")
-	gameContainer.classList.add("none")
-
 	const gameOverText = document.createElement("p")
 	gameOverText.textContent = winner === "Computer" ? "You lose :(" : "You win :)"
 	gameOverText.className = "game-over"
@@ -50,6 +47,10 @@ export function GameOverDOM(winner) {
 	restartBtn.id = "restart-btn"
 
 	body.append(restartBtn)
+
+	// Remove text container
+	const textContainer = document.querySelector(".text-container")
+	textContainer.classList.add("none")
 }
 
 export function removePreviousGameboard() {
