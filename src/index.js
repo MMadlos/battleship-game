@@ -25,7 +25,7 @@ startBtnListener()
 function startBtnListener() {
 	const startBtn = document.getElementById("start-game")
 	startBtn.addEventListener("click", () => {
-		startBtn.classList.add("none")
+		startBtn.remove()
 		initGame()
 	})
 }
@@ -34,7 +34,6 @@ function initGame() {
 	const gameboardOneDOM = document.getElementById("gameboard-one")
 	const gameboardTwoDOM = document.getElementById("gameboard-two")
 
-	startBtnListener()
 	setVariables()
 	setDefault()
 	toggleGameContainer()
@@ -44,7 +43,7 @@ function initGame() {
 
 function setDefault() {
 	const defaultShipsOne = [
-		["Carrier", [0, 5]],
+		["Carrier", [0, 5], "vertical"],
 		["Battleship", [0, 0]],
 		["Destroyer", [2, 0]],
 		["Submarine", [5, 6]],
