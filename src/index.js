@@ -11,8 +11,15 @@ const gameboardTwo = playerTwo.gameboard
 const gameboardPlayerOne = gameboardOne.getGameboard()
 const gameboardPlayerTwo = gameboardTwo.getGameboard()
 
+function setVariables() {
+	playerOne = Player("Player 1")
+	playerTwo = Player("Computer")
+}
+
 // INIT GAMEBOARDS
+// TODO --> Al reiniciar juego, tengo que volver a generar los valores Default
 initGame()
+
 function initGame() {
 	const startBtn = document.getElementById("start-game")
 	startBtn.addEventListener("click", () => {
