@@ -57,6 +57,7 @@ h1 {
 }
 
 /* SHIP CARDS */
+
 .ship-list {
 	display: flex;
 	flex-wrap: wrap;
@@ -64,6 +65,7 @@ h1 {
 	align-items: center;
 	gap: 16px;
 }
+
 .ship-card {
 	padding: 8px 32px;
 	border: 1px solid lightblue;
@@ -101,6 +103,7 @@ h1 {
 	gap: 40px;
 	justify-content: space-evenly;
 	flex-wrap: wrap;
+	margin-top: 40px;
 }
 
 .grid-title {

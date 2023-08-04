@@ -18,7 +18,9 @@ function setVariables() {
 	gameboardPlayerTwo = gameboardTwo.getGameboard()
 }
 
-// TODO
+// TODO --> Refactor. Instead of moving ships around, select the ship he wants to place and then select the grid
+
+const playerGrid = document.getElementById("gameboard-one")
 //* Add all ships in so the player can select which ship to place in the grid
 // Make the Start game button disabled until all ships are placed
 // Select ship
@@ -42,9 +44,6 @@ function initGame() {
 	renderGameboard(gameboardTwoDOM, gameboardPlayerTwo)
 	startBtnListener()
 }
-
-// TODO --> Refactor. Instead of moving ships around, select the ship he wants to place and then select the grid
-const playerGrid = document.getElementById("gameboard-one")
 
 function startBtnListener() {
 	// TODO -> Player can't click in the enemy's grid until it clicks the start game
