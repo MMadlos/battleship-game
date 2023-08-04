@@ -12,12 +12,13 @@
 	</head>
 	<body id="app">
 		<h1>Battleship</h1>
-		<div class="text-container">
-			<p>Place your ships</p>
-			<br />
-			<p>Are your ships placed?</p>
-		</div>
-		<div class="ship-list">
+		<section class="text-section">
+			<div class="text-container">
+				<p>Place your ships</p>
+			</div>
+		</section>
+
+		<section class="ship-list">
 			<div class="ship-card">
 				<p class="ship-name">Carrier</p>
 				<p class="ship-length">Length: 5</p>
@@ -38,17 +39,19 @@
 				<p class="ship-name">PatrolBoat</p>
 				<p class="ship-length">Length: 2</p>
 			</div>
-		</div>
+		</section>
 
-		<button id="start-game">Start game</button>
+		<div class="btn-container">
+			<button id="start-game">Start game</button>
+		</div>
 
 		<main class="game-container">
 			<section>
-				<p>Your grid</p>
+				<p class="grid-title">Your grid</p>
 				<div class="gameboard" id="gameboard-one"></div>
 			</section>
 			<section>
-				<p>Opponent's grid</p>
+				<p class="grid-title">Enemy's grid</p>
 				<div class="gameboard" id="gameboard-two"></div>
 			</section>
 		</main>

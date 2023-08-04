@@ -20,6 +20,7 @@ function setVariables() {
 
 // TODO
 //* Add all ships in so the player can select which ship to place in the grid
+// Make the Start game button disabled until all ships are placed
 // Select ship
 // Get coordinates after clicking the grid
 // Set ship in those coordinates
@@ -44,51 +45,6 @@ function initGame() {
 
 // TODO --> Refactor. Instead of moving ships around, select the ship he wants to place and then select the grid
 const playerGrid = document.getElementById("gameboard-one")
-
-// !OLD
-// let shipToMove // Get with the first click
-// let newCoordinates // Get with the second click
-// playerGrid.addEventListener("click", (e) => {
-// 	// Click in cell
-// 	const cell = e.target.closest("div.cell")
-
-// 	const isCellCoord = cell.classList.contains("coordY") || cell.classList.contains("coordX")
-// 	if (isCellCoord) return
-
-// 	const coordX = cell.dataset.row
-// 	const coordY = cell.dataset.col
-// 	const shipName = gameboardPlayerOne[coordX][coordY]
-// 	const shipObject = gameboardOne.getShipsPlaced()[shipName]
-// 	const shipInfo = { shipName, coordinates: [coordX, coordY], object: shipObject }
-
-// 	const isCellEmpty = !cell.classList.contains("ship-placed")
-
-// 	// It restarts the selection in case the player already moved a ship.
-// 	if (newCoordinates) {
-// 		shipToMove = undefined
-// 		newCoordinates = undefined
-// 	}
-
-// 	// Checks if the player already clicked a ship to move it. If not, it only allows to click on a ship placed.
-// 	if (!shipToMove && !isCellEmpty) {
-// 		shipToMove = shipInfo
-// 		console.log({ shipToMove, newCoordinates })
-
-// 		return
-// 	}
-
-// 	if (shipToMove && isCellEmpty) {
-// 		// TODO
-// 		// Add conditions when the second click -> If is it possible to add the ship into the new coords
-// 		// Add logic to rotate the ship when pressing R
-
-// 		newCoordinates = [coordX, coordY]
-// 		console.log({ shipToMove, newCoordinates })
-// 		return
-// 	}
-
-// 	// Remove values if the player selects another ship
-// })
 
 function startBtnListener() {
 	// TODO -> Player can't click in the enemy's grid until it clicks the start game
