@@ -46,7 +46,15 @@ function ShipListDOM() {
 		}
 	}
 
-	return { render, select, shipPlaced, isPossible, isNotPossible }
+	const removePreview = () => {
+		const shipsPreviewed = document.querySelectorAll(".cell.ship-preview, .cell.not-possible")
+		shipsPreviewed.forEach((preview) => {
+			preview.classList.remove("ship-preview")
+			preview.classList.remove("not-possible")
+		})
+	}
+
+	return { render, select, shipPlaced, isPossible, isNotPossible, removePreview }
 }
 
 function renderShipList() {

@@ -30,11 +30,10 @@ function setVariables() {
 addShipsPlayerGameboard()
 
 function addShipsPlayerGameboard() {
-	// Select ship -> Get shipName
 	const allShipCards = document.querySelectorAll(".ship-card")
 	const playerGrid = document.getElementById("gameboard-one")
 
-	let shipSelected, coordinates
+	let shipSelected
 
 	allShipCards.forEach((card) => {
 		card.addEventListener("click", () => {
@@ -43,69 +42,47 @@ function addShipsPlayerGameboard() {
 		})
 	})
 
-	// If a ship is selected, it should show a visual guide of the ship when moving the mouse over the gameboard.
-	playerGrid.addEventListener("mouseover", (e) => {
-		if (!shipSelected) return
+	// Add visual clue where the ship will be placed and style it accordingly (when is possible, when is not and when is being placed)
+	;["mouseover", "mouseout", "click"].forEach((mouseEvent) => {
+		playerGrid.addEventListener(mouseEvent, (e) => {
+			const isNotGameboard = e.target.closest("coordY") || e.target.closest("coordX")
 
-		const isNotGameboard = e.target.closest("coordY") || e.target.closest("coordX")
-		if (isNotGameboard) return
+			if (!shipSelected || isNotGameboard) return
+			if (mouseEvent === "mouseout") return DOM().shipList.removePreview()
 
-		const shipName = shipSelected
-		const shipLength = shipTypes[shipName]
+			const cell = e.target.closest(".cell")
+			const { row, col } = cell.dataset
+			const rowIndex = Number(row)
+			const colIndex = Number(col)
 
-		const cell = e.target.closest(".cell")
-		const { row, col } = cell.dataset
-		const rowIndex = Number(row)
-		const colIndex = Number(col)
+			const shipName = shipSelected
+			const shipLength = shipTypes[shipName]
 
-		// TODO -> Check what would happen when the player rotates the ship
-		const fitsInGameboard = colIndex + shipLength <= boardLimit + 1
-		const remainingCells = boardLimit - colIndex + 1
+			// TODO -> Check what would happen when the player rotates the ship
 
-		if (fitsInGameboard) DOM().shipList.isPossible(rowIndex, colIndex, shipLength)
-		if (!fitsInGameboard) DOM().shipList.isNotPossible(rowIndex, colIndex, remainingCells)
-	})
+			if (mouseEvent === "mouseover") {
+				const fitsInGameboard = colIndex + shipLength <= boardLimit + 1
+				const remainingCells = boardLimit - colIndex + 1
 
-	// Remove previews if player moseout the gameboard or the cell
-	playerGrid.addEventListener("mouseout", (e) => {
-		if (!shipSelected) return
+				if (fitsInGameboard) DOM().shipList.isPossible(rowIndex, colIndex, shipLength)
+				if (!fitsInGameboard) DOM().shipList.isNotPossible(rowIndex, colIndex, remainingCells)
+			}
 
-		const cell = e.target.closest(".cell")
-		const isNotGameboard = cell.classList.contains("coordY") || cell.classList.contains("coordX")
-		if (isNotGameboard) return
+			if (mouseEvent === "click") {
+				gameboardOne.setShip(shipSelected, [rowIndex, colIndex])
+				shipSelected = undefined
 
-		// Checks if there are already divs with .ship-preview and remove them all
-		const shipsPreviewed = document.querySelectorAll(".cell.ship-preview, .cell.not-possible")
-		shipsPreviewed.forEach((preview) => {
-			preview.classList.remove("ship-preview")
-			preview.classList.remove("not-possible")
+				// TODO -> A partir de aquí, sólo si se ha podido añadir el barco
+				// setShip() devuelve mensaje si no se ha podido añadir el barco
+
+				DOM().shipList.shipPlaced()
+
+				// Ver si se puede pintar sólo las casillas donde se ha añadido el barco y no todo el gameboard
+				removePreviousGameboard()
+				renderGameboard(gameboardOneDOM, gameboardPlayerOne)
+				renderGameboard(gameboardTwoDOM, gameboardPlayerTwo) // Temporal --> Esconder en esta fase del juego
+			}
 		})
-	})
-
-	// Get coordinates after clicking the grid
-	playerGrid.addEventListener("click", (e) => {
-		const cell = e.target.closest("div.cell")
-		const isNotGameboard = cell.classList.contains("coordY") || cell.classList.contains("coordX")
-
-		if (isNotGameboard) return
-
-		const coordX = cell.dataset.row
-		const coordY = cell.dataset.col
-
-		if (!shipSelected) return console.log(gameboardPlayerOne[coordX][coordY])
-
-		// Set ship in those coordinates
-		coordinates = [coordX, coordY]
-		gameboardOne.setShip(shipSelected, coordinates)
-		shipSelected = undefined
-
-		// TODO -> A partir de aquí, sólo si se ha podido añadir el barco
-		DOM().shipList.shipPlaced()
-
-		// Render gameboard
-		removePreviousGameboard()
-		renderGameboard(gameboardOneDOM, gameboardPlayerOne)
-		renderGameboard(gameboardTwoDOM, gameboardPlayerTwo) // Temporal
 	})
 
 	// Add ship style as placed
