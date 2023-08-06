@@ -16,6 +16,11 @@ function ShipListDOM() {
 	const render = renderShipList()
 
 	const select = (shipName) => {
+		// Removes if another one is selected
+		const currentSelected = document.querySelector(".ship-card.selected")
+		if (currentSelected) currentSelected.classList.remove("selected")
+
+		// Add selection
 		const shipSelected = document.querySelector(`[data-ship="${shipName}"]`)
 		shipSelected.classList.add("selected")
 	}
@@ -26,7 +31,22 @@ function ShipListDOM() {
 		currentSelected.classList.add("placed")
 	}
 
-	return { render, select, shipPlaced }
+	const isPossible = (rowIndex, colIndex, shipLength) => {
+		for (let i = 0; i < shipLength; i++) {
+			const cell = document.querySelector(`[data-row="${rowIndex}"][data-col="${colIndex + i}"]`)
+
+			cell.classList.add("ship-preview")
+		}
+	}
+
+	const isNotPossible = (rowIndex, colIndex, remainingCells) => {
+		for (let i = 0; i < remainingCells; i++) {
+			const divToPaint = document.querySelector(`[data-row="${rowIndex}"][data-col="${colIndex + i}"]`)
+			divToPaint.classList.add("not-possible")
+		}
+	}
+
+	return { render, select, shipPlaced, isPossible, isNotPossible }
 }
 
 function renderShipList() {

@@ -27,11 +27,8 @@ function setVariables() {
 	gameboardPlayerTwo = gameboardTwo.getGameboard()
 }
 
-// TODO --> Refactor. Instead of moving ships around, select the ship he wants to place and then select the grid
-
-//* Add all ships in so the player can select which ship to place in the grid
-//* Make the Start game button disabled until all ships are placed
 addShipsPlayerGameboard()
+
 function addShipsPlayerGameboard() {
 	// Select ship -> Get shipName
 	const allShipCards = document.querySelectorAll(".ship-card")
@@ -41,17 +38,8 @@ function addShipsPlayerGameboard() {
 
 	allShipCards.forEach((card) => {
 		card.addEventListener("click", () => {
-			const shipName = card.querySelector(".ship-name").textContent
-
-			// If another ship is selected and the player selects another ship:
-			if (shipSelected) {
-				const currentSelected = document.querySelector(".ship-card.selected")
-				currentSelected.classList.remove("selected")
-			}
-
-			shipSelected = shipName
-
-			DOM().shipList.select(shipName)
+			shipSelected = card.querySelector(".ship-name").textContent
+			DOM().shipList.select(shipSelected)
 		})
 	})
 
@@ -59,30 +47,23 @@ function addShipsPlayerGameboard() {
 	playerGrid.addEventListener("mouseover", (e) => {
 		if (!shipSelected) return
 
-		const cell = e.target.closest(".cell")
-		const isNotGameboard = cell.classList.contains("coordY") || cell.classList.contains("coordX")
+		const isNotGameboard = e.target.closest("coordY") || e.target.closest("coordX")
 		if (isNotGameboard) return
 
 		const shipName = shipSelected
 		const shipLength = shipTypes[shipName]
 
-		//Check if the ship can be placed (it's not traspassing the gameboard)
-		const rowIndex = Number(cell.dataset.row)
-		const colIndex = Number(cell.dataset.col)
+		const cell = e.target.closest(".cell")
+		const { row, col } = cell.dataset
+		const rowIndex = Number(row)
+		const colIndex = Number(col)
 
 		// TODO -> Check what would happen when the player rotates the ship
-		if (colIndex + shipLength <= boardLimit + 1) {
-			for (let i = colIndex; i < colIndex + shipLength; i++) {
-				const divToPaint = document.querySelector(`[data-row="${rowIndex}"][data-col="${i}"]`)
-				divToPaint.classList.add("ship-preview")
-			}
-		} else {
-			const remainingCells = boardLimit - colIndex + 1
-			for (let i = 0; i < remainingCells; i++) {
-				const divToPaint = document.querySelector(`[data-row="${rowIndex}"][data-col="${colIndex + i}"]`)
-				divToPaint.classList.add("not-possible")
-			}
-		}
+		const fitsInGameboard = colIndex + shipLength <= boardLimit + 1
+		const remainingCells = boardLimit - colIndex + 1
+
+		if (fitsInGameboard) DOM().shipList.isPossible(rowIndex, colIndex, shipLength)
+		if (!fitsInGameboard) DOM().shipList.isNotPossible(rowIndex, colIndex, remainingCells)
 	})
 
 	// Remove previews if player moseout the gameboard or the cell
