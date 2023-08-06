@@ -1,4 +1,4 @@
-const shipTypes = {
+export const shipTypes = {
 	Carrier: 5,
 	Battleship: 4,
 	Destroyer: 3,

@@ -68,7 +68,7 @@ h1 {
 
 .ship-card {
 	padding: 8px 32px;
-	border: 1px solid lightblue;
+	border: 2px solid lightblue;
 	border-radius: 4px;
 
 	display: flex;
@@ -78,8 +78,19 @@ h1 {
 	cursor: pointer;
 }
 
-.ship-card:hover {
+.ship-card:not(.placed):hover {
 	border: 2px solid lightseagreen;
+}
+
+.ship-card.selected {
+	border: 2px solid lightseagreen;
+	color: lightseagreen;
+}
+
+.ship-card.placed {
+	border: 2px solid lightseagreen;
+	background-color: lightseagreen;
+	color: white;
 }
 
 .ship-name {
@@ -140,6 +151,15 @@ h1 {
 
 .missed {
 	background-color: lightcoral;
+}
+
+.ship-preview {
+	background-color: lightseagreen;
+}
+
+.ship-placed.ship-preview,
+.not-possible {
+	background-color: red;
 }
 
 .game-over {

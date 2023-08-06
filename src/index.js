@@ -1,9 +1,14 @@
 import "./style.css"
 import { Player } from "./modules/player"
+import { boardLimit } from "./modules/gameboard"
 import { setDefaultShips } from "./modules/defaultShips"
 import { renderGameboard, toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./modules/DOM"
+import { shipTypes } from "./modules/ship"
 
 // DEFAULT
+const gameboardOneDOM = document.getElementById("gameboard-one")
+const gameboardTwoDOM = document.getElementById("gameboard-two")
+
 let playerOne, playerTwo
 let gameboardOne, gameboardTwo // Gameboard factories
 let gameboardPlayerOne, gameboardPlayerTwo // Gameboard content
@@ -20,26 +25,109 @@ function setVariables() {
 
 // TODO --> Refactor. Instead of moving ships around, select the ship he wants to place and then select the grid
 
-const playerGrid = document.getElementById("gameboard-one")
 //* Add all ships in so the player can select which ship to place in the grid
-// Make the Start game button disabled until all ships are placed
-// Select ship
-// Get coordinates after clicking the grid
-// Set ship in those coordinates
-// Remove ship from the options
-// Start game btn after all ships are placed
-// Add styles
-// Add possibility to set all ships randomly
-// Add possibility to remove ship placed
+//* Make the Start game button disabled until all ships are placed
+addShipsPlayerGameboard()
+function addShipsPlayerGameboard() {
+	// Select ship -> Get shipName
+	const allShipCards = document.querySelectorAll(".ship-card")
+	const playerGrid = document.getElementById("gameboard-one")
+
+	// To be able to detect when a ship is selected, first we need to know if the player has clicked on a ship. Then we are able to get the data to place the ship when the player clicks in the gameboard.
+	// If no ship is selected, it shouldn't do nothing if the player clicks the gameboard.
+
+	let shipSelected, coordinates
+
+	allShipCards.forEach((card) => {
+		card.addEventListener("click", () => {
+			const shipName = card.querySelector(".ship-name").textContent
+
+			// If another ship is selected and the player selects another ship:
+			if (shipSelected) {
+				const currentSelected = document.querySelector(".ship-card.selected")
+				currentSelected.classList.remove("selected")
+			}
+
+			shipSelected = shipName
+			card.classList.add("selected")
+		})
+	})
+
+	// If a ship is selected, it should show a visual guide of the ship when moving the mouse over the gameboard.
+
+	let currentDiv
+	playerGrid.addEventListener("mouseover", (e) => {
+		if (!shipSelected) return
+
+		const cell = e.target.closest(".cell")
+		const isNotGameboard = cell.classList.contains("coordY") || cell.classList.contains("coordX")
+		if (isNotGameboard) return
+
+		const shipName = shipSelected
+		const shipLength = shipTypes[shipName]
+
+		// Checks if there are already divs with .ship-preview and remove them all
+		const shipsPreviewed = document.querySelectorAll(".cell.ship-preview, .cell.not-possible")
+		shipsPreviewed.forEach((preview) => {
+			preview.classList.remove("ship-preview")
+			preview.classList.remove("not-possible")
+		})
+
+		//Check if the ship can be placed (it's not traspassing the gameboard)
+		const rowIndex = Number(cell.dataset.row)
+		const colIndex = Number(cell.dataset.col)
+
+		if (colIndex + shipLength <= boardLimit + 1) {
+			for (let i = colIndex; i < colIndex + shipLength; i++) {
+				const divToPaint = document.querySelector(`[data-row="${rowIndex}"][data-col="${i}"]`)
+				divToPaint.classList.add("ship-preview")
+			}
+		} else {
+			const remainingCells = boardLimit - colIndex + 1
+			for (let i = 0; i < remainingCells; i++) {
+				const divToPaint = document.querySelector(`[data-row="${rowIndex}"][data-col="${colIndex + i}"]`)
+				divToPaint.classList.add("not-possible")
+			}
+		}
+	})
+
+	// Get coordinates after clicking the grid
+	playerGrid.addEventListener("click", (e) => {
+		const cell = e.target.closest("div.cell")
+		const isNotGameboard = cell.classList.contains("coordY") || cell.classList.contains("coordX")
+
+		if (isNotGameboard) return
+
+		const coordX = cell.dataset.row
+		const coordY = cell.dataset.col
+
+		if (!shipSelected) return console.log(gameboardPlayerOne[coordX][coordY])
+
+		// Set ship in those coordinates
+		coordinates = [coordX, coordY]
+		gameboardOne.setShip(shipSelected, coordinates)
+		shipSelected = undefined
+		console.log(gameboardPlayerOne[coordX][coordY])
+
+		// Render gameboard
+		removePreviousGameboard()
+		renderGameboard(gameboardOneDOM, gameboardPlayerOne)
+		renderGameboard(gameboardTwoDOM, gameboardPlayerTwo) // Temporal
+	})
+
+	// Add ship style as placed
+
+	// Display start game btn after all ships are placed
+	// Add styles
+	// Add possibility to set all ships randomly
+	// Add possibility to remove ship placed
+}
 
 initGame()
 
 function initGame() {
-	const gameboardOneDOM = document.getElementById("gameboard-one")
-	const gameboardTwoDOM = document.getElementById("gameboard-two")
-
 	setVariables()
-	setDefaultShips(gameboardOne, gameboardTwo)
+	// setDefaultShips(gameboardOne, gameboardTwo)
 	renderGameboard(gameboardOneDOM, gameboardPlayerOne)
 	renderGameboard(gameboardTwoDOM, gameboardPlayerTwo)
 	startBtnListener()
