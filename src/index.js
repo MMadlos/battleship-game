@@ -54,8 +54,6 @@ function addShipsPlayerGameboard() {
 	})
 
 	// If a ship is selected, it should show a visual guide of the ship when moving the mouse over the gameboard.
-
-	let currentDiv
 	playerGrid.addEventListener("mouseover", (e) => {
 		if (!shipSelected) return
 
@@ -66,17 +64,11 @@ function addShipsPlayerGameboard() {
 		const shipName = shipSelected
 		const shipLength = shipTypes[shipName]
 
-		// Checks if there are already divs with .ship-preview and remove them all
-		const shipsPreviewed = document.querySelectorAll(".cell.ship-preview, .cell.not-possible")
-		shipsPreviewed.forEach((preview) => {
-			preview.classList.remove("ship-preview")
-			preview.classList.remove("not-possible")
-		})
-
 		//Check if the ship can be placed (it's not traspassing the gameboard)
 		const rowIndex = Number(cell.dataset.row)
 		const colIndex = Number(cell.dataset.col)
 
+		// TODO -> Check what would happen when the player rotates the ship
 		if (colIndex + shipLength <= boardLimit + 1) {
 			for (let i = colIndex; i < colIndex + shipLength; i++) {
 				const divToPaint = document.querySelector(`[data-row="${rowIndex}"][data-col="${i}"]`)
@@ -89,6 +81,22 @@ function addShipsPlayerGameboard() {
 				divToPaint.classList.add("not-possible")
 			}
 		}
+	})
+
+	// Remove previews if player moseout the gameboard or the cell
+	playerGrid.addEventListener("mouseout", (e) => {
+		if (!shipSelected) return
+
+		const cell = e.target.closest(".cell")
+		const isNotGameboard = cell.classList.contains("coordY") || cell.classList.contains("coordX")
+		if (isNotGameboard) return
+
+		// Checks if there are already divs with .ship-preview and remove them all
+		const shipsPreviewed = document.querySelectorAll(".cell.ship-preview, .cell.not-possible")
+		shipsPreviewed.forEach((preview) => {
+			preview.classList.remove("ship-preview")
+			preview.classList.remove("not-possible")
+		})
 	})
 
 	// Get coordinates after clicking the grid
