@@ -2,8 +2,12 @@ import "./style.css"
 import { Player } from "./modules/player"
 import { boardLimit } from "./modules/gameboard"
 import { setDefaultShips } from "./modules/defaultShips"
-import { renderGameboard, toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./modules/DOM"
 import { shipTypes } from "./modules/ship"
+
+import { renderGameboard, toggleGameContainer, GameOverDOM, removePreviousGameboard, DOM } from "./modules/DOM"
+
+// TEST
+DOM().append()
 
 // DEFAULT
 const gameboardOneDOM = document.getElementById("gameboard-one")
@@ -33,9 +37,6 @@ function addShipsPlayerGameboard() {
 	const allShipCards = document.querySelectorAll(".ship-card")
 	const playerGrid = document.getElementById("gameboard-one")
 
-	// To be able to detect when a ship is selected, first we need to know if the player has clicked on a ship. Then we are able to get the data to place the ship when the player clicks in the gameboard.
-	// If no ship is selected, it shouldn't do nothing if the player clicks the gameboard.
-
 	let shipSelected, coordinates
 
 	allShipCards.forEach((card) => {
@@ -49,7 +50,8 @@ function addShipsPlayerGameboard() {
 			}
 
 			shipSelected = shipName
-			card.classList.add("selected")
+
+			DOM().shipList.select(shipName)
 		})
 	})
 
@@ -115,7 +117,9 @@ function addShipsPlayerGameboard() {
 		coordinates = [coordX, coordY]
 		gameboardOne.setShip(shipSelected, coordinates)
 		shipSelected = undefined
-		console.log(gameboardPlayerOne[coordX][coordY])
+
+		// TODO -> A partir de aquí, sólo si se ha podido añadir el barco
+		DOM().shipList.shipPlaced()
 
 		// Render gameboard
 		removePreviousGameboard()
@@ -171,7 +175,6 @@ function enableAttackEnemy() {
 		cell.classList.add(gameboardPlayerTwo[coordX][coordY].toLowerCase())
 
 		// Check gameover for PlayerTwo
-		console.log({ "Computer Gameover": playerTwo.checkGameOver() })
 		if (playerTwo.checkGameOver()) return displayGameOver("Player")
 
 		// TODO -> Should show more stuff before the computer attacks the player (eg. animation )

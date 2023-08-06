@@ -1,3 +1,59 @@
+import { shipTypes } from "./ship"
+const app = document.getElementById("app")
+const textSection = document.querySelector(".text-section")
+
+export function DOM() {
+	const shipList = ShipListDOM()
+
+	const append = () => {
+		textSection.after(shipList.render)
+	}
+
+	return { shipList, append }
+}
+
+function ShipListDOM() {
+	const render = renderShipList()
+
+	const select = (shipName) => {
+		const shipSelected = document.querySelector(`[data-ship="${shipName}"]`)
+		shipSelected.classList.add("selected")
+	}
+
+	const shipPlaced = () => {
+		const currentSelected = document.querySelector(".ship-card.selected")
+		currentSelected.classList.remove("selected")
+		currentSelected.classList.add("placed")
+	}
+
+	return { render, select, shipPlaced }
+}
+
+function renderShipList() {
+	const shipListSection = document.createElement("section")
+	shipListSection.classList.add("ship-list")
+
+	for (const ship in shipTypes) {
+		const div = document.createElement("div")
+		const shipName = document.createElement("p")
+		const shipLength = document.createElement("p")
+
+		div.className = "ship-card"
+		shipName.className = "ship-name"
+		shipLength.className = "ship-length"
+
+		shipName.textContent = ship
+		shipLength.textContent = shipTypes[ship]
+
+		div.dataset.ship = ship
+
+		div.append(shipName, shipLength)
+		shipListSection.append(div)
+	}
+
+	return shipListSection
+}
+
 export function renderGameboard(gameboardDOM, playerGameboard) {
 	for (let i = 0; i <= 10; i++) {
 		const div = document.createElement("div")
