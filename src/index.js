@@ -1,7 +1,7 @@
 import "./style.css"
 import { Player } from "./modules/player"
 import { boardLimit } from "./modules/gameboard"
-import { setDefaultShips } from "./modules/defaultShips"
+import { setEnemyShips } from "./modules/defaultShips"
 import { shipTypes } from "./modules/ship"
 
 import { renderGameboard, toggleGameContainer, GameOverDOM, removePreviousGameboard, DOM } from "./modules/DOM"
@@ -16,7 +16,8 @@ let playerOne, playerTwo
 let gameboardOne, gameboardTwo // Gameboard factories
 let gameboardPlayerOne, gameboardPlayerTwo // Gameboard content
 
-function setVariables() {
+initGame()
+function initGame() {
 	playerOne = Player("Player 1")
 	playerTwo = Player("Computer")
 
@@ -24,9 +25,11 @@ function setVariables() {
 	gameboardTwo = playerTwo.gameboard
 	gameboardPlayerOne = gameboardOne.getGameboard()
 	gameboardPlayerTwo = gameboardTwo.getGameboard()
+
+	renderGameboard(gameboardOneDOM, gameboardPlayerOne)
+	renderGameboard(gameboardTwoDOM, gameboardPlayerTwo)
 }
 
-initGame()
 addShipsPlayerGameboard()
 
 function addShipsPlayerGameboard() {
@@ -110,21 +113,16 @@ function addShipsPlayerGameboard() {
 	// Add possibility to remove ship placed
 }
 
-function initGame() {
-	setVariables()
-	// setDefaultShips(gameboardOne, gameboardTwo)
-	renderGameboard(gameboardOneDOM, gameboardPlayerOne)
-	renderGameboard(gameboardTwoDOM, gameboardPlayerTwo)
-}
-
 function startBtnListener() {
-	// TODO -> Player can't click in the enemy's grid until it clicks the start game
 	const btnContainer = document.querySelector(".btn-container")
 	btnContainer.classList.remove("none")
 
 	const startBtn = document.getElementById("start-game")
 	startBtn.addEventListener("click", () => {
+		const shipContainer = document.querySelector(".ship-list")
+		shipContainer.classList.add("none")
 		startBtn.remove()
+		setEnemyShips(gameboardTwo)
 		enableAttackEnemy()
 	})
 }
