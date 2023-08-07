@@ -6,7 +6,6 @@ import { shipTypes } from "./modules/ship"
 
 import { renderGameboard, toggleGameContainer, GameOverDOM, removePreviousGameboard, DOM } from "./modules/DOM"
 
-// TEST
 DOM().append()
 
 // DEFAULT
@@ -27,6 +26,7 @@ function setVariables() {
 	gameboardPlayerTwo = gameboardTwo.getGameboard()
 }
 
+initGame()
 addShipsPlayerGameboard()
 
 function addShipsPlayerGameboard() {
@@ -80,31 +80,32 @@ function addShipsPlayerGameboard() {
 				// Ver si se puede pintar sólo las casillas donde se ha añadido el barco y no todo el gameboard
 				removePreviousGameboard()
 				renderGameboard(gameboardOneDOM, gameboardPlayerOne)
-				renderGameboard(gameboardTwoDOM, gameboardPlayerTwo) // Temporal --> Esconder en esta fase del juego
+				renderGameboard(gameboardTwoDOM, gameboardPlayerTwo) // Temporal --> Esconder en esta fase del juego. Debería hacer render después de hacer click en Start Game.
+
+				// Display start game btn after all ships are placed
+				const availableShips = gameboardOne.getAvailableShips()
+				if (availableShips.length === 0) startBtnListener()
 			}
 		})
 	})
 
-	// Add ship style as placed
-
-	// Display start game btn after all ships are placed
 	// Add styles
 	// Add possibility to set all ships randomly
 	// Add possibility to remove ship placed
 }
-
-initGame()
 
 function initGame() {
 	setVariables()
 	// setDefaultShips(gameboardOne, gameboardTwo)
 	renderGameboard(gameboardOneDOM, gameboardPlayerOne)
 	renderGameboard(gameboardTwoDOM, gameboardPlayerTwo)
-	startBtnListener()
 }
 
 function startBtnListener() {
 	// TODO -> Player can't click in the enemy's grid until it clicks the start game
+	const btnContainer = document.querySelector(".btn-container")
+	btnContainer.classList.remove("none")
+
 	const startBtn = document.getElementById("start-game")
 	startBtn.addEventListener("click", () => {
 		startBtn.remove()
