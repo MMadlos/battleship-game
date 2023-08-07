@@ -34,16 +34,23 @@ function addShipsPlayerGameboard() {
 	const playerGrid = document.getElementById("gameboard-one")
 
 	let shipSelected
+	let position = "horizontal"
 
 	allShipCards.forEach((card) => {
 		card.addEventListener("click", () => {
 			shipSelected = card.querySelector(".ship-name").textContent
 			DOM().shipList.select(shipSelected)
 		})
+
+		document.addEventListener("keydown", (e) => {
+			if (e.code === "KeyR") {
+				position = position === "horizontal" ? "vertical" : "horizontal"
+			}
+		})
 	})
 
 	// Add visual clue where the ship will be placed and style it accordingly (when is possible, when is not and when is being placed)
-	;["mouseover", "mouseout", "click"].forEach((mouseEvent) => {
+	;["mouseover", "mouseout", "click", "keydown"].forEach((mouseEvent) => {
 		playerGrid.addEventListener(mouseEvent, (e) => {
 			const isNotGameboard = e.target.closest("coordY") || e.target.closest("coordX")
 
@@ -61,15 +68,24 @@ function addShipsPlayerGameboard() {
 			// TODO -> Check what would happen when the player rotates the ship
 
 			if (mouseEvent === "mouseover") {
-				const fitsInGameboard = colIndex + shipLength <= boardLimit + 1
-				const remainingCells = boardLimit - colIndex + 1
+				if (position === "horizontal") {
+					const fitsInGameboardHor = colIndex + shipLength <= boardLimit + 1
+					const remainingCellsHor = boardLimit - colIndex + 1
+					if (fitsInGameboardHor) DOM().shipList.isPossible(rowIndex, colIndex, shipLength, position)
+					if (!fitsInGameboardHor) DOM().shipList.isNotPossible(rowIndex, colIndex, remainingCellsHor, position)
+				}
 
-				if (fitsInGameboard) DOM().shipList.isPossible(rowIndex, colIndex, shipLength)
-				if (!fitsInGameboard) DOM().shipList.isNotPossible(rowIndex, colIndex, remainingCells)
+				if (position === "vertical") {
+					const fitsInGameboardVer = rowIndex + shipLength <= boardLimit + 1
+					const remainingCellsVer = boardLimit - rowIndex + 1
+
+					if (fitsInGameboardVer) DOM().shipList.isPossible(rowIndex, colIndex, shipLength, position)
+					if (!fitsInGameboardVer) DOM().shipList.isNotPossible(rowIndex, colIndex, remainingCellsVer, position)
+				}
 			}
 
 			if (mouseEvent === "click") {
-				gameboardOne.setShip(shipSelected, [rowIndex, colIndex])
+				gameboardOne.setShip(shipSelected, [rowIndex, colIndex], position)
 				shipSelected = undefined
 
 				// TODO -> A partir de aquí, sólo si se ha podido añadir el barco

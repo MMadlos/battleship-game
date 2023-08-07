@@ -31,18 +31,35 @@ function ShipListDOM() {
 		currentSelected.classList.add("placed")
 	}
 
-	const isPossible = (rowIndex, colIndex, shipLength) => {
-		for (let i = 0; i < shipLength; i++) {
-			const cell = document.querySelector(`[data-row="${rowIndex}"][data-col="${colIndex + i}"]`)
+	const isPossible = (rowIndex, colIndex, shipLength, position) => {
+		if (position === "horizontal") {
+			for (let i = 0; i < shipLength; i++) {
+				const cell = document.querySelector(`[data-row="${rowIndex}"][data-col="${colIndex + i}"]`)
 
-			cell.classList.add("ship-preview")
+				cell.classList.add("ship-preview")
+			}
+		}
+		if (position === "vertical") {
+			for (let i = 0; i < shipLength; i++) {
+				const cell = document.querySelector(`[data-row="${rowIndex + i}"][data-col="${colIndex}"]`)
+
+				cell.classList.add("ship-preview")
+			}
 		}
 	}
 
-	const isNotPossible = (rowIndex, colIndex, remainingCells) => {
-		for (let i = 0; i < remainingCells; i++) {
-			const divToPaint = document.querySelector(`[data-row="${rowIndex}"][data-col="${colIndex + i}"]`)
-			divToPaint.classList.add("not-possible")
+	const isNotPossible = (rowIndex, colIndex, remainingCells, position) => {
+		if (position === "horizontal") {
+			for (let i = 0; i < remainingCells; i++) {
+				const divToPaint = document.querySelector(`[data-row="${rowIndex}"][data-col="${colIndex + i}"]`)
+				divToPaint.classList.add("not-possible")
+			}
+		}
+		if (position === "vertical") {
+			for (let i = 0; i < remainingCells; i++) {
+				const divToPaint = document.querySelector(`[data-row="${rowIndex + i}"][data-col="${colIndex}"]`)
+				divToPaint.classList.add("not-possible")
+			}
 		}
 	}
 
