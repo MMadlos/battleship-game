@@ -7,9 +7,7 @@ import { shipTypes } from "./modules/ship"
 import { renderGameboard, toggleGameContainer, GameOverDOM, removePreviousGameboard, DOM } from "./modules/DOM"
 
 import { getAndAppendShipList, addStyleToShipElement } from "./modules/DOM/ship-list"
-import { getAndAppendGameboard } from "./modules/DOM/gameboard"
-
-// DOM().append()
+import { getAndAppendGameboard, styleShipPreview } from "./modules/DOM/gameboard"
 
 // DEFAULT
 const gameboardOneDOM = document.getElementById("gameboard-one")
@@ -21,6 +19,7 @@ let gameboardPlayerOne, gameboardPlayerTwo // Gameboard content
 
 initGame()
 function initGame() {
+	// We'll need to set the variables when the game starts and when we restart the game after a gameover
 	playerOne = Player("Player 1")
 	playerTwo = Player("Computer")
 
@@ -41,24 +40,29 @@ function renderGameboards() {
 	gameContainer.append(sectionPlayerOne, sectionPlayerTwo)
 }
 
-function addShipsPlayerGameboard() {
-	let shipSelected
-	let position = "horizontal"
+let shipSelected
+let position = "horizontal"
+selectShipToPlace()
 
+function selectShipToPlace() {
 	const shipList = document.querySelector(".ship-list")
 	shipList.onclick = (e) => {
 		const shipCard = e.target.closest(".ship-card")
+		if (!shipCard) return
+
 		addStyleToShipElement(shipCard, "select")
 
 		shipSelected = shipCard.dataset.ship
-		document.onkeydown = (e) => rotateShip(e)
-	}
 
-	const rotateShip = (e) => {
-		if (e.code !== "KeyR") return
-		position = position === "horizontal" ? "vertical" : "horizontal"
+		// Enables ship rotation if the ship is selected
+		document.onkeydown = (e) => {
+			if (e.code !== "KeyR") return
+			position = position === "horizontal" ? "vertical" : "horizontal"
+		}
 	}
+}
 
+function addShipsPlayerGameboard() {
 	// Add visual clue where the ship will be placed and style it accordingly (when is possible, when is not and when is being placed)
 	const playerGrid = document.getElementById("gameboard-one")
 	;["mouseover", "mouseout", "click"].forEach((mouseEvent) => {
@@ -66,7 +70,6 @@ function addShipsPlayerGameboard() {
 			const isNotGameboard = e.target.closest("coordY") || e.target.closest("coordX")
 
 			// TODO -> Sistema para mover el barco de nuevo o para eliminarlo.
-			// if !shipSelected & e.target.closest(".ship-placed")
 
 			if (!shipSelected || isNotGameboard) return
 			if (mouseEvent === "mouseout") return DOM().shipList.removePreview()
@@ -79,13 +82,12 @@ function addShipsPlayerGameboard() {
 			const shipName = shipSelected
 			const shipLength = shipTypes[shipName]
 
+			// TODO -> Para que cuando pulse R se vuelva a ejecutar este código, debería hacer un event listener keydown + función
 			if (mouseEvent === "mouseover") {
-				if (position === "horizontal") {
-					const fitsInGameboardHor = colIndex + shipLength <= boardLimit + 1
-					const remainingCellsHor = boardLimit - colIndex + 1
-					if (fitsInGameboardHor) DOM().shipList.isPossible(rowIndex, colIndex, shipLength, position)
-					if (!fitsInGameboardHor) DOM().shipList.isNotPossible(rowIndex, colIndex, remainingCellsHor, position)
-				}
+				// Debería añadir sólo la función: checkValidation(shipSelected, position)
+				// La función es la que debería revisar todas las variables
+				// Quizá debería coger el elemento DIV y no el nombre. Si cojo el div, puedo extraer las variables.
+				styleShipPreview(cell, shipSelected, position)
 
 				if (position === "vertical") {
 					const fitsInGameboardVer = rowIndex + shipLength <= boardLimit + 1
@@ -107,6 +109,8 @@ function addShipsPlayerGameboard() {
 
 				// Ver si se puede pintar sólo las casillas donde se ha añadido el barco y no todo el gameboard
 				removePreviousGameboard()
+				getAndAppendGameboard(playerOne)
+
 				renderGameboard(gameboardOneDOM, gameboardPlayerOne)
 				renderGameboard(gameboardTwoDOM, gameboardPlayerTwo) // Temporal --> Esconder en esta fase del juego. Debería hacer render después de hacer click en Start Game.
 

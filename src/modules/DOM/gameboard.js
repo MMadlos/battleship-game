@@ -1,3 +1,6 @@
+import { shipTypes } from "../ship"
+import { boardLimit } from "../gameboard"
+
 // CODING LIKE FETCHING
 export function getAndAppendGameboard(playerObject) {
 	const gameboard = playerObject.getGameboard()
@@ -50,40 +53,30 @@ function createGameBoard(playerGameboard) {
 	return gameboardDiv
 }
 
-// Simulating a transformation of the data fetched
-
 // Simulating a fetch
 function getGameboard(playerGameboard) {
 	return playerGameboard
 }
 
-// ! OLD
+// STYLE WHEN PLACING A SHIP
+export function styleShipPreview(cell, shipSelected, position) {
+	const { row, col } = cell.dataset
+	const rowIndex = Number(row)
+	const colIndex = Number(col)
 
-// export function renderGameboard(gameboardDOM, playerGameboard) {
-// 	for (let i = 0; i <= 10; i++) {
-// 		const div = document.createElement("div")
-// 		if (i !== 0) div.textContent = i
-// 		div.classList.add("cell", "coordY")
-// 		gameboardDOM.append(div)
-// 	}
+	const shipName = shipSelected
+	const shipLength = shipTypes[shipName]
 
-// 	playerGameboard.forEach((row, rowIndex) => {
-// 		row.forEach((col, colIndex) => {
-// 			if (colIndex === 0) {
-// 				const div = document.createElement("div")
-// 				gameboardDOM.append(div)
-// 				div.textContent = rowIndex + 1
-// 				div.classList.add("cell", "coordX")
-// 			}
+	if (position === "horizontal") {
+		const fitsInGameboardHor = colIndex + shipLength <= boardLimit + 1
+		const remainingCellsHor = boardLimit - colIndex + 1
 
-// 			const div = document.createElement("div")
+		const cellLength = fitsInGameboardHor ? shipLength : remainingCellsHor
+		const classToAdd = fitsInGameboardHor ? "ship-preview" : "not-possible"
 
-// 			div.dataset.row = rowIndex
-// 			div.dataset.col = colIndex
-// 			div.classList.add("cell")
-// 			div.classList.toggle("ship-placed", col !== "Empty")
-
-// 			gameboardDOM.append(div)
-// 		})
-// 	})
-// }
+		for (let i = 0; i < cellLength; i++) {
+			const cell = document.querySelector(`[data-row="${rowIndex}"][data-col="${colIndex + i}"]`)
+			cell.classList.add(classToAdd)
+		}
+	}
+}
