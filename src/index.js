@@ -30,7 +30,7 @@ function initGame() {
 
 	getAndAppendShipList()
 	renderGameboards()
-	addShipsPlayerGameboard()
+	selectAndPlaceShip()
 }
 
 function renderGameboards() {
@@ -42,33 +42,32 @@ function renderGameboards() {
 
 let shipSelected
 let position = "horizontal"
-selectShipToPlace()
+
+function selectAndPlaceShip() {
+	selectShipToPlace()
+	addShipsPlayerGameboard()
+}
 
 function selectShipToPlace() {
 	const shipList = document.querySelector(".ship-list")
 	shipList.onclick = (e) => {
 		const shipCard = e.target.closest(".ship-card")
-		if (!shipCard) return
+		const isAlreadyPlaced = shipCard.classList.contains("placed")
+		if (isAlreadyPlaced || !shipCard) return
 
 		addStyleToShipElement(shipCard, "select")
-
-		document.onkeydown = (e) => {
-			if (e.code !== "KeyR") return
-			position = position === "horizontal" ? "vertical" : "horizontal"
-		}
-
 		shipSelected = shipCard.dataset.ship
 	}
 }
 
 // Add visual clue where the ship will be placed and style it accordingly (when is possible, when is not and when is being placed)
-
 function addShipsPlayerGameboard() {
 	const playerGrid = document.getElementById("gameboard-one")
 	;["mouseover", "mouseout", "click"].forEach((mouseEvent) => {
 		playerGrid.addEventListener(mouseEvent, (e) => {
-			// TODO -> Sistema para mover el barco de nuevo o para eliminarlo.
-			// TODO -> Para que cuando pulse R se vuelva a ejecutar este código, debería hacer un event listener keydown + función
+			// TODO:
+			// Add possibility to set all ships randomly
+			// Add possibility to remove / move ship placed
 
 			const isNotGameboard = e.target.closest("coordY") || e.target.closest("coordX")
 			if (!shipSelected || isNotGameboard) return
@@ -80,26 +79,31 @@ function addShipsPlayerGameboard() {
 
 			if (mouseEvent === "mouseover") styleShipPreview(cell, shipSelected, position)
 			if (mouseEvent === "mouseout") removePreview()
-			if (mouseEvent === "click") {
-				gameboardOne.setShip(shipSelected, [rowIndex, colIndex], position)
-				shipSelected = undefined
 
-				// TODO -> A partir de aquí, sólo si se ha podido añadir el barco
-				// setShip() devuelve mensaje si no se ha podido añadir el barco
+			document.onkeydown = (e) => {
+				if (e.code !== "KeyR") return
+				position = position === "horizontal" ? "vertical" : "horizontal"
+				removePreview()
+				styleShipPreview(cell, shipSelected, position)
+			}
+
+			if (mouseEvent === "click") {
+				const setShip = gameboardOne.setShip(shipSelected, [rowIndex, colIndex], position)
+
+				const outOfBoard = setShip === "Out of board"
+				const cellNotEmpty = setShip === "Not empty"
+				if (outOfBoard) return console.log("Ship is being placed out of the grid")
+				if (cellNotEmpty) return console.log("There is another ship in these coordinates")
 
 				styleShipPlaced()
 				styleGameboard(playerOne)
+				shipSelected = undefined
 
-				// Display start game btn after all ships are placed
-				const availableShips = gameboardOne.getAvailableShips()
-				if (availableShips.length === 0) startBtnListener()
+				const allShipsPlaced = Object.keys(gameboardOne.getAvailableShips()).every((element) => element === false)
+				if (allShipsPlaced) startBtnListener()
 			}
 		})
 	})
-
-	// Add styles
-	// Add possibility to set all ships randomly
-	// Add possibility to remove ship placed
 }
 
 function startBtnListener() {

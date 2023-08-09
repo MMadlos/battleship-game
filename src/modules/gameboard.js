@@ -30,10 +30,8 @@ export function Gameboard() {
 		// Check that the ship won't be outside of the board.
 		const isOutOfBoardHor = position === "horizontal" && coordY + shipLength - 1 > boardLimit
 		const isOutOfBoardVer = position === "vertical" && coordX + shipLength - 1 > boardLimit
-		const msgError = `${shipType} can't be placed at [${coordX}, ${coordY}]`
 
-		console.log({ shipType, coordinates, shipLength, position, isOutOfBoardHor })
-		if (isOutOfBoardHor || isOutOfBoardVer) return console.log("Out of board: ", msgError)
+		if (isOutOfBoardHor || isOutOfBoardVer) return "Out of board"
 
 		// Check if all cells where we want to place the ship are empty
 		let allCells = []
@@ -49,7 +47,7 @@ export function Gameboard() {
 			}
 		}
 		const isThereAnotherShip = allCells.some((cell) => cell !== "Empty")
-		if (isThereAnotherShip) return console.log("There's another ship: ", msgError)
+		if (isThereAnotherShip) return "Not empty"
 
 		// Put the name of the ship in all cells after verification
 		if (position === "horizontal") {

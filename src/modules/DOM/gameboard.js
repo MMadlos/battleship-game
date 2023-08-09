@@ -100,8 +100,6 @@ export function styleShipPlaced() {
 export function styleGameboard(playerObject) {
 	const playerGameboard = playerObject.getGameboard()
 
-	// Style considering the values in each cell
-	// Check if the cell has a ship and style it
 	playerGameboard.forEach((row, rowIndex) => {
 		row.forEach((col, colIndex) => {
 			if (col !== "Empty") {
