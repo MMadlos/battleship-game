@@ -7,7 +7,7 @@ import { shipTypes } from "./modules/ship"
 import { renderGameboard, toggleGameContainer, GameOverDOM, removePreviousGameboard, DOM } from "./modules/DOM"
 
 import { getAndAppendShipList, addStyleToShipElement } from "./modules/DOM/ship-list"
-import { getAndAppendGameboard, styleShipPreview } from "./modules/DOM/gameboard"
+import { getAndAppendGameboard, styleShipPreview, removePreview, styleShipPlaced, styleGameboard } from "./modules/DOM/gameboard"
 
 // DEFAULT
 const gameboardOneDOM = document.getElementById("gameboard-one")
@@ -52,36 +52,34 @@ function selectShipToPlace() {
 
 		addStyleToShipElement(shipCard, "select")
 
-		shipSelected = shipCard.dataset.ship
-
-		// Enables ship rotation if the ship is selected
 		document.onkeydown = (e) => {
 			if (e.code !== "KeyR") return
 			position = position === "horizontal" ? "vertical" : "horizontal"
 		}
+
+		shipSelected = shipCard.dataset.ship
 	}
 }
 
+// Add visual clue where the ship will be placed and style it accordingly (when is possible, when is not and when is being placed)
+
 function addShipsPlayerGameboard() {
-	// Add visual clue where the ship will be placed and style it accordingly (when is possible, when is not and when is being placed)
 	const playerGrid = document.getElementById("gameboard-one")
 	;["mouseover", "mouseout", "click"].forEach((mouseEvent) => {
 		playerGrid.addEventListener(mouseEvent, (e) => {
-			const isNotGameboard = e.target.closest("coordY") || e.target.closest("coordX")
-
 			// TODO -> Sistema para mover el barco de nuevo o para eliminarlo.
+			// TODO -> Para que cuando pulse R se vuelva a ejecutar este código, debería hacer un event listener keydown + función
 
+			const isNotGameboard = e.target.closest("coordY") || e.target.closest("coordX")
 			if (!shipSelected || isNotGameboard) return
-			if (mouseEvent === "mouseout") return DOM().shipList.removePreview()
 
 			const cell = e.target.closest(".cell")
 			const { row, col } = cell.dataset
 			const rowIndex = Number(row)
 			const colIndex = Number(col)
 
-			// TODO -> Para que cuando pulse R se vuelva a ejecutar este código, debería hacer un event listener keydown + función
 			if (mouseEvent === "mouseover") styleShipPreview(cell, shipSelected, position)
-
+			if (mouseEvent === "mouseout") removePreview()
 			if (mouseEvent === "click") {
 				gameboardOne.setShip(shipSelected, [rowIndex, colIndex], position)
 				shipSelected = undefined
@@ -89,14 +87,8 @@ function addShipsPlayerGameboard() {
 				// TODO -> A partir de aquí, sólo si se ha podido añadir el barco
 				// setShip() devuelve mensaje si no se ha podido añadir el barco
 
-				DOM().shipList.shipPlaced()
-
-				// Ver si se puede pintar sólo las casillas donde se ha añadido el barco y no todo el gameboard
-				removePreviousGameboard()
-				getAndAppendGameboard(playerOne)
-
-				renderGameboard(gameboardOneDOM, gameboardPlayerOne)
-				renderGameboard(gameboardTwoDOM, gameboardPlayerTwo) // Temporal --> Esconder en esta fase del juego. Debería hacer render después de hacer click en Start Game.
+				styleShipPlaced()
+				styleGameboard(playerOne)
 
 				// Display start game btn after all ships are placed
 				const availableShips = gameboardOne.getAvailableShips()

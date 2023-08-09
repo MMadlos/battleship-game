@@ -16,15 +16,15 @@ export function DOM() {
 function ShipListDOM() {
 	const render = renderShipList()
 
-	const select = (shipName) => {
-		// Removes if another one is selected
-		const currentSelected = document.querySelector(".ship-card.selected")
-		if (currentSelected) currentSelected.classList.remove("selected")
+	// const select = (shipName) => {
+	// 	// Removes if another one is selected
+	// 	const currentSelected = document.querySelector(".ship-card.selected")
+	// 	if (currentSelected) currentSelected.classList.remove("selected")
 
-		// Add selection
-		const shipSelected = document.querySelector(`[data-ship="${shipName}"]`)
-		shipSelected.classList.add("selected")
-	}
+	// 	// Add selection
+	// 	const shipSelected = document.querySelector(`[data-ship="${shipName}"]`)
+	// 	shipSelected.classList.add("selected")
+	// }
 
 	const shipPlaced = () => {
 		const currentSelected = document.querySelector(".ship-card.selected")
@@ -32,47 +32,47 @@ function ShipListDOM() {
 		currentSelected.classList.add("placed")
 	}
 
-	const isPossible = (rowIndex, colIndex, shipLength, position) => {
-		if (position === "horizontal") {
-			for (let i = 0; i < shipLength; i++) {
-				const cell = document.querySelector(`[data-row="${rowIndex}"][data-col="${colIndex + i}"]`)
+	// const isPossible = (rowIndex, colIndex, shipLength, position) => {
+	// 	if (position === "horizontal") {
+	// 		for (let i = 0; i < shipLength; i++) {
+	// 			const cell = document.querySelector(`[data-row="${rowIndex}"][data-col="${colIndex + i}"]`)
 
-				cell.classList.add("ship-preview")
-			}
-		}
-		if (position === "vertical") {
-			for (let i = 0; i < shipLength; i++) {
-				const cell = document.querySelector(`[data-row="${rowIndex + i}"][data-col="${colIndex}"]`)
+	// 			cell.classList.add("ship-preview")
+	// 		}
+	// 	}
+	// 	if (position === "vertical") {
+	// 		for (let i = 0; i < shipLength; i++) {
+	// 			const cell = document.querySelector(`[data-row="${rowIndex + i}"][data-col="${colIndex}"]`)
 
-				cell.classList.add("ship-preview")
-			}
-		}
-	}
+	// 			cell.classList.add("ship-preview")
+	// 		}
+	// 	}
+	// }
 
-	const isNotPossible = (rowIndex, colIndex, remainingCells, position) => {
-		if (position === "horizontal") {
-			for (let i = 0; i < remainingCells; i++) {
-				const divToPaint = document.querySelector(`[data-row="${rowIndex}"][data-col="${colIndex + i}"]`)
-				divToPaint.classList.add("not-possible")
-			}
-		}
-		if (position === "vertical") {
-			for (let i = 0; i < remainingCells; i++) {
-				const divToPaint = document.querySelector(`[data-row="${rowIndex + i}"][data-col="${colIndex}"]`)
-				divToPaint.classList.add("not-possible")
-			}
-		}
-	}
+	// const isNotPossible = (rowIndex, colIndex, remainingCells, position) => {
+	// 	if (position === "horizontal") {
+	// 		for (let i = 0; i < remainingCells; i++) {
+	// 			const divToPaint = document.querySelector(`[data-row="${rowIndex}"][data-col="${colIndex + i}"]`)
+	// 			divToPaint.classList.add("not-possible")
+	// 		}
+	// 	}
+	// 	if (position === "vertical") {
+	// 		for (let i = 0; i < remainingCells; i++) {
+	// 			const divToPaint = document.querySelector(`[data-row="${rowIndex + i}"][data-col="${colIndex}"]`)
+	// 			divToPaint.classList.add("not-possible")
+	// 		}
+	// 	}
+	// }
 
-	const removePreview = () => {
-		const shipsPreviewed = document.querySelectorAll(".cell.ship-preview, .cell.not-possible")
-		shipsPreviewed.forEach((preview) => {
-			preview.classList.remove("ship-preview")
-			preview.classList.remove("not-possible")
-		})
-	}
+	// const removePreview = () => {
+	// 	const shipsPreviewed = document.querySelectorAll(".cell.ship-preview, .cell.not-possible")
+	// 	shipsPreviewed.forEach((preview) => {
+	// 		preview.classList.remove("ship-preview")
+	// 		preview.classList.remove("not-possible")
+	// 	})
+	// }
 
-	return { render, select, shipPlaced, isPossible, isNotPossible, removePreview }
+	return { render, shipPlaced } //, isPossible, isNotPossible, removePreview, select,
 }
 
 function renderShipList() {

@@ -49,7 +49,7 @@ function createGameBoard(playerGameboard) {
 			gameboardDiv.append(div)
 		})
 	})
-
+	console.log(gameboardDiv)
 	return gameboardDiv
 }
 
@@ -81,4 +81,34 @@ export function styleShipPreview(cell, shipSelected, position) {
 		const cell = document.querySelector(query)
 		cell.classList.add(classToAdd)
 	}
+}
+
+export function removePreview() {
+	const shipsPreviewed = document.querySelectorAll(".cell.ship-preview, .cell.not-possible")
+	shipsPreviewed.forEach((preview) => {
+		preview.classList.remove("ship-preview")
+		preview.classList.remove("not-possible")
+	})
+}
+
+export function styleShipPlaced() {
+	const currentSelected = document.querySelector(".ship-card.selected")
+	currentSelected.classList.remove("selected")
+	currentSelected.classList.add("placed")
+}
+
+export function styleGameboard(playerObject) {
+	const playerGameboard = playerObject.getGameboard()
+
+	// Style considering the values in each cell
+	// Check if the cell has a ship and style it
+	playerGameboard.forEach((row, rowIndex) => {
+		row.forEach((col, colIndex) => {
+			if (col !== "Empty") {
+				const div = document.querySelector(`[data-row="${rowIndex}"][data-col="${colIndex}"]`)
+				div.classList.remove("ship-preview")
+				div.classList.add("ship-placed")
+			}
+		})
+	})
 }
