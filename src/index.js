@@ -79,24 +79,8 @@ function addShipsPlayerGameboard() {
 			const rowIndex = Number(row)
 			const colIndex = Number(col)
 
-			const shipName = shipSelected
-			const shipLength = shipTypes[shipName]
-
 			// TODO -> Para que cuando pulse R se vuelva a ejecutar este código, debería hacer un event listener keydown + función
-			if (mouseEvent === "mouseover") {
-				// Debería añadir sólo la función: checkValidation(shipSelected, position)
-				// La función es la que debería revisar todas las variables
-				// Quizá debería coger el elemento DIV y no el nombre. Si cojo el div, puedo extraer las variables.
-				styleShipPreview(cell, shipSelected, position)
-
-				// if (position === "vertical") {
-				// 	const fitsInGameboardVer = rowIndex + shipLength <= boardLimit + 1
-				// 	const remainingCellsVer = boardLimit - rowIndex + 1
-
-				// 	if (fitsInGameboardVer) DOM().shipList.isPossible(rowIndex, colIndex, shipLength, position)
-				// 	if (!fitsInGameboardVer) DOM().shipList.isNotPossible(rowIndex, colIndex, remainingCellsVer, position)
-				// }
-			}
+			if (mouseEvent === "mouseover") styleShipPreview(cell, shipSelected, position)
 
 			if (mouseEvent === "click") {
 				gameboardOne.setShip(shipSelected, [rowIndex, colIndex], position)

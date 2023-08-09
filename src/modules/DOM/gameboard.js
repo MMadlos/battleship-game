@@ -67,29 +67,18 @@ export function styleShipPreview(cell, shipSelected, position) {
 	const shipName = shipSelected
 	const shipLength = shipTypes[shipName]
 
-	if (position === "horizontal") {
-		const fitsInGameboardHor = colIndex + shipLength <= boardLimit + 1
-		const remainingCellsHor = boardLimit - colIndex + 1
+	// Get the index used to calculate if it fits in the gameboard or the remaining cells to paint
+	const indexToCheck = position === "horizontal" ? colIndex : rowIndex
+	const fitsInGameboard = indexToCheck + shipLength <= boardLimit + 1
+	const remainingCells = boardLimit - indexToCheck + 1
 
-		const cellLength = fitsInGameboardHor ? shipLength : remainingCellsHor
-		const classToAdd = fitsInGameboardHor ? "ship-preview" : "not-possible"
+	const cellLength = fitsInGameboard ? shipLength : remainingCells
+	const classToAdd = fitsInGameboard ? "ship-preview" : "not-possible"
 
-		for (let i = 0; i < cellLength; i++) {
-			const cell = document.querySelector(`[data-row="${rowIndex}"][data-col="${colIndex + i}"]`)
-			cell.classList.add(classToAdd)
-		}
-	}
+	for (let i = 0; i < cellLength; i++) {
+		const query = position === "horizontal" ? `[data-row="${rowIndex}"][data-col="${colIndex + i}"]` : `[data-row="${rowIndex + i}"][data-col="${colIndex}"]`
 
-	if (position === "vertical") {
-		const fitsInGameboardVer = rowIndex + shipLength <= boardLimit + 1
-		const remainingCellsVer = boardLimit - rowIndex + 1
-
-		const cellLength = fitsInGameboardVer ? shipLength : remainingCellsVer
-		const classToAdd = fitsInGameboardVer ? "ship-preview" : "not-possible"
-
-		for (let i = 0; i < cellLength; i++) {
-			const cell = document.querySelector(`[data-row="${rowIndex + i}"][data-col="${colIndex}"]`)
-			cell.classList.add(classToAdd)
-		}
+		const cell = document.querySelector(query)
+		cell.classList.add(classToAdd)
 	}
 }
