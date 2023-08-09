@@ -89,13 +89,13 @@ function addShipsPlayerGameboard() {
 				// Quizá debería coger el elemento DIV y no el nombre. Si cojo el div, puedo extraer las variables.
 				styleShipPreview(cell, shipSelected, position)
 
-				if (position === "vertical") {
-					const fitsInGameboardVer = rowIndex + shipLength <= boardLimit + 1
-					const remainingCellsVer = boardLimit - rowIndex + 1
+				// if (position === "vertical") {
+				// 	const fitsInGameboardVer = rowIndex + shipLength <= boardLimit + 1
+				// 	const remainingCellsVer = boardLimit - rowIndex + 1
 
-					if (fitsInGameboardVer) DOM().shipList.isPossible(rowIndex, colIndex, shipLength, position)
-					if (!fitsInGameboardVer) DOM().shipList.isNotPossible(rowIndex, colIndex, remainingCellsVer, position)
-				}
+				// 	if (fitsInGameboardVer) DOM().shipList.isPossible(rowIndex, colIndex, shipLength, position)
+				// 	if (!fitsInGameboardVer) DOM().shipList.isNotPossible(rowIndex, colIndex, remainingCellsVer, position)
+				// }
 			}
 
 			if (mouseEvent === "click") {

@@ -79,4 +79,17 @@ export function styleShipPreview(cell, shipSelected, position) {
 			cell.classList.add(classToAdd)
 		}
 	}
+
+	if (position === "vertical") {
+		const fitsInGameboardVer = rowIndex + shipLength <= boardLimit + 1
+		const remainingCellsVer = boardLimit - rowIndex + 1
+
+		const cellLength = fitsInGameboardVer ? shipLength : remainingCellsVer
+		const classToAdd = fitsInGameboardVer ? "ship-preview" : "not-possible"
+
+		for (let i = 0; i < cellLength; i++) {
+			const cell = document.querySelector(`[data-row="${rowIndex + i}"][data-col="${colIndex}"]`)
+			cell.classList.add(classToAdd)
+		}
+	}
 }
