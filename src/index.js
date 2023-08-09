@@ -6,7 +6,10 @@ import { shipTypes } from "./modules/ship"
 
 import { renderGameboard, toggleGameContainer, GameOverDOM, removePreviousGameboard, DOM } from "./modules/DOM"
 
-DOM().append()
+import { getAndAppendShipList, addStyleToShipElement } from "./modules/DOM/ship-list"
+import { getAndAppendGameboard } from "./modules/DOM/gameboard"
+
+// DOM().append()
 
 // DEFAULT
 const gameboardOneDOM = document.getElementById("gameboard-one")
@@ -26,36 +29,44 @@ function initGame() {
 	gameboardPlayerOne = gameboardOne.getGameboard()
 	gameboardPlayerTwo = gameboardTwo.getGameboard()
 
-	renderGameboard(gameboardOneDOM, gameboardPlayerOne)
-	renderGameboard(gameboardTwoDOM, gameboardPlayerTwo)
+	getAndAppendShipList()
+	renderGameboards()
+	addShipsPlayerGameboard()
 }
 
-addShipsPlayerGameboard()
+function renderGameboards() {
+	const gameContainer = document.querySelector(".game-container")
+	const sectionPlayerOne = getAndAppendGameboard(playerOne)
+	const sectionPlayerTwo = getAndAppendGameboard(playerTwo)
+	gameContainer.append(sectionPlayerOne, sectionPlayerTwo)
+}
 
 function addShipsPlayerGameboard() {
-	const allShipCards = document.querySelectorAll(".ship-card")
-	const playerGrid = document.getElementById("gameboard-one")
-
 	let shipSelected
 	let position = "horizontal"
 
-	allShipCards.forEach((card) => {
-		card.addEventListener("click", () => {
-			shipSelected = card.querySelector(".ship-name").textContent
-			DOM().shipList.select(shipSelected)
-		})
+	const shipList = document.querySelector(".ship-list")
+	shipList.onclick = (e) => {
+		const shipCard = e.target.closest(".ship-card")
+		addStyleToShipElement(shipCard, "select")
 
-		document.addEventListener("keydown", (e) => {
-			if (e.code === "KeyR") {
-				position = position === "horizontal" ? "vertical" : "horizontal"
-			}
-		})
-	})
+		shipSelected = shipCard.dataset.ship
+		document.onkeydown = (e) => rotateShip(e)
+	}
+
+	const rotateShip = (e) => {
+		if (e.code !== "KeyR") return
+		position = position === "horizontal" ? "vertical" : "horizontal"
+	}
 
 	// Add visual clue where the ship will be placed and style it accordingly (when is possible, when is not and when is being placed)
-	;["mouseover", "mouseout", "click", "keydown"].forEach((mouseEvent) => {
+	const playerGrid = document.getElementById("gameboard-one")
+	;["mouseover", "mouseout", "click"].forEach((mouseEvent) => {
 		playerGrid.addEventListener(mouseEvent, (e) => {
 			const isNotGameboard = e.target.closest("coordY") || e.target.closest("coordX")
+
+			// TODO -> Sistema para mover el barco de nuevo o para eliminarlo.
+			// if !shipSelected & e.target.closest(".ship-placed")
 
 			if (!shipSelected || isNotGameboard) return
 			if (mouseEvent === "mouseout") return DOM().shipList.removePreview()
@@ -67,8 +78,6 @@ function addShipsPlayerGameboard() {
 
 			const shipName = shipSelected
 			const shipLength = shipTypes[shipName]
-
-			// TODO -> Check what would happen when the player rotates the ship
 
 			if (mouseEvent === "mouseover") {
 				if (position === "horizontal") {
@@ -206,15 +215,16 @@ function displayGameOver(winner) {
 
 function restartGame() {
 	// TODO --> Check how to render the init screen again.
-	// Check classes of game-container and how to init game
 	const restartBtn = document.getElementById("restart-btn")
 	const gameOverText = document.querySelector(".game-over")
 
 	restartBtn.addEventListener("click", () => {
+		// Check classes of game-container and how to init game
+
+		const textContainer = document.querySelector(".text-container")
 		restartBtn.remove()
 		gameOverText.remove()
 
-		const textContainer = document.querySelector(".text-container")
 		textContainer.classList.remove("none")
 
 		removePreviousGameboard()

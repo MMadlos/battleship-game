@@ -1,5 +1,6 @@
 import { shipTypes } from "./ship"
-const app = document.getElementById("app")
+import { getAndAppendShipList } from "./DOM/ship-list"
+
 const textSection = document.querySelector(".text-section")
 
 export function DOM() {
