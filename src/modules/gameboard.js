@@ -27,35 +27,24 @@ export function Gameboard() {
 		const position = ship.getPosition()
 
 		// Check that the ship won't be outside of the board.
-		const isOutOfBoardHor = position === "horizontal" && coordY + shipLength - 1 > boardLimit
-		const isOutOfBoardVer = position === "vertical" && coordX + shipLength - 1 > boardLimit
+		const positionCoord = position === "horizontal" ? coordY : coordX
+		const isOutOfBoard = positionCoord + shipLength - 1 > boardLimit
+		if (isOutOfBoard) return "Out of board"
 
-		if (isOutOfBoardHor || isOutOfBoardVer) return "Out of board"
-
-		// Check if all cells where we want to place the ship are empty
-		let allCells = []
 		if (position === "horizontal") {
-			for (let i = coordY; i < coordY + shipLength; i++) {
-				allCells.push(gameboard[coordX][i])
-			}
-		}
+			const isEmpty = gameboard[coordX].every((cell) => cell === "Empty")
+			if (!isEmpty) return "Not empty"
 
-		if (position === "vertical") {
-			for (let i = coordX; i < coordX + shipLength; i++) {
-				allCells.push(gameboard[i][coordY])
-			}
-		}
-		const isThereAnotherShip = allCells.some((cell) => cell !== "Empty")
-		if (isThereAnotherShip) return "Not empty"
-
-		// Put the name of the ship in all cells after verification
-		if (position === "horizontal") {
 			for (let i = coordY; i < coordY + shipLength; i++) {
 				gameboard[coordX][i] = shipType
 			}
 		}
+
 		if (position === "vertical") {
 			for (let i = coordX; i < coordX + shipLength; i++) {
+				const isEmpty = gameboard[i][coordY] === "Empty"
+				if (!isEmpty) return "Not empty"
+
 				gameboard[i][coordY] = shipType
 			}
 		}
