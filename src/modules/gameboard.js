@@ -1,6 +1,5 @@
 import { Ship } from "./ship"
 
-const shipNames = ["Carrier", "Battleship", "Destroyer", "Submarine", "PatrolBoat"]
 export const boardLimit = 9
 
 export function Gameboard() {

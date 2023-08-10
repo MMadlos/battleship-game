@@ -1,18 +1,16 @@
 import "./style.css"
 import { Player } from "./modules/player"
-import { boardLimit } from "./modules/gameboard"
 import { setEnemyShips } from "./modules/defaultShips"
-import { shipTypes } from "./modules/ship"
 
-import { renderGameboard, toggleGameContainer, GameOverDOM, removePreviousGameboard, DOM } from "./modules/DOM"
+import { toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./modules/DOM"
 
 import { getAndAppendShipList, addStyleToShipElement } from "./modules/DOM/ship-list"
 import { getAndAppendGameboard, styleShipPreview, removePreview, styleShipPlaced, styleGameboard } from "./modules/DOM/gameboard"
 
-// DEFAULT
-const gameboardOneDOM = document.getElementById("gameboard-one")
-const gameboardTwoDOM = document.getElementById("gameboard-two")
+// UI
+getAndAppendShipList()
 
+// VARIABLES
 let playerOne, playerTwo
 let gameboardOne, gameboardTwo // Gameboard factories
 let gameboardPlayerOne, gameboardPlayerTwo // Gameboard content
@@ -28,7 +26,6 @@ function initGame() {
 	gameboardPlayerOne = gameboardOne.getGameboard()
 	gameboardPlayerTwo = gameboardTwo.getGameboard()
 
-	getAndAppendShipList()
 	renderGameboards()
 	selectAndPlaceShip()
 }
@@ -40,15 +37,11 @@ function renderGameboards() {
 	gameContainer.append(sectionPlayerOne, sectionPlayerTwo)
 }
 
-let shipSelected
-let position = "horizontal"
-
 function selectAndPlaceShip() {
-	selectShipToPlace()
-	addShipsPlayerGameboard()
-}
+	let shipSelected
+	let position = "horizontal"
 
-function selectShipToPlace() {
+	// Select ship
 	const shipList = document.querySelector(".ship-list")
 	shipList.onclick = (e) => {
 		const shipCard = e.target.closest(".ship-card")
@@ -58,10 +51,8 @@ function selectShipToPlace() {
 		addStyleToShipElement(shipCard, "select")
 		shipSelected = shipCard.dataset.ship
 	}
-}
 
-// Add visual clue where the ship will be placed and style it accordingly (when is possible, when is not and when is being placed)
-function addShipsPlayerGameboard() {
+	// Add visual clue where the ship will be placed and style it accordingly (when is possible, when is not and when is placed)
 	const playerGrid = document.getElementById("gameboard-one")
 	;["mouseover", "mouseout", "click"].forEach((mouseEvent) => {
 		playerGrid.addEventListener(mouseEvent, (e) => {
@@ -73,22 +64,23 @@ function addShipsPlayerGameboard() {
 			if (!shipSelected || isNotGameboard) return
 
 			const cell = e.target.closest(".cell")
-			const { row, col } = cell.dataset
-			const rowIndex = Number(row)
-			const colIndex = Number(col)
 
 			if (mouseEvent === "mouseover") styleShipPreview(cell, shipSelected, position)
 			if (mouseEvent === "mouseout") removePreview()
 
 			document.onkeydown = (e) => {
 				if (e.code !== "KeyR") return
+
 				position = position === "horizontal" ? "vertical" : "horizontal"
 				removePreview()
 				styleShipPreview(cell, shipSelected, position)
 			}
 
 			if (mouseEvent === "click") {
-				const setShip = gameboardOne.setShip(shipSelected, [rowIndex, colIndex], position)
+				const { row, col } = cell.dataset
+				const coordinates = [Number(row), Number(col)]
+
+				const setShip = gameboardOne.setShip(shipSelected, coordinates, position)
 
 				const outOfBoard = setShip === "Out of board"
 				const cellNotEmpty = setShip === "Not empty"

@@ -6,8 +6,6 @@ export function getAndAppendGameboard(playerObject) {
 	const gameboard = playerObject.getGameboard()
 	const isComputer = playerObject.getName() === "Computer"
 
-	const section = document.createElement("section")
-
 	const gameboardDiv = createGameBoard(gameboard)
 	gameboardDiv.id = isComputer ? "gameboard-two" : "gameboard-one"
 
@@ -15,6 +13,7 @@ export function getAndAppendGameboard(playerObject) {
 	textPara.className = "grid-title"
 	textPara.textContent = isComputer ? "Enemy's grid" : "Your grid"
 
+	const section = document.createElement("section")
 	section.append(textPara, gameboardDiv)
 	return section
 }
@@ -49,7 +48,6 @@ function createGameBoard(playerGameboard) {
 			gameboardDiv.append(div)
 		})
 	})
-	console.log(gameboardDiv)
 	return gameboardDiv
 }
 
