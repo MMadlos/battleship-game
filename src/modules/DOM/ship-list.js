@@ -39,12 +39,18 @@ function createShipElement(shipName, shipLength) {
 }
 
 // Style Ship element
-export function addStyleToShipElement(shipEl, status) {
-	if (status === "select") {
-		const currentSelected = document.querySelector(".ship-card.selected")
-		if (currentSelected) currentSelected.classList.remove("selected")
-		shipEl.classList.add("selected")
-	}
+export function addStyleToShipElement(shipEl) {
+	const currentSelected = document.querySelector(".ship-card.selected")
+	if (currentSelected) currentSelected.classList.remove("selected")
+
+	const isNotSelected = [...shipEl.classList].length === 1
+	shipEl.classList.toggle("selected", isNotSelected)
+}
+
+export function styleShipPlaced() {
+	const currentSelected = document.querySelector(".ship-card.selected")
+	currentSelected.classList.remove("selected")
+	currentSelected.classList.add("placed")
 }
 
 // Simulating a transformation of the data fetched

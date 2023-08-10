@@ -4,11 +4,8 @@ import { setEnemyShips } from "./modules/defaultShips"
 
 import { toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./modules/DOM"
 
-import { getAndAppendShipList, addStyleToShipElement } from "./modules/DOM/ship-list"
-import { getAndAppendGameboard, styleShipPreview, removePreview, styleShipPlaced, styleGameboard } from "./modules/DOM/gameboard"
-
-// UI
-getAndAppendShipList()
+import { getAndAppendShipList, addStyleToShipElement, styleShipPlaced } from "./modules/DOM/ship-list"
+import { getAndAppendGameboard, styleShipPreview, removePreview, styleGameboard } from "./modules/DOM/gameboard"
 
 // VARIABLES
 let playerOne, playerTwo
@@ -26,6 +23,7 @@ function initGame() {
 	gameboardPlayerOne = gameboardOne.getGameboard()
 	gameboardPlayerTwo = gameboardTwo.getGameboard()
 
+	getAndAppendShipList()
 	renderGameboards()
 	selectAndPlaceShip()
 }
@@ -44,11 +42,10 @@ function selectAndPlaceShip() {
 	// Select ship
 	const shipList = document.querySelector(".ship-list")
 	shipList.onclick = (e) => {
-		const shipCard = e.target.closest(".ship-card")
-		const isAlreadyPlaced = shipCard.classList.contains("placed")
-		if (isAlreadyPlaced || !shipCard) return
+		const shipCard = e.target.closest(".ship-card:not(.placed)")
+		if (!shipCard) return
 
-		addStyleToShipElement(shipCard, "select")
+		addStyleToShipElement(shipCard)
 		shipSelected = shipCard.dataset.ship
 	}
 
@@ -65,9 +62,6 @@ function selectAndPlaceShip() {
 
 			const cell = e.target.closest(".cell")
 
-			if (mouseEvent === "mouseover") styleShipPreview(cell, shipSelected, position)
-			if (mouseEvent === "mouseout") removePreview()
-
 			document.onkeydown = (e) => {
 				if (e.code !== "KeyR") return
 
@@ -76,6 +70,8 @@ function selectAndPlaceShip() {
 				styleShipPreview(cell, shipSelected, position)
 			}
 
+			if (mouseEvent === "mouseover") styleShipPreview(cell, shipSelected, position)
+			if (mouseEvent === "mouseout") removePreview()
 			if (mouseEvent === "click") {
 				const { row, col } = cell.dataset
 				const coordinates = [Number(row), Number(col)]
@@ -89,23 +85,30 @@ function selectAndPlaceShip() {
 
 				styleShipPlaced()
 				styleGameboard(playerOne)
-				shipSelected = undefined
+				checkAndDisplayStartBtn()
 
-				const allShipsPlaced = Object.keys(gameboardOne.getAvailableShips()).every((element) => element === false)
-				if (allShipsPlaced) startBtnListener()
+				shipSelected = undefined
 			}
 		})
 	})
+}
+
+function checkAndDisplayStartBtn() {
+	const availableShips = Object.keys(gameboardOne.getAvailableShips())
+	const areAllShipsPlaced = availableShips.every((element) => element === false)
+
+	if (areAllShipsPlaced) startBtnListener()
 }
 
 function startBtnListener() {
 	const btnContainer = document.querySelector(".btn-container")
 	btnContainer.classList.remove("none")
 
+	const shipList = document.querySelector(".ship-list")
 	const startBtn = document.getElementById("start-game")
+
 	startBtn.addEventListener("click", () => {
-		const shipContainer = document.querySelector(".ship-list")
-		shipContainer.classList.add("none")
+		shipList.remove()
 		startBtn.remove()
 		setEnemyShips(gameboardTwo)
 		enableAttackEnemy()

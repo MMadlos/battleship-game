@@ -1,10 +1,10 @@
 export function setEnemyShips(gameboard) {
 	const defaultShips = [
-		["Carrier", [5, 8], "vertical"],
-		["Battleship", [4, 0]],
-		["Destroyer", [3, 3], "vertical"],
-		["Submarine", [0, 7], "vertical"],
-		["PatrolBoat", [9, 4]],
+		["Carrier", [0, 0]],
+		["Battleship", [1, 0]],
+		["Destroyer", [2, 0]],
+		["Submarine", [3, 0]],
+		["PatrolBoat", [4, 0]],
 	]
 
 	defaultShips.forEach((ship) => {

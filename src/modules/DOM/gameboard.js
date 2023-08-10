@@ -89,12 +89,6 @@ export function removePreview() {
 	})
 }
 
-export function styleShipPlaced() {
-	const currentSelected = document.querySelector(".ship-card.selected")
-	currentSelected.classList.remove("selected")
-	currentSelected.classList.add("placed")
-}
-
 export function styleGameboard(playerObject) {
 	const playerGameboard = playerObject.getGameboard()
 

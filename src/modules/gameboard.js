@@ -26,11 +26,12 @@ export function Gameboard() {
 		const shipLength = ship.getLength()
 		const position = ship.getPosition()
 
-		// Check that the ship won't be outside of the board.
+		// Check that the ship won't be outside of the board
 		const positionCoord = position === "horizontal" ? coordY : coordX
 		const isOutOfBoard = positionCoord + shipLength - 1 > boardLimit
 		if (isOutOfBoard) return "Out of board"
 
+		// Check if coords are available and place the ship if possible
 		if (position === "horizontal") {
 			const isEmpty = gameboard[coordX].every((cell) => cell === "Empty")
 			if (!isEmpty) return "Not empty"
