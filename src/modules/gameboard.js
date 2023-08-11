@@ -16,9 +16,7 @@ export function Gameboard() {
 	const shipsPlaced = {}
 	const getShipsPlaced = () => shipsPlaced
 	const getGameboard = () => gameboard
-	const setShip = (shipType, coordinates, shipPosition = "horizontal") => {
-		if (!availableShips[shipType]) return console.log(`It's already placed in the gameboard`)
-
+	const setShip = ({ shipType, coordinates, shipPosition }) => {
 		const ship = Ship(shipType)
 		ship.setPosition(shipPosition)
 
@@ -29,12 +27,12 @@ export function Gameboard() {
 		// Check that the ship won't be outside of the board
 		const positionCoord = position === "horizontal" ? coordY : coordX
 		const isOutOfBoard = positionCoord + shipLength - 1 > boardLimit
-		if (isOutOfBoard) return "Out of board"
+		if (isOutOfBoard) return { error: true, message: "Out of board" }
 
 		// Check if coords are available and place the ship if possible
 		if (position === "horizontal") {
 			const isEmpty = gameboard[coordX].every((cell) => cell === "Empty")
-			if (!isEmpty) return "Not empty"
+			if (!isEmpty) return { error: true, message: "Not empty" }
 
 			for (let i = coordY; i < coordY + shipLength; i++) {
 				gameboard[coordX][i] = shipType
@@ -44,7 +42,7 @@ export function Gameboard() {
 		if (position === "vertical") {
 			for (let i = coordX; i < coordX + shipLength; i++) {
 				const isEmpty = gameboard[i][coordY] === "Empty"
-				if (!isEmpty) return "Not empty"
+				if (!isEmpty) return { error: true, message: "Not empty" }
 
 				gameboard[i][coordY] = shipType
 			}
@@ -52,6 +50,7 @@ export function Gameboard() {
 
 		availableShips[shipType] = false
 		shipsPlaced[shipType] = ship
+		return true
 	}
 
 	const getAvailableShips = () => {

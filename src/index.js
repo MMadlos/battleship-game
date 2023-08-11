@@ -6,6 +6,7 @@ import { toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./mod
 
 import { getAndAppendShipList, addStyleToShipElement, styleShipPlaced } from "./modules/DOM/ship-list"
 import { getAndAppendGameboard, styleShipPreview, removePreview, styleGameboard } from "./modules/DOM/gameboard"
+import { placingMsg } from "./modules/DOM/messages"
 
 // VARIABLES
 let playerOne, playerTwo
@@ -76,12 +77,9 @@ function selectAndPlaceShip() {
 				const { row, col } = cell.dataset
 				const coordinates = [Number(row), Number(col)]
 
-				const setShip = gameboardOne.setShip(shipSelected, coordinates, position)
-
-				const outOfBoard = setShip === "Out of board"
-				const cellNotEmpty = setShip === "Not empty"
-				if (outOfBoard) return console.log("Ship is being placed out of the grid")
-				if (cellNotEmpty) return console.log("There is another ship in these coordinates")
+				const shipData = { shipType: shipSelected, coordinates, shipPosition: position }
+				const setShip = gameboardOne.setShip(shipData)
+				if (setShip.error) return placingMsg(setShip)
 
 				styleShipPlaced()
 				styleGameboard(playerOne)
@@ -97,22 +95,19 @@ function checkAndDisplayStartBtn() {
 	const availableShips = Object.keys(gameboardOne.getAvailableShips())
 	const areAllShipsPlaced = availableShips.every((element) => element === false)
 
-	if (areAllShipsPlaced) startBtnListener()
-}
-
-function startBtnListener() {
+	if (!areAllShipsPlaced) return
 	const btnContainer = document.querySelector(".btn-container")
 	btnContainer.classList.remove("none")
 
-	const shipList = document.querySelector(".ship-list")
 	const startBtn = document.getElementById("start-game")
+	startBtn.onclick = () => {
+		const shipList = document.querySelector(".ship-list")
 
-	startBtn.addEventListener("click", () => {
 		shipList.remove()
 		startBtn.remove()
 		setEnemyShips(gameboardTwo)
 		enableAttackEnemy()
-	})
+	}
 }
 
 // "START OF THE GAME"
