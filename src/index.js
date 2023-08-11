@@ -8,6 +8,13 @@ import { getAndAppendShipList, addStyleToShipElement, styleShipPlaced } from "./
 import { getAndAppendGameboard, styleShipPreview, removePreview, styleGameboard } from "./modules/DOM/gameboard"
 import { displayErrorMessage } from "./modules/DOM/messages"
 
+// TODO ->
+// - Styling
+// - Add messages
+// - Add images
+// - Order code (imports, exports and file structure)
+// - Add features (place ships randomly, enable to move a ship that has been already placed, add second "human" player)
+
 // VARIABLES
 let playerOne, playerTwo
 let gameboardOne, gameboardTwo // Gameboard factories
