@@ -6,7 +6,7 @@ import { toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./mod
 
 import { getAndAppendShipList, addStyleToShipElement, styleShipPlaced } from "./modules/DOM/ship-list"
 import { getAndAppendGameboard, styleShipPreview, removePreview, styleGameboard } from "./modules/DOM/gameboard"
-import { placingMsg } from "./modules/DOM/messages"
+import { displayErrorMessage } from "./modules/DOM/messages"
 
 // VARIABLES
 let playerOne, playerTwo
@@ -77,9 +77,8 @@ function selectAndPlaceShip() {
 				const { row, col } = cell.dataset
 				const coordinates = [Number(row), Number(col)]
 
-				const shipData = { shipType: shipSelected, coordinates, shipPosition: position }
-				const setShip = gameboardOne.setShip(shipData)
-				if (setShip.error) return placingMsg(setShip)
+				const setShip = gameboardOne.setShip(shipSelected, coordinates, position)
+				if (setShip.error) return displayErrorMessage(setShip.message)
 
 				styleShipPlaced()
 				styleGameboard(playerOne)

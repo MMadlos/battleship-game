@@ -16,7 +16,7 @@ export function Gameboard() {
 	const shipsPlaced = {}
 	const getShipsPlaced = () => shipsPlaced
 	const getGameboard = () => gameboard
-	const setShip = ({ shipType, coordinates, shipPosition }) => {
+	const setShip = (shipType, coordinates, shipPosition) => {
 		const ship = Ship(shipType)
 		ship.setPosition(shipPosition)
 
@@ -27,12 +27,12 @@ export function Gameboard() {
 		// Check that the ship won't be outside of the board
 		const positionCoord = position === "horizontal" ? coordY : coordX
 		const isOutOfBoard = positionCoord + shipLength - 1 > boardLimit
-		if (isOutOfBoard) return { error: true, message: "Out of board" }
+		if (isOutOfBoard) return { error: true, message: "outOfBoard" }
 
 		// Check if coords are available and place the ship if possible
 		if (position === "horizontal") {
 			const isEmpty = gameboard[coordX].every((cell) => cell === "Empty")
-			if (!isEmpty) return { error: true, message: "Not empty" }
+			if (!isEmpty) return { error: true, message: "cellNotEmpty" }
 
 			for (let i = coordY; i < coordY + shipLength; i++) {
 				gameboard[coordX][i] = shipType
@@ -40,10 +40,13 @@ export function Gameboard() {
 		}
 
 		if (position === "vertical") {
+			// If we put this inside the other for loop, it messes with the styles. It has to check firt if all cells are empty and then place the shipType in the gameboard.
 			for (let i = coordX; i < coordX + shipLength; i++) {
 				const isEmpty = gameboard[i][coordY] === "Empty"
-				if (!isEmpty) return { error: true, message: "Not empty" }
+				if (!isEmpty) return { error: true, message: "cellNotEmpty" }
+			}
 
+			for (let i = coordX; i < coordX + shipLength; i++) {
 				gameboard[i][coordY] = shipType
 			}
 		}
