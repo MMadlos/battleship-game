@@ -31,8 +31,10 @@ export function Gameboard() {
 
 		// Check if coords are available and place the ship if possible
 		if (position === "horizontal") {
-			const isEmpty = gameboard[coordX].every((cell) => cell === "Empty")
-			if (!isEmpty) return { error: true, message: "cellNotEmpty" }
+			for (let i = coordY; i < coordY + shipLength; i++) {
+				const isEmpty = gameboard[coordX][i] === "Empty"
+				if (!isEmpty) return { error: true, message: "cellNotEmpty" }
+			}
 
 			for (let i = coordY; i < coordY + shipLength; i++) {
 				gameboard[coordX][i] = shipType
