@@ -93,17 +93,20 @@ function selectAndPlaceShip() {
 function checkAndDisplayStartBtn() {
 	const availableShips = Object.keys(gameboardOne.getAvailableShips())
 	const areAllShipsPlaced = availableShips.every((element) => element === false)
-
 	if (!areAllShipsPlaced) return
+
 	const btnContainer = document.querySelector(".btn-container")
 	btnContainer.classList.remove("none")
 
 	const startBtn = document.getElementById("start-game")
+	startBtn.classList.remove("none")
+
 	startBtn.onclick = () => {
 		const shipList = document.querySelector(".ship-list")
-
 		shipList.remove()
-		startBtn.remove()
+
+		startBtn.classList.add("none")
+
 		setEnemyShips(gameboardTwo)
 		enableAttackEnemy()
 	}
@@ -195,10 +198,10 @@ function restartGame() {
 		// Check classes of game-container and how to init game
 
 		const textContainer = document.querySelector(".text-container")
+		textContainer.classList.remove("none")
+
 		restartBtn.remove()
 		gameOverText.remove()
-
-		textContainer.classList.remove("none")
 
 		removePreviousGameboard()
 		initGame()

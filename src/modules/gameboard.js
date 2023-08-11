@@ -16,7 +16,7 @@ export function Gameboard() {
 	const shipsPlaced = {}
 	const getShipsPlaced = () => shipsPlaced
 	const getGameboard = () => gameboard
-	const setShip = (shipType, coordinates, shipPosition) => {
+	const setShip = (shipType, coordinates, shipPosition = "horizontal") => {
 		const ship = Ship(shipType)
 		ship.setPosition(shipPosition)
 

@@ -54,6 +54,9 @@ export function GameOverDOM(winner) {
 }
 
 export function removePreviousGameboard() {
-	const cellsAll = document.querySelectorAll(".gameboard  > div")
-	cellsAll.forEach((cell) => cell.remove())
+	const gameContainer = document.querySelector(".game-container")
+	gameContainer.classList.remove("none")
+
+	const gameContainerSections = document.querySelectorAll(".game-container > section")
+	gameContainerSections.forEach((section) => section.remove())
 }
