@@ -172,3 +172,13 @@ h1 {
 	align-items: center;
 	justify-self: center;
 }
+
+/* Text messages */
+.text-container.errorMsg {
+	background-color: rgba(228, 228, 228, 0.5);
+	border-radius: 8px;
+}
+.errorMsg {
+	color: red;
+	font-weight: 500;
+}

@@ -5,7 +5,7 @@ const messages = {
 
 export function displayErrorMessage(errorMessage) {
 	const isErrorDisplayed = document.querySelector(".text-container.errorMsg")
-	const textSection = document.querySelector(".text-section")
+	const app = document.querySelector("#app")
 
 	if (!isErrorDisplayed) {
 		const textContainer = document.createElement("div")
@@ -15,7 +15,7 @@ export function displayErrorMessage(errorMessage) {
 
 		textP.textContent = messages[errorMessage]
 
-		textSection.append(textContainer)
+		app.append(textContainer)
 		textContainer.append(textP)
 	}
 
@@ -24,5 +24,5 @@ export function displayErrorMessage(errorMessage) {
 		textError.textContent = messages[errorMessage]
 	}
 
-	return textSection
+	return app
 }
