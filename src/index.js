@@ -47,14 +47,13 @@ function selectAndPlaceShip() {
 	let shipSelected
 	let position = "horizontal"
 
-	// Select ship
 	const shipList = document.querySelector(".ship-list")
 	shipList.onclick = (e) => {
 		const shipCard = e.target.closest(".ship-card:not(.placed)")
 		if (!shipCard) return
 
-		addStyleToShipElement(shipCard)
 		shipSelected = shipCard.dataset.ship
+		addStyleToShipElement(shipCard)
 	}
 
 	// Add visual clue where the ship will be placed and style it accordingly (when is possible, when is not and when is placed)
