@@ -26,3 +26,8 @@ export function displayErrorMessage(errorMessage) {
 
 	return app
 }
+
+export function removeErrorMessage() {
+	const errorMessage = document.querySelector(".errorMsg")
+	if (errorMessage) errorMessage.remove()
+}

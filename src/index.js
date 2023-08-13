@@ -6,7 +6,7 @@ import { toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./mod
 
 import { getAndAppendShipList, addStyleToShipElement, styleShipPlaced } from "./modules/DOM/ship-list"
 import { getAndAppendGameboard, styleShipPreview, removePreview, styleGameboard } from "./modules/DOM/gameboard"
-import { displayErrorMessage } from "./modules/DOM/messages"
+import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
 
 // TODO ->
 // - Styling
@@ -89,6 +89,7 @@ function selectAndPlaceShip() {
 				styleShipPlaced()
 				styleGameboard(playerOne)
 				checkAndDisplayStartBtn()
+				removeErrorMessage()
 
 				shipSelected = undefined
 			}
