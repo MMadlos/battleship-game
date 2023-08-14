@@ -53,6 +53,7 @@ function initGame() {
 	gameboardPlayerOne = gameboardOne.getGameboard()
 	gameboardPlayerTwo = gameboardTwo.getGameboard()
 
+	setShipsRandomly()
 	getAndAppendShipList()
 	renderGameboards()
 	selectAndPlaceShip()
@@ -65,21 +66,27 @@ function renderGameboards() {
 	gameContainer.append(sectionPlayerOne, sectionPlayerTwo)
 }
 
-setShipsRandomly()
 function setShipsRandomly() {
 	const randomBtn = document.getElementById("random-ships")
 	randomBtn.addEventListener("click", () => {
+		clearGameboard()
+		setRandomShips()
+		styleGameboard(playerOne)
+		checkAndDisplayStartBtn()
+	})
+
+	function clearGameboard() {
 		playerOne.gameboard.clearGameboard()
 		removePreviousGameboard()
 		renderGameboards()
+	}
 
+	function setRandomShips() {
 		const shipNames = Object.keys(shipTypes)
 		shipNames.forEach((shipName) => {
 			setShipRandomly(playerOne, shipName)
 		})
-		styleGameboard(playerOne)
-		checkAndDisplayStartBtn()
-	})
+	}
 }
 
 function selectAndPlaceShip() {
