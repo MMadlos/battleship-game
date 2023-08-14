@@ -7,6 +7,13 @@ import { toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./mod
 import { getAndAppendShipList, addStyleToShipElement, styleShipPlaced } from "./modules/DOM/ship-list"
 import { getAndAppendGameboard, styleShipPreview, removePreview, styleGameboard } from "./modules/DOM/gameboard"
 import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
+import { getRandomCoord } from "./modules/placeShipsRandom"
+
+// TEST
+console.log(getRandomCoord("Carrier"))
+console.log(getRandomCoord("Carrier"))
+console.log(getRandomCoord("Carrier"))
+console.log(getRandomCoord("Carrier"))
 
 // TODO ->
 // - Styling
@@ -14,6 +21,26 @@ import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
 // - Add images
 // - Order code (imports, exports and file structure)
 // - Add features (place ships randomly, enable to move a ship that has been already placed, add second "human" player)
+
+// *AÑADIR BARCOS ALEATORIAMENTE
+/*
+Place ships randomly
+- Tener en cuenta la longitud de cada barco
+- Tener en cuenta que cambian los parámetros (coordX o coordY) en función de la orientación del barco (horizontal / vertical)
+- Añadir de más grande a más pequeño (Carrier y Battleship)
+- Incrustar Destroyer, Submarine y PatrolBoat 
+	- Random coord
+	- Revisar longitud de "Empty" en esa fila
+	- Ver si coincide con su longitud
+	- Añadir si coincide
+
+Notas
+1 -> Carrier (length: 5)
+	Posibilidades: del 0 al 5 -> A partir del 5 ya estaría outOfBoard
+
+2 -> Battleship (length: 4)
+	Posibilidades: del 0 al 6
+*/
 
 // VARIABLES
 let playerOne, playerTwo
