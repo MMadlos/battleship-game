@@ -60,14 +60,21 @@ function getRandomCoord(shipName) {
 
 // If the ship is being placed and there is already a ship in those coordinates, it has to check the next coordinates available
 export function setShipRandomly(player, shipName) {
-	const { coordinates, position } = getRandomCoord(shipName)
+	// TODO -> Remove everything in case it clicks the setShipRandomly btn again.
 
+	const { coordinates, position } = getRandomCoord(shipName)
 	const setShip = player.gameboard.setShip(shipName, coordinates, position)
 
+	// When there is already a ship placed, it will check for an empty row or column (depending on the ship's position) and it will generate a new random index to place it.
 	if (setShip.error) {
 		const gameboard = player.getGameboard()
+		const maxIndex = BOARD_LIMIT - shipLengths[shipName]
+		const randomIndex = getRandomBetween(0, maxIndex)
+		let newCoordinates
+
+		const cellEmpty = (cell) => cell === "Empty"
+
 		if (position === "vertical") {
-			let emptyColIndex
 			for (let i = 0; i < gameboard.length; i++) {
 				const col = []
 
@@ -75,43 +82,23 @@ export function setShipRandomly(player, shipName) {
 					col.push(gameboard[j][i])
 				}
 
-				const isColEmpty = col.every((cell) => cell === "Empty")
-
-				if (isColEmpty) {
-					emptyColIndex = i
+				if (col.every(cellEmpty)) {
+					newCoordinates = [randomIndex, i]
 					break
 				}
 			}
-
-			const maxIndex = BOARD_LIMIT - shipLengths[shipName]
-			const randomRowlIndex = getRandomBetween(0, maxIndex)
-			const newCoordinates = [randomRowlIndex, emptyColIndex]
-
-			player.gameboard.setShip(shipName, newCoordinates, position)
 		}
 
-		// Ejemplo: Carrier horizontal
 		if (position === "horizontal") {
 			const rows = []
-			gameboard.forEach((row) => {
-				rows.push(row)
-			})
+			gameboard.forEach((row) => rows.push(row))
 
-			let emptyRowIndex
 			rows.forEach((row, rowIndex) => {
-				const isRowEmpty = row.every((cell) => cell === "Empty")
-
-				if (isRowEmpty) {
-					emptyRowIndex = rowIndex
-					return emptyRowIndex
-				}
+				newCoordinates = [rowIndex, randomIndex]
+				if (row.every(cellEmpty)) return
 			})
-
-			const maxIndex = BOARD_LIMIT - shipLengths[shipName]
-			const randomColIndex = getRandomBetween(0, maxIndex)
-			const newCoordinates = [emptyRowIndex, randomColIndex]
-
-			player.gameboard.setShip(shipName, newCoordinates, position)
 		}
+
+		player.gameboard.setShip(shipName, newCoordinates, position)
 	}
 }

@@ -57,6 +57,9 @@ export function Gameboard() {
 		availableShips[shipType] = false
 		shipsPlaced[shipType] = ship
 		return true
+
+		// Crea objeto Ship() y lo añade a "shipsPlaced"
+		// Añade en las coordenadas el nombre del barco
 	}
 
 	const getAvailableShips = () => {
