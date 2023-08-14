@@ -57,9 +57,24 @@ export function Gameboard() {
 		availableShips[shipType] = false
 		shipsPlaced[shipType] = ship
 		return true
+	}
 
+	const clearGameboard = () => {
 		// Crea objeto Ship() y lo añade a "shipsPlaced"
 		// Añade en las coordenadas el nombre del barco
+		// Cambia los ships disponibles a false
+
+		//* Borrar todos los objetos en shipsPlaced
+		//* Crear de nuevo el gameboard
+		// Cambiar los ships disponibles a true
+
+		const shipsPlacedNames = Object.keys(shipsPlaced)
+		shipsPlacedNames.forEach((ship) => {
+			availableShips[ship] = true
+			delete shipsPlaced[ship]
+		})
+
+		gameboard = setGameboard()
 	}
 
 	const getAvailableShips = () => {
@@ -133,7 +148,7 @@ export function Gameboard() {
 		return areNotAllSunk ? false : true
 	}
 
-	return { shipsPlaced, getShipsPlaced, getGameboard, setShip, getShipCoordinates, getAvailableShips, receiveAttack, checkGameOver }
+	return { shipsPlaced, getShipsPlaced, getGameboard, setShip, getShipCoordinates, getAvailableShips, receiveAttack, checkGameOver, clearGameboard }
 }
 
 function setGameboard() {

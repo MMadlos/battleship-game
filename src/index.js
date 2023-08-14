@@ -69,6 +69,10 @@ setShipsRandomly()
 function setShipsRandomly() {
 	const randomBtn = document.getElementById("random-ships")
 	randomBtn.addEventListener("click", () => {
+		playerOne.gameboard.clearGameboard()
+		removePreviousGameboard()
+		renderGameboards()
+
 		const shipNames = Object.keys(shipTypes)
 		shipNames.forEach((shipName) => {
 			setShipRandomly(playerOne, shipName)
