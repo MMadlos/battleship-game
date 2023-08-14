@@ -34,7 +34,6 @@ function RandomPosition() {
 	return positions[randomIndex]
 }
 
-// --> Coord X / Coord Y
 const shipLengths = {
 	Carrier: 5,
 	Battleship: 4,
@@ -44,31 +43,15 @@ const shipLengths = {
 }
 const BOARD_LIMIT = 9
 
-// 1 -> Carrier (length: 5)
-//Posibilidades: del 0 al 5 -> A partir del 5 ya estaría outOfBoard
 export function getRandomCoord(shipName) {
-	console.log(shipLengths[shipName])
 	const maxIndex = BOARD_LIMIT - shipLengths[shipName]
 
 	const position = RandomPosition()
 	const randomIndex = getRandomBetween(0, BOARD_LIMIT)
 	const randomRestrictedIndex = getRandomBetween(0, maxIndex)
 
-	// Asignar el indice random a una de las coordenadas en función de si es horizontal o vertical
-
-	let coordY, coordX
-
-	// Ejemplo: Carrier, Horizontal
-	if (position === "horizontal") {
-		coordX = randomIndex
-		coordY = randomRestrictedIndex
-	}
-
-	// Ejemplo: Carrier, Vertical
-	if (position === "vertical") {
-		coordX = randomRestrictedIndex
-		coordY = randomIndex
-	}
+	const coordX = position === "horizontal" ? randomIndex : randomRestrictedIndex
+	const coordY = position === "horizontal" ? randomRestrictedIndex : randomIndex
 
 	const randomCoord = [coordX, coordY]
 
