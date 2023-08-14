@@ -1,19 +1,14 @@
 import "./style.css"
 import { Player } from "./modules/player"
 import { setEnemyShips } from "./modules/defaultShips"
+import { shipTypes } from "./modules/ship"
 
 import { toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./modules/DOM"
 
 import { getAndAppendShipList, addStyleToShipElement, styleShipPlaced } from "./modules/DOM/ship-list"
 import { getAndAppendGameboard, styleShipPreview, removePreview, styleGameboard } from "./modules/DOM/gameboard"
 import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
-import { getRandomCoord } from "./modules/placeShipsRandom"
-
-// TEST
-console.log(getRandomCoord("Carrier"))
-console.log(getRandomCoord("Carrier"))
-console.log(getRandomCoord("Carrier"))
-console.log(getRandomCoord("Carrier"))
+import { setShipRandomly } from "./modules/placeShipsRandom"
 
 // TODO ->
 // - Styling
@@ -68,6 +63,19 @@ function renderGameboards() {
 	const sectionPlayerOne = getAndAppendGameboard(playerOne)
 	const sectionPlayerTwo = getAndAppendGameboard(playerTwo)
 	gameContainer.append(sectionPlayerOne, sectionPlayerTwo)
+}
+
+setShipsRandomly()
+function setShipsRandomly() {
+	const randomBtn = document.getElementById("random-ships")
+	randomBtn.addEventListener("click", () => {
+		const shipNames = Object.keys(shipTypes)
+		shipNames.forEach((shipName) => {
+			setShipRandomly(playerOne, shipName)
+		})
+		styleGameboard(playerOne)
+		checkAndDisplayStartBtn()
+	})
 }
 
 function selectAndPlaceShip() {
