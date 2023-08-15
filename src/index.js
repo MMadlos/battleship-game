@@ -57,7 +57,6 @@ function setShipsRandomly() {
 		styleGameboard(playerOne)
 		checkAndDisplayStartBtn()
 
-		// Style all cards
 		const allShipCards = document.querySelectorAll(".ship-card")
 		allShipCards.forEach((card) => card.classList.add("placed"))
 	})
