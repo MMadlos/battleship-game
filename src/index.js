@@ -15,27 +15,10 @@ import { setShipRandomly } from "./modules/placeShipsRandom"
 // - Add messages
 // - Add images
 // - Order code (imports, exports and file structure)
-// - Add features (place ships randomly, enable to move a ship that has been already placed, add second "human" player)
-
-// *AÑADIR BARCOS ALEATORIAMENTE
-/*
-Place ships randomly
-- Tener en cuenta la longitud de cada barco
-- Tener en cuenta que cambian los parámetros (coordX o coordY) en función de la orientación del barco (horizontal / vertical)
-- Añadir de más grande a más pequeño (Carrier y Battleship)
-- Incrustar Destroyer, Submarine y PatrolBoat 
-	- Random coord
-	- Revisar longitud de "Empty" en esa fila
-	- Ver si coincide con su longitud
-	- Añadir si coincide
-
-Notas
-1 -> Carrier (length: 5)
-	Posibilidades: del 0 al 5 -> A partir del 5 ya estaría outOfBoard
-
-2 -> Battleship (length: 4)
-	Posibilidades: del 0 al 6
-*/
+// - Add features:
+// * -->  Place ships randomly
+// --> Enable to move a ship that has been already placed
+// --> Add second "human" player
 
 // VARIABLES
 let playerOne, playerTwo
@@ -73,6 +56,10 @@ function setShipsRandomly() {
 		setRandomShips()
 		styleGameboard(playerOne)
 		checkAndDisplayStartBtn()
+
+		// Style all cards
+		const allShipCards = document.querySelectorAll(".ship-card")
+		allShipCards.forEach((card) => card.classList.add("placed"))
 	})
 
 	function clearGameboard() {
@@ -146,18 +133,18 @@ function selectAndPlaceShip() {
 function checkAndDisplayStartBtn() {
 	const availableShips = Object.keys(gameboardOne.getAvailableShips())
 	const areAllShipsPlaced = availableShips.every((element) => element === false)
+
 	if (!areAllShipsPlaced) return
 
-	const btnContainer = document.querySelector(".btn-container")
-	btnContainer.classList.remove("none")
-
 	const startBtn = document.getElementById("start-game")
-	startBtn.classList.remove("none")
+	startBtn.classList.toggle("none", !areAllShipsPlaced)
 
 	startBtn.onclick = () => {
 		const shipList = document.querySelector(".ship-list")
 		shipList.remove()
 
+		const btnSetShipRandomly = document.getElementById("random-ships")
+		btnSetShipRandomly.classList.add("none")
 		startBtn.classList.add("none")
 
 		setEnemyShips(gameboardTwo)
@@ -243,7 +230,6 @@ function displayGameOver(winner) {
 }
 
 function restartGame() {
-	// TODO --> Check how to render the init screen again.
 	const restartBtn = document.getElementById("restart-btn")
 	const gameOverText = document.querySelector(".game-over")
 
@@ -255,6 +241,9 @@ function restartGame() {
 
 		restartBtn.remove()
 		gameOverText.remove()
+
+		const btnSetShipRandomly = document.getElementById("random-ships")
+		btnSetShipRandomly.classList.remove("none")
 
 		removePreviousGameboard()
 		initGame()

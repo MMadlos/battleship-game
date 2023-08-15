@@ -100,8 +100,7 @@ h1 {
 	margin: 0 auto;
 }
 
-#start-game,
-#restart-btn {
+button {
 	padding: 8px 24px;
 }
 
