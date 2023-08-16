@@ -1,4 +1,15 @@
-import { Gameboard } from "./gameboard"
+import { Gameboard, GAMEBOARD } from "./gameboard"
+
+export function PLAYER(name) {
+	const playerGameboard = GAMEBOARD()
+	const { gameboard } = playerGameboard
+	const attack = (enemy, coordinates) => {
+		const enemyGameboard = enemy.gameboard
+		enemyGameboard.receiveAttack(coordinates)
+	}
+
+	return { name, gameboard, attack }
+}
 
 export function Player(name) {
 	const playerName = name
