@@ -1,7 +1,9 @@
 import "./style.css"
-import { Player } from "./modules/player"
 import { setEnemyShips } from "./modules/defaultShips"
-import { shipTypes } from "./modules/ship"
+
+import { Player, PLAYER } from "./modules/player"
+import { SHIP_LENGTH, SHIP_NAMES, shipTypes } from "./modules/ship"
+import { BOARD_LIMIT, GAMEBOARD } from "./modules/gameboard"
 
 import { toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./modules/DOM"
 
@@ -9,12 +11,6 @@ import { getAndAppendShipList, addStyleToShipElement, styleShipPlaced } from "./
 import { getAndAppendGameboard, styleShipPreview, removePreview, styleGameboard } from "./modules/DOM/gameboard"
 import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
 import { setShipRandomly } from "./modules/placeShipsRandom"
-
-import { GAMEBOARD } from "./modules/gameboard"
-
-// TEST
-console.log(GAMEBOARD().gameboard)
-console.log(GAMEBOARD().ships)
 
 // TODO ->
 // - Styling
@@ -29,19 +25,22 @@ console.log(GAMEBOARD().ships)
 // VARIABLES
 let playerOne, playerTwo
 let gameboardOne, gameboardTwo // Gameboard factories
-let gameboardPlayerOne, gameboardPlayerTwo // Gameboard content
+let gridOne, gridTwo // Gameboard content
 
-initGame()
-function initGame() {
-	// We'll need to set the variables when the game starts and when we restart the game after a gameover
-	playerOne = Player("Player 1")
-	playerTwo = Player("Computer")
+function setVariables() {
+	playerOne = PLAYER("Player 1")
+	playerTwo = PLAYER("Computer")
 
 	gameboardOne = playerOne.gameboard
 	gameboardTwo = playerTwo.gameboard
-	gameboardPlayerOne = gameboardOne.getGameboard()
-	gameboardPlayerTwo = gameboardTwo.getGameboard()
 
+	gridOne = gameboardOne.grid
+	gridTwo = gameboardTwo.grid
+}
+
+initGame()
+function initGame() {
+	setVariables()
 	setShipsRandomly()
 	getAndAppendShipList()
 	renderGameboards()

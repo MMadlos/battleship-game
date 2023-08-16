@@ -24,7 +24,7 @@ function createShips() {
 }
 
 function GAMEBOARD() {
-	const gameboard = setGameboard()
+	const grid = setGameboard()
 	const ships = createShips()
 
 	// Gameboards should be able to place ships at specific coordinates by calling the ship factory function.
@@ -41,13 +41,13 @@ function GAMEBOARD() {
 
 		// There has to be 2 loops in order to first check if all cells are empty and then, if true, place the ship.
 		for (let i = positionCoord; i < positionCoord + length; i++) {
-			const cellContent = isHorizontal ? gameboard[coordX][i] : gameboard[i][coordY]
+			const cellContent = isHorizontal ? grid[coordX][i] : grid[i][coordY]
 			if (cellContent !== "Empty") return { error: true, message: "cellNotEmpty" }
 		}
 
 		for (let i = positionCoord; i < positionCoord + length; i++) {
-			isHorizontal ? (gameboard[coordX][i] = shipName) : (gameboard[i][coordY] = shipName)
-			// const cellContent = isHorizontal ? gameboard[coordX][i] : gameboard[i][coordY]
+			isHorizontal ? (grid[coordX][i] = shipName) : (grid[i][coordY] = shipName)
+			// const cellContent = isHorizontal ? grid[coordX][i] : grid[i][coordY]
 			// cellContent = shipName
 		}
 
@@ -58,14 +58,14 @@ function GAMEBOARD() {
 
 	function receiveAttack(coordinates) {
 		const [coordX, coordY] = coordinates
-		const shipName = gameboard[coordX][coordY]
+		const shipName = grid[coordX][coordY]
 
 		const isEmpty = shipName === "Empty"
-		gameboard[coordX][coordY] = isEmpty ? "Missed" : "Hit"
+		grid[coordX][coordY] = isEmpty ? "Missed" : "Hit"
 
 		if (!isEmpty) ships[shipName].hit()
 
-		return isGameOver() ? "GameOver" : gameboard[coordX][coordY]
+		return isGameOver() ? "GameOver" : grid[coordX][coordY]
 	}
 
 	function isGameOver() {
@@ -82,10 +82,10 @@ function GAMEBOARD() {
 			ships[shipName].reset()
 		}
 
-		gameboard = setGameboard()
+		grid = setGameboard()
 	}
 
-	return { gameboard, ships, setShip, receiveAttack, clearGameboard }
+	return { grid, ships, setShip, receiveAttack, clearGameboard }
 }
 
 export { GAMEBOARD }
