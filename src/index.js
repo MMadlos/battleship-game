@@ -10,6 +10,12 @@ import { getAndAppendGameboard, styleShipPreview, removePreview, styleGameboard 
 import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
 import { setShipRandomly } from "./modules/placeShipsRandom"
 
+import { GAMEBOARD } from "./modules/gameboard"
+
+// TEST
+console.log(GAMEBOARD().gameboard)
+console.log(GAMEBOARD().ships)
+
 // TODO ->
 // - Styling
 // - Add messages
