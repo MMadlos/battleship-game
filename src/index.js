@@ -4,6 +4,9 @@ import { PLAYER } from "./modules/player"
 import { displayShipList } from "./modules/DOM/ship-list"
 import { displayGrid } from "./modules/DOM/gameboard"
 
+import { addShipSelected, addShipPlaced } from "./modules/DOM/ship-list"
+import { addShipPreview, removeShipPreview, addShipToGrid } from "./modules/DOM/gameboard"
+
 // import { setEnemyShips } from "./modules/defaultShips"
 // import { toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./modules/DOM/GameOver"
 // import { getAndAppendShipList, addStyleToShipElement, styleShipPlaced } from "./modules/DOM/ship-list"
@@ -31,8 +34,9 @@ function initGame() {
 	displayShipList()
 	displayGrid(playerOne)
 	displayGrid(playerTwo)
+	test()
+	selectAndPlaceShip()
 	// setShipsRandomly()
-	// selectAndPlaceShip()
 }
 
 function setVariables() {
@@ -44,6 +48,65 @@ function setVariables() {
 
 	gridOne = gameboardOne.grid
 	gridTwo = gameboardTwo.grid
+}
+function test() {}
+
+function selectAndPlaceShip() {
+	let shipSelected = shipSelection()
+	let position = "horizontal"
+
+	function shipSelection() {
+		const shipList = document.querySelectorAll(".ship-card")
+		shipList.forEach((card) => {
+			card.onclick = () => {
+				shipSelected = card.dataset.ship
+				addShipSelected(card)
+			}
+		})
+	}
+
+	const playerGrid = document.getElementById("gameboard-one")
+	;["mouseover", "mouseout", "click"].forEach((mouseEvent) => {
+		playerGrid.addEventListener(mouseEvent, (e) => {
+			// TODO:
+			// Add possibility to set all ships randomly
+			// Add possibility to remove / move ship placed
+
+			const isNotGameboard = e.target.closest("coordY") || e.target.closest("coordX")
+			if (!shipSelected || isNotGameboard) return
+
+			const cell = e.target.closest(".cell")
+
+			document.onkeydown = rotateShipPosition
+			if (mouseEvent === "mouseover") addShipPreview(cell, shipSelected, position)
+			if (mouseEvent === "mouseout") removeShipPreview()
+
+			if (mouseEvent === "click") {
+				const { row, col } = cell.dataset
+				const coordinates = [Number(row), Number(col)]
+
+				// TODO -> Check how ships are being set
+				const setShip = gameboardOne.setShip(shipSelected, coordinates, position)
+				if (setShip.error) return displayErrorMessage(setShip.message)
+
+				addShipPlaced()
+				addShipToGrid()
+
+				// checkAndDisplayStartBtn()
+				// removeErrorMessage()
+
+				shipSelected = undefined
+			}
+
+			function rotateShipPosition(e) {
+				if (e.code !== "KeyR") return
+
+				position = position === "horizontal" ? "vertical" : "horizontal"
+				removeShipPreview()
+				addShipPreview(cell, shipSelected, position)
+			}
+		})
+	})
 }
 
 // function setShipsRandomly() {
@@ -70,60 +133,6 @@ function setVariables() {
 // 			setShipRandomly(playerOne, shipName)
 // 		})
 // 	}
-// }
-
-// function selectAndPlaceShip() {
-// 	let shipSelected
-// 	let position = "horizontal"
-
-// 	const shipList = document.querySelector(".ship-list")
-// 	shipList.onclick = (e) => {
-// 		const shipCard = e.target.closest(".ship-card:not(.placed)")
-// 		if (!shipCard) return
-
-// 		shipSelected = shipCard.dataset.ship
-// 		addStyleToShipElement(shipCard)
-// 	}
-
-// 	// Add visual clue where the ship will be placed and style it accordingly (when is possible, when is not and when is placed)
-// 	const playerGrid = document.getElementById("gameboard-one")
-// 	;["mouseover", "mouseout", "click"].forEach((mouseEvent) => {
-// 		playerGrid.addEventListener(mouseEvent, (e) => {
-// 			// TODO:
-// 			// Add possibility to set all ships randomly
-// 			// Add possibility to remove / move ship placed
-
-// 			const isNotGameboard = e.target.closest("coordY") || e.target.closest("coordX")
-// 			if (!shipSelected || isNotGameboard) return
-
-// 			const cell = e.target.closest(".cell")
-
-// 			document.onkeydown = (e) => {
-// 				if (e.code !== "KeyR") return
-
-// 				position = position === "horizontal" ? "vertical" : "horizontal"
-// 				removePreview()
-// 				styleShipPreview(cell, shipSelected, position)
-// 			}
-
-// 			if (mouseEvent === "mouseover") styleShipPreview(cell, shipSelected, position)
-// 			if (mouseEvent === "mouseout") removePreview()
-// 			if (mouseEvent === "click") {
-// 				const { row, col } = cell.dataset
-// 				const coordinates = [Number(row), Number(col)]
-
-// 				const setShip = gameboardOne.setShip(shipSelected, coordinates, position)
-// 				if (setShip.error) return displayErrorMessage(setShip.message)
-
-// 				styleShipPlaced()
-// 				styleGameboard(playerOne)
-// 				checkAndDisplayStartBtn()
-// 				removeErrorMessage()
-
-// 				shipSelected = undefined
-// 			}
-// 		})
-// 	})
 // }
 
 // function checkAndDisplayStartBtn() {

@@ -1,12 +1,11 @@
 import { BOARD_LIMIT } from "../gameboard"
+import { SHIP_LENGTH } from "../ship"
 
-// CODING LIKE FETCHING
 export function displayGrid(playerObject) {
 	const gridContent = playerObject.gameboard.grid
 	const grid = createGrid(gridContent)
 
 	const isGridOne = document.querySelector("#gameboard-one")
-	console.log(isGridOne)
 	grid.id = isGridOne ? "gameboard-two" : "gameboard-one"
 
 	const text = document.createElement("p")
@@ -53,18 +52,18 @@ function createGrid(playerGrid) {
 }
 
 // STYLE WHEN PLACING A SHIP
-export function styleShipPreview(cell, shipSelected, position) {
+export function addShipPreview(cell, shipSelected, position) {
 	const { row, col } = cell.dataset
 	const rowIndex = Number(row)
 	const colIndex = Number(col)
 
 	const shipName = shipSelected
-	const shipLength = shipTypes[shipName]
+	const shipLength = SHIP_LENGTH[shipName]
 
 	// Get the index used to calculate if it fits in the gameboard or the remaining cells to paint
 	const indexToCheck = position === "horizontal" ? colIndex : rowIndex
-	const fitsInGameboard = indexToCheck + shipLength <= boardLimit + 1
-	const remainingCells = boardLimit - indexToCheck + 1
+	const fitsInGameboard = indexToCheck + shipLength <= BOARD_LIMIT + 1
+	const remainingCells = BOARD_LIMIT - indexToCheck + 1
 
 	const cellLength = fitsInGameboard ? shipLength : remainingCells
 	const classToAdd = fitsInGameboard ? "ship-preview" : "not-possible"
@@ -77,7 +76,7 @@ export function styleShipPreview(cell, shipSelected, position) {
 	}
 }
 
-export function removePreview() {
+export function removeShipPreview() {
 	const shipsPreviewed = document.querySelectorAll(".cell.ship-preview, .cell.not-possible")
 	shipsPreviewed.forEach((preview) => {
 		preview.classList.remove("ship-preview")
@@ -85,17 +84,11 @@ export function removePreview() {
 	})
 }
 
-export function styleGameboard(playerObject) {
-	const playerGameboard = playerObject.getGameboard()
-
-	playerGameboard.forEach((row, rowIndex) => {
-		row.forEach((col, colIndex) => {
-			if (col !== "Empty") {
-				const div = document.querySelector(`[data-row="${rowIndex}"][data-col="${colIndex}"]`)
-				div.classList.remove("ship-preview")
-				div.classList.add("ship-placed")
-			}
-		})
+export function addShipToGrid() {
+	const shipPreviewed = document.querySelectorAll(".cell.ship-preview")
+	shipPreviewed.forEach((cell) => {
+		cell.classList.remove("ship-preview")
+		cell.classList.add("ship-placed")
 	})
 }
 

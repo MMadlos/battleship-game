@@ -32,15 +32,14 @@ function createShipElement(shipName, shipLength) {
 }
 
 // Style Ship element
-export function addStyleToShipElement(shipEl) {
+export function addShipSelected(shipCard) {
 	const currentSelected = document.querySelector(".ship-card.selected")
 	if (currentSelected) currentSelected.classList.remove("selected")
 
-	const isNotSelected = [...shipEl.classList].length === 1
-	shipEl.classList.toggle("selected", isNotSelected)
+	shipCard.classList.add("selected")
 }
 
-export function styleShipPlaced() {
+export function addShipPlaced() {
 	const currentSelected = document.querySelector(".ship-card.selected")
 	currentSelected.classList.remove("selected")
 	currentSelected.classList.add("placed")
