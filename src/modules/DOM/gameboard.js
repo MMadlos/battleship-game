@@ -1,36 +1,38 @@
-import { shipTypes } from "../ship"
-import { boardLimit } from "../gameboard"
+import { BOARD_LIMIT } from "../gameboard"
 
 // CODING LIKE FETCHING
-export function getAndAppendGameboard(playerObject) {
-	const gameboard = playerObject.getGameboard()
-	const isComputer = playerObject.getName() === "Computer"
+export function displayGrid(playerObject) {
+	const gridContent = playerObject.gameboard.grid
+	const grid = createGrid(gridContent)
 
-	const gameboardDiv = createGameBoard(gameboard)
-	gameboardDiv.id = isComputer ? "gameboard-two" : "gameboard-one"
+	const isGridOne = document.querySelector("#gameboard-one")
+	console.log(isGridOne)
+	grid.id = isGridOne ? "gameboard-two" : "gameboard-one"
 
-	const textPara = document.createElement("p")
-	textPara.className = "grid-title"
-	textPara.textContent = isComputer ? "Enemy's grid" : "Your grid"
+	const text = document.createElement("p")
+	text.className = "grid-title"
+	text.textContent = isGridOne ? "Enemy's grid" : "Your grid"
 
 	const section = document.createElement("section")
-	section.append(textPara, gameboardDiv)
+	const gameContainer = document.querySelector(".game-container")
+
+	section.append(text, grid)
+	gameContainer.append(section)
 	return section
 }
 
-// Create DOM
-function createGameBoard(playerGameboard) {
+function createGrid(playerGrid) {
 	const gameboardDiv = document.createElement("div")
 	gameboardDiv.className = "gameboard"
 
-	for (let i = 0; i <= 10; i++) {
+	for (let i = 0; i <= BOARD_LIMIT + 1; i++) {
 		const div = document.createElement("div")
 		if (i !== 0) div.textContent = i
 		div.classList.add("cell", "coordY")
 		gameboardDiv.append(div)
 	}
 
-	playerGameboard.forEach((row, rowIndex) => {
+	playerGrid.forEach((row, rowIndex) => {
 		row.forEach((col, colIndex) => {
 			if (colIndex === 0) {
 				const div = document.createElement("div")
@@ -43,17 +45,11 @@ function createGameBoard(playerGameboard) {
 			div.dataset.row = rowIndex
 			div.dataset.col = colIndex
 			div.classList.add("cell")
-			div.classList.toggle("ship-placed", col !== "Empty")
 
 			gameboardDiv.append(div)
 		})
 	})
 	return gameboardDiv
-}
-
-// Simulating a fetch
-function getGameboard(playerGameboard) {
-	return playerGameboard
 }
 
 // STYLE WHEN PLACING A SHIP
@@ -111,11 +107,6 @@ export function removePreviousGameboard() {
 	gameContainerSections.forEach((section) => section.remove())
 }
 
-export function toggleGameContainer() {
-	const container = document.querySelector(".game-container")
-	const isHidden = container.classList.contains("none")
-	isHidden ? container.classList.remove("none") : container.classList.add("none")
-}
 export function toggleGameContainer() {
 	const container = document.querySelector(".game-container")
 	const isHidden = container.classList.contains("none")

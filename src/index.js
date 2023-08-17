@@ -1,16 +1,15 @@
 import "./style.css"
-import { setEnemyShips } from "./modules/defaultShips"
 
 import { PLAYER } from "./modules/player"
-import { SHIP_LENGTH, SHIP_NAMES } from "./modules/ship"
-import { BOARD_LIMIT, GAMEBOARD } from "./modules/gameboard"
+import { displayShipList } from "./modules/DOM/ship-list"
+import { displayGrid } from "./modules/DOM/gameboard"
 
-import { toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./modules/DOM"
-
-import { getAndAppendShipList, addStyleToShipElement, styleShipPlaced } from "./modules/DOM/ship-list"
-import { getAndAppendGameboard, styleShipPreview, removePreview, styleGameboard } from "./modules/DOM/gameboard"
-import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
-import { setShipRandomly } from "./modules/placeShipsRandom"
+// import { setEnemyShips } from "./modules/defaultShips"
+// import { toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./modules/DOM/GameOver"
+// import { getAndAppendShipList, addStyleToShipElement, styleShipPlaced } from "./modules/DOM/ship-list"
+// import { getAndAppendGameboard, styleShipPreview, removePreview, styleGameboard } from "./modules/DOM/gameboard"
+// import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
+// import { setShipRandomly } from "./modules/placeShipsRandom"
 
 // TODO ->
 // - Styling
@@ -26,6 +25,16 @@ let playerOne, playerTwo
 let gameboardOne, gameboardTwo // Gameboard factories
 let gridOne, gridTwo // Gameboard content
 
+initGame()
+function initGame() {
+	setVariables()
+	displayShipList()
+	displayGrid(playerOne)
+	displayGrid(playerTwo)
+	// setShipsRandomly()
+	// selectAndPlaceShip()
+}
+
 function setVariables() {
 	playerOne = PLAYER("Player 1")
 	playerTwo = PLAYER("Computer")
@@ -36,23 +45,6 @@ function setVariables() {
 	gridOne = gameboardOne.grid
 	gridTwo = gameboardTwo.grid
 }
-
-initGame()
-function initGame() {
-	setVariables() //* DONE
-	getAndAppendShipList()
-
-	setShipsRandomly()
-	renderGameboards()
-	selectAndPlaceShip()
-}
-
-// function renderGameboards() {
-// 	const gameContainer = document.querySelector(".game-container")
-// 	const sectionPlayerOne = getAndAppendGameboard(playerOne)
-// 	const sectionPlayerTwo = getAndAppendGameboard(playerTwo)
-// 	gameContainer.append(sectionPlayerOne, sectionPlayerTwo)
-// }
 
 // function setShipsRandomly() {
 // 	const randomBtn = document.getElementById("random-ships")
