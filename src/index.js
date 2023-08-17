@@ -1,8 +1,8 @@
 import "./style.css"
 import { setEnemyShips } from "./modules/defaultShips"
 
-import { Player, PLAYER } from "./modules/player"
-import { SHIP_LENGTH, SHIP_NAMES, shipTypes } from "./modules/ship"
+import { PLAYER } from "./modules/player"
+import { SHIP_LENGTH, SHIP_NAMES } from "./modules/ship"
 import { BOARD_LIMIT, GAMEBOARD } from "./modules/gameboard"
 
 import { toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./modules/DOM"
@@ -18,7 +18,6 @@ import { setShipRandomly } from "./modules/placeShipsRandom"
 // - Add images
 // - Order code (imports, exports and file structure)
 // - Add features:
-// * -->  Place ships randomly
 // --> Enable to move a ship that has been already placed
 // --> Add second "human" player
 
@@ -40,216 +39,217 @@ function setVariables() {
 
 initGame()
 function initGame() {
-	setVariables()
-	setShipsRandomly()
+	setVariables() //* DONE
 	getAndAppendShipList()
+
+	setShipsRandomly()
 	renderGameboards()
 	selectAndPlaceShip()
 }
 
-function renderGameboards() {
-	const gameContainer = document.querySelector(".game-container")
-	const sectionPlayerOne = getAndAppendGameboard(playerOne)
-	const sectionPlayerTwo = getAndAppendGameboard(playerTwo)
-	gameContainer.append(sectionPlayerOne, sectionPlayerTwo)
-}
+// function renderGameboards() {
+// 	const gameContainer = document.querySelector(".game-container")
+// 	const sectionPlayerOne = getAndAppendGameboard(playerOne)
+// 	const sectionPlayerTwo = getAndAppendGameboard(playerTwo)
+// 	gameContainer.append(sectionPlayerOne, sectionPlayerTwo)
+// }
 
-function setShipsRandomly() {
-	const randomBtn = document.getElementById("random-ships")
-	randomBtn.addEventListener("click", () => {
-		clearGameboard()
-		setRandomShips()
-		styleGameboard(playerOne)
-		checkAndDisplayStartBtn()
+// function setShipsRandomly() {
+// 	const randomBtn = document.getElementById("random-ships")
+// 	randomBtn.addEventListener("click", () => {
+// 		clearGameboard()
+// 		setRandomShips()
+// 		styleGameboard(playerOne)
+// 		checkAndDisplayStartBtn()
 
-		const allShipCards = document.querySelectorAll(".ship-card")
-		allShipCards.forEach((card) => card.classList.add("placed"))
-	})
+// 		const allShipCards = document.querySelectorAll(".ship-card")
+// 		allShipCards.forEach((card) => card.classList.add("placed"))
+// 	})
 
-	function clearGameboard() {
-		playerOne.gameboard.clearGameboard()
-		removePreviousGameboard()
-		renderGameboards()
-	}
+// 	function clearGameboard() {
+// 		playerOne.gameboard.clearGameboard()
+// 		removePreviousGameboard()
+// 		renderGameboards()
+// 	}
 
-	function setRandomShips() {
-		const shipNames = Object.keys(shipTypes)
-		shipNames.forEach((shipName) => {
-			setShipRandomly(playerOne, shipName)
-		})
-	}
-}
+// 	function setRandomShips() {
+// 		const shipNames = Object.keys(shipTypes)
+// 		shipNames.forEach((shipName) => {
+// 			setShipRandomly(playerOne, shipName)
+// 		})
+// 	}
+// }
 
-function selectAndPlaceShip() {
-	let shipSelected
-	let position = "horizontal"
+// function selectAndPlaceShip() {
+// 	let shipSelected
+// 	let position = "horizontal"
 
-	const shipList = document.querySelector(".ship-list")
-	shipList.onclick = (e) => {
-		const shipCard = e.target.closest(".ship-card:not(.placed)")
-		if (!shipCard) return
+// 	const shipList = document.querySelector(".ship-list")
+// 	shipList.onclick = (e) => {
+// 		const shipCard = e.target.closest(".ship-card:not(.placed)")
+// 		if (!shipCard) return
 
-		shipSelected = shipCard.dataset.ship
-		addStyleToShipElement(shipCard)
-	}
+// 		shipSelected = shipCard.dataset.ship
+// 		addStyleToShipElement(shipCard)
+// 	}
 
-	// Add visual clue where the ship will be placed and style it accordingly (when is possible, when is not and when is placed)
-	const playerGrid = document.getElementById("gameboard-one")
-	;["mouseover", "mouseout", "click"].forEach((mouseEvent) => {
-		playerGrid.addEventListener(mouseEvent, (e) => {
-			// TODO:
-			// Add possibility to set all ships randomly
-			// Add possibility to remove / move ship placed
+// 	// Add visual clue where the ship will be placed and style it accordingly (when is possible, when is not and when is placed)
+// 	const playerGrid = document.getElementById("gameboard-one")
+// 	;["mouseover", "mouseout", "click"].forEach((mouseEvent) => {
+// 		playerGrid.addEventListener(mouseEvent, (e) => {
+// 			// TODO:
+// 			// Add possibility to set all ships randomly
+// 			// Add possibility to remove / move ship placed
 
-			const isNotGameboard = e.target.closest("coordY") || e.target.closest("coordX")
-			if (!shipSelected || isNotGameboard) return
+// 			const isNotGameboard = e.target.closest("coordY") || e.target.closest("coordX")
+// 			if (!shipSelected || isNotGameboard) return
 
-			const cell = e.target.closest(".cell")
+// 			const cell = e.target.closest(".cell")
 
-			document.onkeydown = (e) => {
-				if (e.code !== "KeyR") return
+// 			document.onkeydown = (e) => {
+// 				if (e.code !== "KeyR") return
 
-				position = position === "horizontal" ? "vertical" : "horizontal"
-				removePreview()
-				styleShipPreview(cell, shipSelected, position)
-			}
+// 				position = position === "horizontal" ? "vertical" : "horizontal"
+// 				removePreview()
+// 				styleShipPreview(cell, shipSelected, position)
+// 			}
 
-			if (mouseEvent === "mouseover") styleShipPreview(cell, shipSelected, position)
-			if (mouseEvent === "mouseout") removePreview()
-			if (mouseEvent === "click") {
-				const { row, col } = cell.dataset
-				const coordinates = [Number(row), Number(col)]
+// 			if (mouseEvent === "mouseover") styleShipPreview(cell, shipSelected, position)
+// 			if (mouseEvent === "mouseout") removePreview()
+// 			if (mouseEvent === "click") {
+// 				const { row, col } = cell.dataset
+// 				const coordinates = [Number(row), Number(col)]
 
-				const setShip = gameboardOne.setShip(shipSelected, coordinates, position)
-				if (setShip.error) return displayErrorMessage(setShip.message)
+// 				const setShip = gameboardOne.setShip(shipSelected, coordinates, position)
+// 				if (setShip.error) return displayErrorMessage(setShip.message)
 
-				styleShipPlaced()
-				styleGameboard(playerOne)
-				checkAndDisplayStartBtn()
-				removeErrorMessage()
+// 				styleShipPlaced()
+// 				styleGameboard(playerOne)
+// 				checkAndDisplayStartBtn()
+// 				removeErrorMessage()
 
-				shipSelected = undefined
-			}
-		})
-	})
-}
+// 				shipSelected = undefined
+// 			}
+// 		})
+// 	})
+// }
 
-function checkAndDisplayStartBtn() {
-	const availableShips = Object.keys(gameboardOne.getAvailableShips())
-	const areAllShipsPlaced = availableShips.every((element) => element === false)
+// function checkAndDisplayStartBtn() {
+// 	const availableShips = Object.keys(gameboardOne.getAvailableShips())
+// 	const areAllShipsPlaced = availableShips.every((element) => element === false)
 
-	if (!areAllShipsPlaced) return
+// 	if (!areAllShipsPlaced) return
 
-	const startBtn = document.getElementById("start-game")
-	startBtn.classList.toggle("none", !areAllShipsPlaced)
+// 	const startBtn = document.getElementById("start-game")
+// 	startBtn.classList.toggle("none", !areAllShipsPlaced)
 
-	startBtn.onclick = () => {
-		const shipList = document.querySelector(".ship-list")
-		shipList.remove()
+// 	startBtn.onclick = () => {
+// 		const shipList = document.querySelector(".ship-list")
+// 		shipList.remove()
 
-		const btnSetShipRandomly = document.getElementById("random-ships")
-		btnSetShipRandomly.classList.add("none")
-		startBtn.classList.add("none")
+// 		const btnSetShipRandomly = document.getElementById("random-ships")
+// 		btnSetShipRandomly.classList.add("none")
+// 		startBtn.classList.add("none")
 
-		setEnemyShips(gameboardTwo)
-		enableAttackEnemy()
-	}
-}
+// 		setEnemyShips(gameboardTwo)
+// 		enableAttackEnemy()
+// 	}
+// }
 
-// "START OF THE GAME"
-function enableAttackEnemy() {
-	const opponentGameboard = document.getElementById("gameboard-two")
-	opponentGameboard.addEventListener("click", (e) => {
-		const cell = e.target.closest("div.cell")
-		const isNotGameboard = cell.classList.contains("coordY") || cell.classList.contains("coordX")
+// // "START OF THE GAME"
+// function enableAttackEnemy() {
+// 	const opponentGameboard = document.getElementById("gameboard-two")
+// 	opponentGameboard.addEventListener("click", (e) => {
+// 		const cell = e.target.closest("div.cell")
+// 		const isNotGameboard = cell.classList.contains("coordY") || cell.classList.contains("coordX")
 
-		if (isNotGameboard) return
+// 		if (isNotGameboard) return
 
-		const coordX = cell.dataset.row
-		const coordY = cell.dataset.col
+// 		const coordX = cell.dataset.row
+// 		const coordY = cell.dataset.col
 
-		const gameboardContent = gameboardPlayerTwo[coordX][coordY]
-		const isAlreadyAttacked = gameboardContent === "Hit" || gameboardContent === "Missed"
+// 		const gameboardContent = gameboardPlayerTwo[coordX][coordY]
+// 		const isAlreadyAttacked = gameboardContent === "Hit" || gameboardContent === "Missed"
 
-		if (isAlreadyAttacked) return console.log("You already attacked these coordinates")
+// 		if (isAlreadyAttacked) return console.log("You already attacked these coordinates")
 
-		playerOne.attack(playerTwo, [coordX, coordY])
-		cell.classList.add(gameboardPlayerTwo[coordX][coordY].toLowerCase())
+// 		playerOne.attack(playerTwo, [coordX, coordY])
+// 		cell.classList.add(gameboardPlayerTwo[coordX][coordY].toLowerCase())
 
-		// Check gameover for PlayerTwo
-		if (playerTwo.checkGameOver()) return displayGameOver("Player")
+// 		// Check gameover for PlayerTwo
+// 		if (playerTwo.checkGameOver()) return displayGameOver("Player")
 
-		// TODO -> Should show more stuff before the computer attacks the player (eg. animation )
-		// [...]
+// 		// TODO -> Should show more stuff before the computer attacks the player (eg. animation )
+// 		// [...]
 
-		setTimeout(computerAttacks, 500)
-	})
-}
+// 		setTimeout(computerAttacks, 500)
+// 	})
+// }
 
-function computerAttacks(coords = [undefined, undefined]) {
-	const [_coordX, _coordY] = coords
+// function computerAttacks(coords = [undefined, undefined]) {
+// 	const [_coordX, _coordY] = coords
 
-	const coordX = _coordX || getRandomIndex()
-	const coordY = _coordY || getRandomIndex()
+// 	const coordX = _coordX || getRandomIndex()
+// 	const coordY = _coordY || getRandomIndex()
 
-	const isHit = gameboardPlayerOne[coordX][coordY] === "Hit"
-	const isMissed = gameboardPlayerOne[coordX][coordY] === "Missed"
-	const canAttack = !isHit && !isMissed
+// 	const isHit = gameboardPlayerOne[coordX][coordY] === "Hit"
+// 	const isMissed = gameboardPlayerOne[coordX][coordY] === "Missed"
+// 	const canAttack = !isHit && !isMissed
 
-	if (canAttack) {
-		playerTwo.attack(playerOne, [coordX, coordY])
+// 	if (canAttack) {
+// 		playerTwo.attack(playerOne, [coordX, coordY])
 
-		const playerOneCellDOM = document.querySelector(`[data-row="${coordX}"][data-col="${coordY}"]`)
-		playerOneCellDOM.classList.add(gameboardPlayerOne[coordX][coordY].toLowerCase())
+// 		const playerOneCellDOM = document.querySelector(`[data-row="${coordX}"][data-col="${coordY}"]`)
+// 		playerOneCellDOM.classList.add(gameboardPlayerOne[coordX][coordY].toLowerCase())
 
-		if (playerOne.checkGameOver()) return displayGameOver("Computer")
-	}
+// 		if (playerOne.checkGameOver()) return displayGameOver("Computer")
+// 	}
 
-	if (!canAttack) {
-		// It first searches if there's a spot that can be attacked in the same row. If not, it searches the first spot in the  gameboard.
+// 	if (!canAttack) {
+// 		// It first searches if there's a spot that can be attacked in the same row. If not, it searches the first spot in the  gameboard.
 
-		const currentRow = gameboardPlayerOne[coordX]
-		const canAttackCell = (element) => element !== "Hit" && element !== "Missed"
+// 		const currentRow = gameboardPlayerOne[coordX]
+// 		const canAttackCell = (element) => element !== "Hit" && element !== "Missed"
 
-		const newCoordY = currentRow.findIndex(canAttackCell)
-		if (newCoordY !== -1) return computerAttacks([coordX, newCoordY])
+// 		const newCoordY = currentRow.findIndex(canAttackCell)
+// 		if (newCoordY !== -1) return computerAttacks([coordX, newCoordY])
 
-		for (let i = 0; i < 10; i++) {
-			const row = gameboardPlayerOne[i]
-			const colIndex = row.findIndex(canAttackCell)
+// 		for (let i = 0; i < 10; i++) {
+// 			const row = gameboardPlayerOne[i]
+// 			const colIndex = row.findIndex(canAttackCell)
 
-			if (colIndex !== -1) return computerAttacks([i, colIndex])
-		}
-	}
-}
+// 			if (colIndex !== -1) return computerAttacks([i, colIndex])
+// 		}
+// 	}
+// }
 
-function getRandomIndex() {
-	return Math.floor(Math.random() * 10)
-}
+// function getRandomIndex() {
+// 	return Math.floor(Math.random() * 10)
+// }
 
-function displayGameOver(winner) {
-	toggleGameContainer()
-	GameOverDOM(winner)
-	restartGame()
-}
+// function displayGameOver(winner) {
+// 	toggleGameContainer()
+// 	GameOverDOM(winner)
+// 	restartGame()
+// }
 
-function restartGame() {
-	const restartBtn = document.getElementById("restart-btn")
-	const gameOverText = document.querySelector(".game-over")
+// function restartGame() {
+// 	const restartBtn = document.getElementById("restart-btn")
+// 	const gameOverText = document.querySelector(".game-over")
 
-	restartBtn.addEventListener("click", () => {
-		// Check classes of game-container and how to init game
+// 	restartBtn.addEventListener("click", () => {
+// 		// Check classes of game-container and how to init game
 
-		const textContainer = document.querySelector(".text-container")
-		textContainer.classList.remove("none")
+// 		const textContainer = document.querySelector(".text-container")
+// 		textContainer.classList.remove("none")
 
-		restartBtn.remove()
-		gameOverText.remove()
+// 		restartBtn.remove()
+// 		gameOverText.remove()
 
-		const btnSetShipRandomly = document.getElementById("random-ships")
-		btnSetShipRandomly.classList.remove("none")
+// 		const btnSetShipRandomly = document.getElementById("random-ships")
+// 		btnSetShipRandomly.classList.remove("none")
 
-		removePreviousGameboard()
-		initGame()
-	})
-}
+// 		removePreviousGameboard()
+// 		initGame()
+// 	})
+// }

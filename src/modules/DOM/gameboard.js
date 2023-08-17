@@ -102,3 +102,22 @@ export function styleGameboard(playerObject) {
 		})
 	})
 }
+
+export function removePreviousGameboard() {
+	const gameContainer = document.querySelector(".game-container")
+	gameContainer.classList.remove("none")
+
+	const gameContainerSections = document.querySelectorAll(".game-container > section")
+	gameContainerSections.forEach((section) => section.remove())
+}
+
+export function toggleGameContainer() {
+	const container = document.querySelector(".game-container")
+	const isHidden = container.classList.contains("none")
+	isHidden ? container.classList.remove("none") : container.classList.add("none")
+}
+export function toggleGameContainer() {
+	const container = document.querySelector(".game-container")
+	const isHidden = container.classList.contains("none")
+	isHidden ? container.classList.remove("none") : container.classList.add("none")
+}

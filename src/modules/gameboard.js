@@ -86,4 +86,4 @@ function createShips() {
 	return allShips
 }
 
-export { GAMEBOARD }
+export { GAMEBOARD, BOARD_LIMIT }
