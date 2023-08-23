@@ -60,7 +60,15 @@ function GAMEBOARD() {
 		grid = createGrid()
 	}
 
-	return { grid, ships, setShip, receiveAttack, clearGameboard }
+	const checkAllShipsPlaced = () => {
+		for (const ship in ships) {
+			const { isPlaced } = ships[ship]
+			if (!isPlaced) return false
+		}
+		return true
+	}
+
+	return { grid, ships, setShip, receiveAttack, clearGameboard, checkAllShipsPlaced }
 }
 
 function createGrid() {

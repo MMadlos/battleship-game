@@ -56,32 +56,27 @@ function selectAndPlaceShip() {
 	const playerGrid = document.getElementById("gameboard-one")
 	;["mouseover", "mouseout", "click"].forEach((mouseEvent) => {
 		playerGrid.addEventListener(mouseEvent, (e) => {
-			// TODO:
-			// Add possibility to set all ships randomly
-			// Add possibility to remove / move ship placed
-
 			const isNotGameboard = e.target.closest("coordY") || e.target.closest("coordX")
 			if (!shipSelected || isNotGameboard) return
 
 			const cell = e.target.closest(".cell")
 
 			document.onkeydown = rotateShipPosition
+
 			if (mouseEvent === "mouseover") addShipPreview(cell, shipSelected, position)
 			if (mouseEvent === "mouseout") removeShipPreview()
-
 			if (mouseEvent === "click") {
 				const { row, col } = cell.dataset
 				const coordinates = [Number(row), Number(col)]
-
 				const setShip = gameboardOne.setShip(shipSelected, coordinates, position)
+
 				if (setShip.error) return displayErrorMessage(setShip.message)
 
+				shipSelected = undefined
 				removeErrorMessage()
 				addShipPlaced()
 				addShipToGrid()
 				checkAndDisplayStartBtn()
-
-				shipSelected = undefined
 			}
 
 			function rotateShipPosition(e) {
@@ -122,25 +117,24 @@ function selectAndPlaceShip() {
 // }
 
 function checkAndDisplayStartBtn() {
-	// TODO -> Revisar
-	const availableShips = Object.keys(gameboardOne.getAvailableShips())
-	const areAllShipsPlaced = availableShips.every((element) => element === false)
+	const allShipsPlaced = gameboardOne.checkAllShipsPlaced()
+	if (allShipsPlaced) displayStartBtn()
+}
 
-	if (!areAllShipsPlaced) return
-
+function displayStartBtn() {
 	const startBtn = document.getElementById("start-game")
-	startBtn.classList.toggle("none", !areAllShipsPlaced)
-
+	startBtn.classList.remove("none")
 	startBtn.onclick = () => {
 		const shipList = document.querySelector(".ship-list")
 		shipList.remove()
 
 		const btnSetShipRandomly = document.getElementById("random-ships")
 		btnSetShipRandomly.classList.add("none")
+
 		startBtn.classList.add("none")
 
-		setEnemyShips(gameboardTwo)
-		enableAttackEnemy()
+		// setEnemyShips(gameboardTwo)
+		// enableAttackEnemy()
 	}
 }
 
