@@ -2,7 +2,8 @@ import "./style.css"
 
 import { PLAYER } from "./modules/player"
 import { SHIP_NAMES } from "./modules/ship"
-import { setShipRandomly } from "./modules/placeShipsRandom"
+import { setRandomShips } from "./modules/placeShipsRandom"
+import { setEnemyShips } from "./modules/defaultShips"
 
 import { displayShipList, addShipSelected, addShipPlaced } from "./modules/DOM/ship-list"
 import { displayGrid, addShipPreview, removeShipPreview, addShipToGrid } from "./modules/DOM/gameboard"
@@ -37,7 +38,7 @@ function setVariables() {
 	gameboardTwo = playerTwo.gameboard
 
 	gridOne = gameboardOne.grid
-	// gridTwo = gameboardTwo.grid
+	gridTwo = gameboardTwo.grid
 }
 
 function selectAndPlaceShip() {
@@ -95,7 +96,7 @@ function btnRandomShips() {
 	randomBtn.addEventListener("click", () => {
 		// clearGameboard()
 
-		setRandomShips()
+		setRandomShips(playerOne)
 		styleGameBoard()
 		checkAndDisplayStartBtn()
 
@@ -109,12 +110,6 @@ function btnRandomShips() {
 	// 	const { grid } = playerOne.gameboard
 	// 	grid.forEach((row) => row.forEach((col) => (col = "Empty")))
 	// }
-
-	function setRandomShips() {
-		SHIP_NAMES.forEach((shipName) => {
-			setShipRandomly(playerOne, shipName)
-		})
-	}
 
 	function styleGameBoard() {
 		playerOne.gameboard.grid.forEach((row, rowIndex) => {
@@ -145,40 +140,41 @@ function displayStartBtn() {
 
 		startBtn.classList.add("none")
 
-		// setEnemyShips(gameboardTwo)
-		// enableAttackEnemy()
+		setEnemyShips(gameboardTwo)
+		enableAttackEnemy()
 	}
 }
 
-// // "START OF THE GAME"
-// function enableAttackEnemy() {
-// 	const opponentGameboard = document.getElementById("gameboard-two")
-// 	opponentGameboard.addEventListener("click", (e) => {
-// 		const cell = e.target.closest("div.cell")
-// 		const isNotGameboard = cell.classList.contains("coordY") || cell.classList.contains("coordX")
+function enableAttackEnemy() {
+	const opponentGameboard = document.getElementById("gameboard-two")
+	opponentGameboard.addEventListener("click", (e) => {
+		const cell = e.target.closest("div.cell")
+		const isNotGameboard = cell.classList.contains("coordY") || cell.classList.contains("coordX")
 
-// 		if (isNotGameboard) return
+		if (isNotGameboard) return
 
-// 		const coordX = cell.dataset.row
-// 		const coordY = cell.dataset.col
+		const coordX = cell.dataset.row
+		const coordY = cell.dataset.col
 
-// 		const gameboardContent = gameboardPlayerTwo[coordX][coordY]
-// 		const isAlreadyAttacked = gameboardContent === "Hit" || gameboardContent === "Missed"
+		const gameboardContent = gridTwo[coordX][coordY]
+		const isAlreadyAttacked = gameboardContent === "Hit" || gameboardContent === "Missed"
 
-// 		if (isAlreadyAttacked) return console.log("You already attacked these coordinates")
+		if (isAlreadyAttacked) return console.log("You already attacked these coordinates")
 
-// 		playerOne.attack(playerTwo, [coordX, coordY])
-// 		cell.classList.add(gameboardPlayerTwo[coordX][coordY].toLowerCase())
+		const coordinates = [Number(coordX), Number(coordY)]
 
-// 		// Check gameover for PlayerTwo
-// 		if (playerTwo.checkGameOver()) return displayGameOver("Player")
+		const attack = playerOne.attack(playerTwo, coordinates)
+		cell.classList.add(gridTwo[coordX][coordY].toLowerCase())
 
-// 		// TODO -> Should show more stuff before the computer attacks the player (eg. animation )
-// 		// [...]
+		// Check gameover for PlayerTwo
+		if (attack === "GameOver") return displayGameOver("Player")
 
-// 		setTimeout(computerAttacks, 500)
-// 	})
-// }
+		// // TODO -> Should show more stuff before the computer attacks the player (eg. animation )
+		// // [...]
+
+		// setTimeout(computerAttacks, 500)
+	})
+}
 
 // function computerAttacks(coords = [undefined, undefined]) {
 // 	const [_coordX, _coordY] = coords
@@ -221,11 +217,12 @@ function displayStartBtn() {
 // 	return Math.floor(Math.random() * 10)
 // }
 
-// function displayGameOver(winner) {
-// 	toggleGameContainer()
-// 	GameOverDOM(winner)
-// 	restartGame()
-// }
+function displayGameOver(winner) {
+	console.log("GAME OVER")
+	// toggleGameContainer()
+	// GameOverDOM(winner)
+	// restartGame()
+}
 
 // function restartGame() {
 // 	const restartBtn = document.getElementById("restart-btn")

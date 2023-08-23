@@ -1,8 +1,14 @@
-import { SHIP_LENGTH } from "./ship"
+import { SHIP_LENGTH, SHIP_NAMES } from "./ship"
 import { BOARD_LIMIT } from "./gameboard"
 
+export function setRandomShips(player) {
+	SHIP_NAMES.forEach((shipName) => {
+		setShipRandomly(player, shipName)
+	})
+}
+
 // If the ship is being placed and there is already a ship in those coordinates, it has to check the next coordinates available
-export function setShipRandomly(player, shipName) {
+function setShipRandomly(player, shipName) {
 	const { coordinates, position } = getRandomCoord(shipName)
 	const setShip = player.gameboard.setShip(shipName, coordinates, position)
 

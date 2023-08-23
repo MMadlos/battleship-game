@@ -11,9 +11,3 @@ export function setEnemyShips(gameboard) {
 		gameboard.setShip(ship[0], ship[1], ship[2])
 	})
 }
-
-function getRandomIndexes() {}
-
-function getRandomIndex() {
-	return Math.floor(Math.random() * 10)
-}

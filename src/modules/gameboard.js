@@ -46,7 +46,7 @@ function GAMEBOARD() {
 	function isGameOver() {
 		const allShipSunk = []
 		for (const shipName in ships) {
-			allShipSunk.push(ships[shipName].isSunk)
+			allShipSunk.push(ships[shipName].getSunk())
 		}
 
 		return allShipSunk.every((status) => status === true)

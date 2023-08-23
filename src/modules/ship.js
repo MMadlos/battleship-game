@@ -16,8 +16,7 @@ function SHIP(shipName) {
 	let isSunk = false
 
 	const hit = () => {
-		hitsReceived++
-
+		hitsReceived = hitsReceived + 1
 		if (hitsReceived === length) isSunk = true
 	}
 
@@ -27,7 +26,11 @@ function SHIP(shipName) {
 		isSunk = false
 	}
 
-	return { length, isPlaced, hitsReceived, isSunk, hit, reset }
+	function getSunk() {
+		return isSunk
+	}
+
+	return { length, isPlaced, hitsReceived, isSunk, hit, reset, getSunk }
 }
 
 export { SHIP_LENGTH, SHIP_NAMES, SHIP }
