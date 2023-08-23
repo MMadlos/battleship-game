@@ -6,22 +6,13 @@ import { displayGrid } from "./modules/DOM/gameboard"
 
 import { addShipSelected, addShipPlaced } from "./modules/DOM/ship-list"
 import { addShipPreview, removeShipPreview, addShipToGrid } from "./modules/DOM/gameboard"
+import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
 
 // import { setEnemyShips } from "./modules/defaultShips"
 // import { toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./modules/DOM/GameOver"
 // import { getAndAppendShipList, addStyleToShipElement, styleShipPlaced } from "./modules/DOM/ship-list"
 // import { getAndAppendGameboard, styleShipPreview, removePreview, styleGameboard } from "./modules/DOM/gameboard"
-// import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
 // import { setShipRandomly } from "./modules/placeShipsRandom"
-
-// TODO ->
-// - Styling
-// - Add messages
-// - Add images
-// - Order code (imports, exports and file structure)
-// - Add features:
-// --> Enable to move a ship that has been already placed
-// --> Add second "human" player
 
 // VARIABLES
 let playerOne, playerTwo
@@ -34,7 +25,6 @@ function initGame() {
 	displayShipList()
 	displayGrid(playerOne)
 	displayGrid(playerTwo)
-	test()
 	selectAndPlaceShip()
 	// setShipsRandomly()
 }
@@ -49,21 +39,19 @@ function setVariables() {
 	gridOne = gameboardOne.grid
 	gridTwo = gameboardTwo.grid
 }
-function test() {}
 
 function selectAndPlaceShip() {
-	let shipSelected = shipSelection()
+	let shipSelected
 	let position = "horizontal"
 
-	function shipSelection() {
-		const shipList = document.querySelectorAll(".ship-card")
-		shipList.forEach((card) => {
-			card.onclick = () => {
-				shipSelected = card.dataset.ship
-				addShipSelected(card)
-			}
-		})
-	}
+	const shipList = document.querySelectorAll(".ship-card")
+	shipList.forEach((card) => {
+		card.onclick = () => {
+			addShipSelected(card)
+
+			shipSelected = card.dataset.ship
+		}
+	})
 
 	const playerGrid = document.getElementById("gameboard-one")
 	;["mouseover", "mouseout", "click"].forEach((mouseEvent) => {
@@ -85,15 +73,13 @@ function selectAndPlaceShip() {
 				const { row, col } = cell.dataset
 				const coordinates = [Number(row), Number(col)]
 
-				// TODO -> Check how ships are being set
 				const setShip = gameboardOne.setShip(shipSelected, coordinates, position)
 				if (setShip.error) return displayErrorMessage(setShip.message)
 
+				removeErrorMessage()
 				addShipPlaced()
 				addShipToGrid()
-
-				// checkAndDisplayStartBtn()
-				// removeErrorMessage()
+				checkAndDisplayStartBtn()
 
 				shipSelected = undefined
 			}
@@ -135,27 +121,28 @@ function selectAndPlaceShip() {
 // 	}
 // }
 
-// function checkAndDisplayStartBtn() {
-// 	const availableShips = Object.keys(gameboardOne.getAvailableShips())
-// 	const areAllShipsPlaced = availableShips.every((element) => element === false)
+function checkAndDisplayStartBtn() {
+	// TODO -> Revisar
+	const availableShips = Object.keys(gameboardOne.getAvailableShips())
+	const areAllShipsPlaced = availableShips.every((element) => element === false)
 
-// 	if (!areAllShipsPlaced) return
+	if (!areAllShipsPlaced) return
 
-// 	const startBtn = document.getElementById("start-game")
-// 	startBtn.classList.toggle("none", !areAllShipsPlaced)
+	const startBtn = document.getElementById("start-game")
+	startBtn.classList.toggle("none", !areAllShipsPlaced)
 
-// 	startBtn.onclick = () => {
-// 		const shipList = document.querySelector(".ship-list")
-// 		shipList.remove()
+	startBtn.onclick = () => {
+		const shipList = document.querySelector(".ship-list")
+		shipList.remove()
 
-// 		const btnSetShipRandomly = document.getElementById("random-ships")
-// 		btnSetShipRandomly.classList.add("none")
-// 		startBtn.classList.add("none")
+		const btnSetShipRandomly = document.getElementById("random-ships")
+		btnSetShipRandomly.classList.add("none")
+		startBtn.classList.add("none")
 
-// 		setEnemyShips(gameboardTwo)
-// 		enableAttackEnemy()
-// 	}
-// }
+		setEnemyShips(gameboardTwo)
+		enableAttackEnemy()
+	}
+}
 
 // // "START OF THE GAME"
 // function enableAttackEnemy() {

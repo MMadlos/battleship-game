@@ -7,7 +7,7 @@ function GAMEBOARD() {
 	const ships = createShips()
 
 	const setShip = (shipName, coordinates, shipPosition = "horizontal") => {
-		const length = ships[shipName]
+		const { length } = ships[shipName]
 
 		const [coordX, coordY] = coordinates
 		const isHorizontal = shipPosition === "horizontal"
