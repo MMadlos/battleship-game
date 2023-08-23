@@ -1,21 +1,6 @@
 import { SHIP_LENGTH } from "./ship"
 import { BOARD_LIMIT } from "./gameboard"
 
-function getRandomCoord(shipName) {
-	const maxIndex = BOARD_LIMIT - SHIP_LENGTH[shipName]
-
-	const position = RandomPosition()
-	const randomIndex = getRandomBetween(0, BOARD_LIMIT)
-	const randomRestrictedIndex = getRandomBetween(0, maxIndex)
-
-	const coordX = position === "horizontal" ? randomIndex : randomRestrictedIndex
-	const coordY = position === "horizontal" ? randomRestrictedIndex : randomIndex
-
-	const coordinates = [coordX, coordY]
-
-	return { position, coordinates }
-}
-
 // If the ship is being placed and there is already a ship in those coordinates, it has to check the next coordinates available
 export function setShipRandomly(player, shipName) {
 	const { coordinates, position } = getRandomCoord(shipName)
@@ -23,7 +8,7 @@ export function setShipRandomly(player, shipName) {
 
 	// When there is already a ship placed, it will check for an empty row or column (depending on the ship's position) and it will generate a new random index to place it.
 	if (setShip.error) {
-		const gameboard = player.getGameboard()
+		const { grid } = player.gameboard
 		const maxIndex = BOARD_LIMIT - SHIP_LENGTH[shipName]
 		const randomIndex = getRandomBetween(0, maxIndex)
 		let newCoordinates
@@ -31,11 +16,11 @@ export function setShipRandomly(player, shipName) {
 		const cellEmpty = (cell) => cell === "Empty"
 
 		if (position === "vertical") {
-			for (let i = 0; i < gameboard.length; i++) {
+			for (let i = 0; i < grid.length; i++) {
 				const col = []
 
-				for (let j = 0; j < gameboard.length; j++) {
-					col.push(gameboard[j][i])
+				for (let j = 0; j < grid.length; j++) {
+					col.push(grid[j][i])
 				}
 
 				if (col.every(cellEmpty)) {
@@ -47,7 +32,7 @@ export function setShipRandomly(player, shipName) {
 
 		if (position === "horizontal") {
 			const rows = []
-			gameboard.forEach((row) => rows.push(row))
+			grid.forEach((row) => rows.push(row))
 
 			rows.forEach((row, rowIndex) => {
 				newCoordinates = [rowIndex, randomIndex]
@@ -57,6 +42,22 @@ export function setShipRandomly(player, shipName) {
 
 		player.gameboard.setShip(shipName, newCoordinates, position)
 	}
+}
+
+function getRandomCoord(shipName) {
+	const maxIndex = BOARD_LIMIT - SHIP_LENGTH[shipName]
+
+	const position = RandomPosition()
+	const randomIndex = getRandomBetween(0, BOARD_LIMIT)
+	const randomRestrictedIndex = getRandomBetween(0, maxIndex)
+	const isHorizontal = position === "horizontal"
+
+	const coordX = isHorizontal ? randomIndex : randomRestrictedIndex
+	const coordY = isHorizontal ? randomRestrictedIndex : randomIndex
+
+	const coordinates = [coordX, coordY]
+
+	return { position, coordinates }
 }
 
 function getRandomBetween(min, max) {

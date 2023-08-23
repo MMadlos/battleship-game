@@ -1,11 +1,11 @@
 import "./style.css"
 
 import { PLAYER } from "./modules/player"
-import { displayShipList } from "./modules/DOM/ship-list"
-import { displayGrid } from "./modules/DOM/gameboard"
+import { SHIP_NAMES } from "./modules/ship"
+import { setShipRandomly } from "./modules/placeShipsRandom"
 
-import { addShipSelected, addShipPlaced } from "./modules/DOM/ship-list"
-import { addShipPreview, removeShipPreview, addShipToGrid } from "./modules/DOM/gameboard"
+import { displayShipList, addShipSelected, addShipPlaced } from "./modules/DOM/ship-list"
+import { displayGrid, addShipPreview, removeShipPreview, addShipToGrid } from "./modules/DOM/gameboard"
 import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
 
 // import { setEnemyShips } from "./modules/defaultShips"
@@ -17,7 +17,7 @@ import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
 // VARIABLES
 let playerOne, playerTwo
 let gameboardOne, gameboardTwo // Gameboard factories
-let gridOne, gridTwo // Gameboard content
+let gridOne, gridTwo // Gameboard content -> Check if it's still necessary
 
 initGame()
 function initGame() {
@@ -26,7 +26,7 @@ function initGame() {
 	displayGrid(playerOne)
 	displayGrid(playerTwo)
 	selectAndPlaceShip()
-	// setShipsRandomly()
+	btnRandomShips()
 }
 
 function setVariables() {
@@ -37,7 +37,7 @@ function setVariables() {
 	gameboardTwo = playerTwo.gameboard
 
 	gridOne = gameboardOne.grid
-	gridTwo = gameboardTwo.grid
+	// gridTwo = gameboardTwo.grid
 }
 
 function selectAndPlaceShip() {
@@ -90,31 +90,43 @@ function selectAndPlaceShip() {
 	})
 }
 
-// function setShipsRandomly() {
-// 	const randomBtn = document.getElementById("random-ships")
-// 	randomBtn.addEventListener("click", () => {
-// 		clearGameboard()
-// 		setRandomShips()
-// 		styleGameboard(playerOne)
-// 		checkAndDisplayStartBtn()
+function btnRandomShips() {
+	const randomBtn = document.getElementById("random-ships")
+	randomBtn.addEventListener("click", () => {
+		// clearGameboard()
 
-// 		const allShipCards = document.querySelectorAll(".ship-card")
-// 		allShipCards.forEach((card) => card.classList.add("placed"))
-// 	})
+		setRandomShips()
+		styleGameBoard()
+		checkAndDisplayStartBtn()
 
-// 	function clearGameboard() {
-// 		playerOne.gameboard.clearGameboard()
-// 		removePreviousGameboard()
-// 		renderGameboards()
-// 	}
+		const allShipCards = document.querySelectorAll(".ship-card")
+		allShipCards.forEach((card) => card.classList.add("placed"))
 
-// 	function setRandomShips() {
-// 		const shipNames = Object.keys(shipTypes)
-// 		shipNames.forEach((shipName) => {
-// 			setShipRandomly(playerOne, shipName)
-// 		})
-// 	}
-// }
+		randomBtn.classList.add("none")
+	})
+
+	// function clearGameboard() {
+	// 	const { grid } = playerOne.gameboard
+	// 	grid.forEach((row) => row.forEach((col) => (col = "Empty")))
+	// }
+
+	function setRandomShips() {
+		SHIP_NAMES.forEach((shipName) => {
+			setShipRandomly(playerOne, shipName)
+		})
+	}
+
+	function styleGameBoard() {
+		playerOne.gameboard.grid.forEach((row, rowIndex) => {
+			row.forEach((col, colIndex) => {
+				const div = document.querySelector(`#gameboard-one > [data-row="${rowIndex}"][data-col="${colIndex}"]`)
+
+				const isNotEmpty = col !== "Empty"
+				div.classList.toggle("ship-placed", isNotEmpty)
+			})
+		})
+	}
+}
 
 function checkAndDisplayStartBtn() {
 	const allShipsPlaced = gameboardOne.checkAllShipsPlaced()
