@@ -1,13 +1,14 @@
 import "./style.css"
 
 import { PLAYER } from "./modules/player"
-import { setRandomShips } from "./modules/placeShipsRandom"
+import { setRandomShips, getRandomBetween } from "./modules/placeShipsRandom"
 import { setEnemyShips } from "./modules/defaultShips"
 
 import { displayShipList, addShipSelected, addShipPlaced } from "./modules/DOM/ship-list"
 import { displayGrid, addShipPreview, removeShipPreview, addShipToGrid, toggleGameContainer, removePreviousGameboard } from "./modules/DOM/gameboard"
 import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
 import { GameOverDOM } from "./modules/DOM/GameOver"
+import { BOARD_LIMIT } from "./modules/gameboard"
 
 // VARIABLES
 let playerOne, playerTwo
@@ -144,7 +145,6 @@ function enableAttackEnemy() {
 
 		const gridTwo = gameboardTwo.getGrid()
 		const gameboardContent = gridTwo[coordX][coordY]
-		console.log(gameboardContent)
 		const isAlreadyAttacked = gameboardContent === "Hit" || gameboardContent === "Missed"
 
 		if (isAlreadyAttacked) return console.log("You already attacked these coordinates")
@@ -160,50 +160,48 @@ function enableAttackEnemy() {
 		// TODO -> Should show more stuff before the computer attacks the player (eg. animation )
 		// [...]
 
-		// setTimeout(computerAttacks, 500)
+		setTimeout(computerAttacks, 500)
 	})
 }
 
-// function computerAttacks(coords = [undefined, undefined]) {
-// 	const [_coordX, _coordY] = coords
+function computerAttacks(coords = [undefined, undefined]) {
+	const [_coordX, _coordY] = coords
 
-// 	const coordX = _coordX || getRandomIndex()
-// 	const coordY = _coordY || getRandomIndex()
+	const coordX = _coordX || getRandomBetween(0, BOARD_LIMIT)
+	const coordY = _coordY || getRandomBetween(0, BOARD_LIMIT)
 
-// 	const isHit = gameboardPlayerOne[coordX][coordY] === "Hit"
-// 	const isMissed = gameboardPlayerOne[coordX][coordY] === "Missed"
-// 	const canAttack = !isHit && !isMissed
+	const gridOne = gameboardOne.getGrid()
 
-// 	if (canAttack) {
-// 		playerTwo.attack(playerOne, [coordX, coordY])
+	const isHit = gridOne[coordX][coordY] === "Hit"
+	const isMissed = gridOne[coordX][coordY] === "Missed"
+	const canAttack = !isHit && !isMissed
 
-// 		const playerOneCellDOM = document.querySelector(`[data-row="${coordX}"][data-col="${coordY}"]`)
-// 		playerOneCellDOM.classList.add(gameboardPlayerOne[coordX][coordY].toLowerCase())
+	if (canAttack) {
+		playerTwo.attack(playerOne, [coordX, coordY])
 
-// 		if (playerOne.checkGameOver()) return displayGameOver("Computer")
-// 	}
+		const playerOneCellDOM = document.querySelector(`[data-row="${coordX}"][data-col="${coordY}"]`)
+		playerOneCellDOM.classList.add(gridOne[coordX][coordY].toLowerCase())
 
-// 	if (!canAttack) {
-// 		// It first searches if there's a spot that can be attacked in the same row. If not, it searches the first spot in the  gameboard.
+		if (gameboardOne.isGameOver()) return displayGameOver("Computer")
+	}
 
-// 		const currentRow = gameboardPlayerOne[coordX]
-// 		const canAttackCell = (element) => element !== "Hit" && element !== "Missed"
+	if (!canAttack) {
+		// It first searches if there's a spot that can be attacked in the same row. If not, it searches the first spot in the  gameboard.
 
-// 		const newCoordY = currentRow.findIndex(canAttackCell)
-// 		if (newCoordY !== -1) return computerAttacks([coordX, newCoordY])
+		const currentRow = gridOne[coordX]
+		const canAttackCell = (element) => element !== "Hit" && element !== "Missed"
 
-// 		for (let i = 0; i < 10; i++) {
-// 			const row = gameboardPlayerOne[i]
-// 			const colIndex = row.findIndex(canAttackCell)
+		const newCoordY = currentRow.findIndex(canAttackCell)
+		if (newCoordY !== -1) return computerAttacks([coordX, newCoordY])
 
-// 			if (colIndex !== -1) return computerAttacks([i, colIndex])
-// 		}
-// 	}
-// }
+		for (let i = 0; i < 10; i++) {
+			const row = gridOne[i]
+			const colIndex = row.findIndex(canAttackCell)
 
-// function getRandomIndex() {
-// 	return Math.floor(Math.random() * 10)
-// }
+			if (colIndex !== -1) return computerAttacks([i, colIndex])
+		}
+	}
+}
 
 function displayGameOver(winner) {
 	toggleGameContainer()

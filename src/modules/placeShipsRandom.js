@@ -66,10 +66,10 @@ function getRandomCoord(shipName) {
 	return { position, coordinates }
 }
 
-function getRandomBetween(min, max) {
+export function getRandomBetween(min, max) {
 	min = Math.ceil(min)
 	max = Math.floor(max)
-	return Math.floor(Math.random() * (max - min + 1) + min) // The maximum is exclusive and the minimum is inclusive
+	return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
 function RandomPosition() {

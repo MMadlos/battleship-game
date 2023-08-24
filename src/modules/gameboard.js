@@ -72,7 +72,7 @@ function GAMEBOARD() {
 	const getGrid = () => grid
 	const getShips = () => ships
 
-	return { setShip, receiveAttack, clearGameboard, checkAllShipsPlaced, getGrid, getShips }
+	return { setShip, receiveAttack, clearGameboard, checkAllShipsPlaced, getGrid, getShips, isGameOver }
 }
 
 function createGrid() {
