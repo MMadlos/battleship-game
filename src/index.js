@@ -6,8 +6,9 @@ import { setRandomShips } from "./modules/placeShipsRandom"
 import { setEnemyShips } from "./modules/defaultShips"
 
 import { displayShipList, addShipSelected, addShipPlaced } from "./modules/DOM/ship-list"
-import { displayGrid, addShipPreview, removeShipPreview, addShipToGrid } from "./modules/DOM/gameboard"
+import { displayGrid, addShipPreview, removeShipPreview, addShipToGrid, toggleGameContainer, removePreviousGameboard } from "./modules/DOM/gameboard"
 import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
+import { GameOverDOM } from "./modules/DOM/GameOver"
 
 // import { setEnemyShips } from "./modules/defaultShips"
 // import { toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./modules/DOM/GameOver"
@@ -37,8 +38,8 @@ function setVariables() {
 	gameboardOne = playerOne.gameboard
 	gameboardTwo = playerTwo.gameboard
 
-	gridOne = gameboardOne.grid
-	gridTwo = gameboardTwo.grid
+	gridOne = gameboardOne.getGrid()
+	gridTwo = gameboardTwo.getGrid()
 }
 
 function selectAndPlaceShip() {
@@ -94,7 +95,7 @@ function selectAndPlaceShip() {
 function btnRandomShips() {
 	const randomBtn = document.getElementById("random-ships")
 	randomBtn.addEventListener("click", () => {
-		// clearGameboard()
+		clearGameboard()
 
 		setRandomShips(playerOne)
 		styleGameBoard()
@@ -106,13 +107,12 @@ function btnRandomShips() {
 		randomBtn.classList.add("none")
 	})
 
-	// function clearGameboard() {
-	// 	const { grid } = playerOne.gameboard
-	// 	grid.forEach((row) => row.forEach((col) => (col = "Empty")))
-	// }
+	function clearGameboard() {}
 
 	function styleGameBoard() {
-		playerOne.gameboard.grid.forEach((row, rowIndex) => {
+		const grid = playerOne.gameboard.getGrid()
+
+		grid.forEach((row, rowIndex) => {
 			row.forEach((col, colIndex) => {
 				const div = document.querySelector(`#gameboard-one > [data-row="${rowIndex}"][data-col="${colIndex}"]`)
 
@@ -169,8 +169,8 @@ function enableAttackEnemy() {
 		// Check gameover for PlayerTwo
 		if (attack === "GameOver") return displayGameOver("Player")
 
-		// // TODO -> Should show more stuff before the computer attacks the player (eg. animation )
-		// // [...]
+		// TODO -> Should show more stuff before the computer attacks the player (eg. animation )
+		// [...]
 
 		// setTimeout(computerAttacks, 500)
 	})
@@ -218,29 +218,41 @@ function enableAttackEnemy() {
 // }
 
 function displayGameOver(winner) {
-	console.log("GAME OVER")
-	// toggleGameContainer()
-	// GameOverDOM(winner)
-	// restartGame()
+	toggleGameContainer()
+	GameOverDOM(winner)
+	restartGame()
 }
 
-// function restartGame() {
-// 	const restartBtn = document.getElementById("restart-btn")
-// 	const gameOverText = document.querySelector(".game-over")
+function restartGame() {
+	const restartBtn = document.getElementById("restart-btn")
+	const gameOverText = document.querySelector(".game-over")
 
-// 	restartBtn.addEventListener("click", () => {
-// 		// Check classes of game-container and how to init game
+	restartBtn.addEventListener("click", () => {
+		// Check classes of game-container and how to init game
 
-// 		const textContainer = document.querySelector(".text-container")
-// 		textContainer.classList.remove("none")
+		const textContainer = document.querySelector(".text-container")
+		textContainer.classList.remove("none")
 
-// 		restartBtn.remove()
-// 		gameOverText.remove()
+		restartBtn.remove()
+		gameOverText.remove()
 
-// 		const btnSetShipRandomly = document.getElementById("random-ships")
-// 		btnSetShipRandomly.classList.remove("none")
+		const btnSetShipRandomly = document.getElementById("random-ships")
+		btnSetShipRandomly.classList.remove("none")
 
-// 		removePreviousGameboard()
-// 		initGame()
-// 	})
-// }
+		removePreviousGameboard()
+
+		// Reset gameboard
+
+		// Reset ships
+		const { ships } = playerOne.gameboard
+		console.log(ships)
+
+		displayShipList()
+		displayGrid(playerOne)
+		displayGrid(playerTwo)
+		selectAndPlaceShip()
+		btnRandomShips()
+
+		// initGame()
+	})
+}

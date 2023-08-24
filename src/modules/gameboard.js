@@ -3,8 +3,9 @@ import { SHIP_NAMES, SHIP } from "./ship"
 const BOARD_LIMIT = 9
 
 function GAMEBOARD() {
-	let grid = createGrid()
+	// const grid = createGrid()
 	const ships = createShips()
+	const grid = createGrid()
 
 	const setShip = (shipName, coordinates, shipPosition = "horizontal") => {
 		const { length } = ships[shipName]
@@ -68,7 +69,10 @@ function GAMEBOARD() {
 		return true
 	}
 
-	return { grid, ships, setShip, receiveAttack, clearGameboard, checkAllShipsPlaced }
+	const getGrid = () => grid
+	const getShips = () => ships
+
+	return { setShip, receiveAttack, clearGameboard, checkAllShipsPlaced, getGrid, getShips }
 }
 
 function createGrid() {

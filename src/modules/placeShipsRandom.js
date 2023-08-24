@@ -14,7 +14,7 @@ function setShipRandomly(player, shipName) {
 
 	// When there is already a ship placed, it will check for an empty row or column (depending on the ship's position) and it will generate a new random index to place it.
 	if (setShip.error) {
-		const { grid } = player.gameboard
+		const grid = player.gameboard.getGrid()
 		const maxIndex = BOARD_LIMIT - SHIP_LENGTH[shipName]
 		const randomIndex = getRandomBetween(0, maxIndex)
 		let newCoordinates

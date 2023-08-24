@@ -26,11 +26,11 @@ function SHIP(shipName) {
 		isSunk = false
 	}
 
-	function getSunk() {
-		return isSunk
-	}
+	const getSunk = () => isSunk
+	const getHits = () => hitsReceived
+	const getIsPlaced = () => isPlaced
 
-	return { length, isPlaced, hitsReceived, isSunk, hit, reset, getSunk }
+	return { length, hit, reset, getSunk, getHits, getIsPlaced }
 }
 
 export { SHIP_LENGTH, SHIP_NAMES, SHIP }

@@ -2,7 +2,7 @@ import { BOARD_LIMIT } from "../gameboard"
 import { SHIP_LENGTH } from "../ship"
 
 export function displayGrid(playerObject) {
-	const gridContent = playerObject.gameboard.grid
+	const gridContent = playerObject.gameboard.getGrid()
 	const grid = createGrid(gridContent)
 
 	const isGridOne = document.querySelector("#gameboard-one")
