@@ -1,7 +1,6 @@
 import "./style.css"
 
 import { PLAYER } from "./modules/player"
-import { SHIP_NAMES } from "./modules/ship"
 import { setRandomShips } from "./modules/placeShipsRandom"
 import { setEnemyShips } from "./modules/defaultShips"
 
@@ -10,20 +9,13 @@ import { displayGrid, addShipPreview, removeShipPreview, addShipToGrid, toggleGa
 import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
 import { GameOverDOM } from "./modules/DOM/GameOver"
 
-// import { setEnemyShips } from "./modules/defaultShips"
-// import { toggleGameContainer, GameOverDOM, removePreviousGameboard } from "./modules/DOM/GameOver"
-// import { getAndAppendShipList, addStyleToShipElement, styleShipPlaced } from "./modules/DOM/ship-list"
-// import { getAndAppendGameboard, styleShipPreview, removePreview, styleGameboard } from "./modules/DOM/gameboard"
-// import { setShipRandomly } from "./modules/placeShipsRandom"
-
 // VARIABLES
 let playerOne, playerTwo
 let gameboardOne, gameboardTwo // Gameboard factories
-let gridOne, gridTwo // Gameboard content -> Check if it's still necessary
+setVariables()
 
 initGame()
 function initGame() {
-	setVariables()
 	displayShipList()
 	displayGrid(playerOne)
 	displayGrid(playerTwo)
@@ -37,9 +29,6 @@ function setVariables() {
 
 	gameboardOne = playerOne.gameboard
 	gameboardTwo = playerTwo.gameboard
-
-	gridOne = gameboardOne.getGrid()
-	gridTwo = gameboardTwo.getGrid()
 }
 
 function selectAndPlaceShip() {
@@ -95,7 +84,7 @@ function selectAndPlaceShip() {
 function btnRandomShips() {
 	const randomBtn = document.getElementById("random-ships")
 	randomBtn.addEventListener("click", () => {
-		clearGameboard()
+		gameboardOne.clearGameboard()
 
 		setRandomShips(playerOne)
 		styleGameBoard()
@@ -107,11 +96,8 @@ function btnRandomShips() {
 		randomBtn.classList.add("none")
 	})
 
-	function clearGameboard() {}
-
 	function styleGameBoard() {
-		const grid = playerOne.gameboard.getGrid()
-
+		const grid = gameboardOne.getGrid()
 		grid.forEach((row, rowIndex) => {
 			row.forEach((col, colIndex) => {
 				const div = document.querySelector(`#gameboard-one > [data-row="${rowIndex}"][data-col="${colIndex}"]`)
@@ -156,7 +142,9 @@ function enableAttackEnemy() {
 		const coordX = cell.dataset.row
 		const coordY = cell.dataset.col
 
+		const gridTwo = gameboardTwo.getGrid()
 		const gameboardContent = gridTwo[coordX][coordY]
+		console.log(gameboardContent)
 		const isAlreadyAttacked = gameboardContent === "Hit" || gameboardContent === "Missed"
 
 		if (isAlreadyAttacked) return console.log("You already attacked these coordinates")
@@ -241,18 +229,9 @@ function restartGame() {
 
 		removePreviousGameboard()
 
-		// Reset gameboard
+		gameboardOne.clearGameboard()
+		gameboardTwo.clearGameboard()
 
-		// Reset ships
-		const { ships } = playerOne.gameboard
-		console.log(ships)
-
-		displayShipList()
-		displayGrid(playerOne)
-		displayGrid(playerTwo)
-		selectAndPlaceShip()
-		btnRandomShips()
-
-		// initGame()
+		initGame()
 	})
 }

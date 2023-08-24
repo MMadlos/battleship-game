@@ -5,7 +5,7 @@ const BOARD_LIMIT = 9
 function GAMEBOARD() {
 	// const grid = createGrid()
 	const ships = createShips()
-	const grid = createGrid()
+	let grid = createGrid()
 
 	const setShip = (shipName, coordinates, shipPosition = "horizontal") => {
 		const { length } = ships[shipName]
