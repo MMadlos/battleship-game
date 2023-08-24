@@ -31,16 +31,21 @@ function createShipElement(shipName, shipLength) {
 	return div
 }
 
-// Style Ship element
-export function addShipSelected(shipCard) {
+export function shipCardStyle(state, element) {
 	const currentSelected = document.querySelector(".ship-card.selected")
-	if (currentSelected) currentSelected.classList.remove("selected")
 
-	shipCard.classList.add("selected")
-}
+	const isSelected = state === "selected"
+	const isPlaced = state === "placed"
 
-export function addShipPlaced() {
-	const currentSelected = document.querySelector(".ship-card.selected")
-	currentSelected.classList.remove("selected")
-	currentSelected.classList.add("placed")
+	if (currentSelected && isSelected) {
+		currentSelected.classList.remove("selected")
+		element.classList.add("selected")
+	}
+
+	if (!currentSelected && isSelected) element.classList.add("selected")
+
+	if (isPlaced) {
+		currentSelected.classList.remove("selected")
+		currentSelected.classList.add("placed")
+	}
 }

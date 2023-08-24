@@ -3,7 +3,6 @@ import { SHIP_NAMES, SHIP } from "./ship"
 const BOARD_LIMIT = 9
 
 function GAMEBOARD() {
-	// const grid = createGrid()
 	const ships = createShips()
 	let grid = createGrid()
 

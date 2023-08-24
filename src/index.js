@@ -4,32 +4,25 @@ import { PLAYER } from "./modules/player"
 import { setRandomShips, getRandomBetween } from "./modules/placeShipsRandom"
 import { setEnemyShips } from "./modules/defaultShips"
 
-import { displayShipList, addShipSelected, addShipPlaced } from "./modules/DOM/ship-list"
+import { displayShipList, shipCardStyle } from "./modules/DOM/ship-list"
 import { displayGrid, addShipPreview, removeShipPreview, addShipToGrid, toggleGameContainer, removePreviousGameboard } from "./modules/DOM/gameboard"
 import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
 import { GameOverDOM } from "./modules/DOM/GameOver"
 import { BOARD_LIMIT } from "./modules/gameboard"
 
-// VARIABLES
-let playerOne, playerTwo
-let gameboardOne, gameboardTwo // Gameboard factories
-setVariables()
+const playerOne = PLAYER("Player 1")
+const playerTwo = PLAYER("Computer")
+const gameboardOne = playerOne.gameboard
+const gameboardTwo = playerTwo.gameboard
 
 initGame()
+
 function initGame() {
 	displayShipList()
 	displayGrid(playerOne)
 	displayGrid(playerTwo)
 	selectAndPlaceShip()
 	btnRandomShips()
-}
-
-function setVariables() {
-	playerOne = PLAYER("Player 1")
-	playerTwo = PLAYER("Computer")
-
-	gameboardOne = playerOne.gameboard
-	gameboardTwo = playerTwo.gameboard
 }
 
 function selectAndPlaceShip() {
@@ -39,8 +32,7 @@ function selectAndPlaceShip() {
 	const shipList = document.querySelectorAll(".ship-card")
 	shipList.forEach((card) => {
 		card.onclick = () => {
-			addShipSelected(card)
-
+			shipCardStyle("selected", card)
 			shipSelected = card.dataset.ship
 		}
 	})
@@ -53,9 +45,10 @@ function selectAndPlaceShip() {
 
 			const cell = e.target.closest(".cell")
 
-			document.onkeydown = rotateShipPosition
-
-			if (mouseEvent === "mouseover") addShipPreview(cell, shipSelected, position)
+			if (mouseEvent === "mouseover") {
+				document.onkeydown = rotateShipPosition
+				addShipPreview(cell, shipSelected, position)
+			}
 			if (mouseEvent === "mouseout") removeShipPreview()
 			if (mouseEvent === "click") {
 				const { row, col } = cell.dataset
@@ -66,7 +59,7 @@ function selectAndPlaceShip() {
 
 				shipSelected = undefined
 				removeErrorMessage()
-				addShipPlaced()
+				shipCardStyle("placed")
 				addShipToGrid()
 				checkAndDisplayStartBtn()
 			}
@@ -225,11 +218,9 @@ function restartGame() {
 		const btnSetShipRandomly = document.getElementById("random-ships")
 		btnSetShipRandomly.classList.remove("none")
 
-		removePreviousGameboard()
-
 		gameboardOne.clearGameboard()
 		gameboardTwo.clearGameboard()
-
+		removePreviousGameboard()
 		initGame()
 	})
 }
