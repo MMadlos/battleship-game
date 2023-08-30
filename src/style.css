@@ -1,3 +1,14 @@
+:root {
+	--black-text: #333;
+	--bg-grey-light: #f8f8f8;
+	--green: #2ca800;
+	--green-ligth: #dcf0de;
+	--blue: #0000ff;
+	--blue-light: #e8e8f5;
+	--red: #ff0000;
+	--red-light: #ffaeae;
+}
+
 *,
 *::before,
 *::after {
@@ -8,6 +19,7 @@
 	margin: 0;
 	padding: 0;
 	font: inherit;
+	color: var(--black-text);
 }
 
 html {
@@ -37,16 +49,37 @@ h3 {
 	font-family: "Space Grotesk", sans-serif;
 }
 
+.none {
+	display: none !important;
+}
+
+/* HEADER */
+header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 1rem;
+}
+
 h1 {
 	font-size: 2rem;
 	font-weight: 700;
 	text-align: center;
-	margin-top: 20px;
 }
 
-.none {
-	display: none !important;
+.fa-github {
+	font-size: 1.5rem;
 }
+
+.link-github {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+/* .link-github > a {
+	color: black;
+} */
 
 /* TEXT CONTAINER */
 
