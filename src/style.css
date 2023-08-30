@@ -4,7 +4,8 @@
 	--green: #2ca800;
 	--green-ligth: #dcf0de;
 	--blue: #0000ff;
-	--blue-light: #e8e8f5;
+	--blue-light: #f2f2ff;
+	--purple: #b4b4ff;
 	--red: #ff0000;
 	--red-light: #ffaeae;
 	--white-ligth: #fafafa;
@@ -141,9 +142,10 @@ h1 {
 
 .ship-list {
 	display: flex;
-	flex-wrap: wrap;
 	justify-content: center;
-	align-items: center;
+	align-self: flex-start;
+	flex-wrap: wrap;
+	flex-grow: 1;
 	gap: 16px;
 }
 
@@ -155,12 +157,14 @@ h1 {
 	box-shadow: 2px 2px 4px 0px rgba(0, 0, 255, 0.25);
 
 	display: flex;
-	justify-content: space-around;
-	gap: 16px;
+	gap: 8px;
 }
 
 .ship-card > p {
 	color: var(--blue);
+}
+
+.ship-card > p:not(.ship-length) {
 	font-weight: 700;
 }
 
@@ -202,7 +206,7 @@ h1 {
 
 .cell {
 	min-width: 24px;
-	width: 40px;
+	width: 32px;
 	aspect-ratio: 1/1;
 	display: flex;
 	justify-content: center;
@@ -210,11 +214,16 @@ h1 {
 }
 
 .cell:not(.coordX):not(.coordY) {
-	border: 1px dotted grey;
+	border: 1px dotted var(--purple);
+}
+
+.ship-preview {
+	background-color: var(--green-ligth);
+	border: solid 1px var(--green);
 }
 
 .ship-placed {
-	background-color: lightblue;
+	background-color: var(--blue-light);
 }
 
 .hit {
@@ -223,10 +232,6 @@ h1 {
 
 .missed {
 	background-color: lightcoral;
-}
-
-.ship-preview {
-	background-color: lightseagreen;
 }
 
 .ship-placed.ship-preview,

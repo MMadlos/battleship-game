@@ -4,7 +4,7 @@ import { PLAYER } from "./modules/player"
 import { setRandomShips, getRandomBetween } from "./modules/placeShipsRandom"
 import { setEnemyShips } from "./modules/defaultShips"
 
-import { displayShipList, shipCardStyle } from "./modules/DOM/ship-list"
+import { appendShipList, shipCardStyle } from "./modules/DOM/ship-list"
 import { displayGrid, addShipPreview, removeShipPreview, addShipToGrid, toggleGameContainer, removePreviousGameboard } from "./modules/DOM/gameboard"
 import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
 import { GameOverDOM } from "./modules/DOM/GameOver"
@@ -18,7 +18,7 @@ const gameboardTwo = playerTwo.gameboard
 initGame()
 
 function initGame() {
-	displayShipList()
+	appendShipList()
 	displayGrid(playerOne)
 	displayGrid(playerTwo)
 	selectAndPlaceShip()

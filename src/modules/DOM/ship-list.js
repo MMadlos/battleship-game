@@ -1,16 +1,12 @@
 import { SHIP_LENGTH } from "../ship"
 
-export function displayShipList() {
-	const shipList = document.createElement("section")
-	shipList.classList.add("ship-list")
+export function appendShipList() {
+	const shipList = document.querySelector(".ship-list")
 
 	for (const [shipName, shipLength] of Object.entries(SHIP_LENGTH)) {
 		const card = createShipElement(shipName, shipLength)
 		shipList.append(card)
 	}
-
-	const textSection = document.querySelector(".text-section")
-	textSection.after(shipList)
 }
 
 // Create the DOM
@@ -25,7 +21,7 @@ function createShipElement(shipName, shipLength) {
 
 	const shipLengthEl = document.createElement("p")
 	shipLengthEl.className = "ship-length"
-	shipLengthEl.textContent = `Length: ${shipLength}`
+	shipLengthEl.textContent = `(${shipLength})`
 
 	div.append(shipNameEl, shipLengthEl)
 	return div
