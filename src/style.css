@@ -7,6 +7,7 @@
 	--blue-light: #e8e8f5;
 	--red: #ff0000;
 	--red-light: #ffaeae;
+	--white-ligth: #fafafa;
 }
 
 *,
@@ -147,32 +148,30 @@ h1 {
 }
 
 .ship-card {
-	padding: 8px 32px;
-	border: 2px solid lightblue;
+	padding: 12px 24px;
+	border: 1px solid var(--blue);
 	border-radius: 4px;
+	background-color: var(--white-ligth);
+	box-shadow: 2px 2px 4px 0px rgba(0, 0, 255, 0.25);
 
 	display: flex;
 	justify-content: space-around;
 	gap: 16px;
 }
-.ship-card:not(.placed):hover {
-	cursor: pointer;
-	border: 2px solid lightseagreen;
+
+.ship-card > p {
+	color: var(--blue);
+	font-weight: 700;
 }
 
+.ship-card:not(.placed):hover,
 .ship-card.selected {
-	border: 2px solid lightseagreen;
-	color: lightseagreen;
+	cursor: pointer;
+	background-color: var(--blue-light);
 }
 
 .ship-card.placed {
-	border: 2px solid lightseagreen;
-	background-color: lightseagreen;
-	color: white;
-}
-
-.ship-name {
-	font-weight: 600;
+	opacity: 20%;
 }
 
 /* BUTTONS */
