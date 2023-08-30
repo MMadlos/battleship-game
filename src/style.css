@@ -28,11 +28,7 @@ html {
 
 body {
 	font-family: "Inter", sans-serif;
-	padding: 1rem 10vw 2rem 10vw;
-
-	display: flex;
-	flex-direction: column;
-	gap: 16px;
+	padding: 0 8vw;
 }
 
 img,
@@ -49,6 +45,10 @@ h3 {
 	font-family: "Space Grotesk", sans-serif;
 }
 
+i {
+	font-size: 1.125rem;
+}
+
 .none {
 	display: none !important;
 }
@@ -58,13 +58,13 @@ header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-top: 1rem;
+	margin-top: 1.5rem;
+	margin-bottom: 1.5rem;
 }
 
 h1 {
 	font-size: 2rem;
 	font-weight: 700;
-	text-align: center;
 }
 
 .fa-github {
@@ -77,17 +77,64 @@ h1 {
 	align-items: center;
 }
 
-/* .link-github > a {
-	color: black;
-} */
+/* TEXT SECTION */
 
-/* TEXT CONTAINER */
+.text-section {
+	background-color: var(--bg-grey-light);
+	padding: 24px 16px;
+}
 
-.text-container {
+.start-container {
+	display: flex;
+	gap: 48px;
+}
+
+.instructions {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: 32px;
+}
+
+.manual {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.manual-text {
+	display: flex;
+	gap: 12px;
+	font-weight: 700;
+}
+
+.manual-details {
+	padding-left: 24px;
+}
+
+#random-ships {
+	border: none;
+	background-color: transparent;
+	text-decoration: underline dashed 0.5px;
+	text-underline-offset: 8px;
+	color: var(--blue);
+	font-weight: 600;
+}
+
+#random-ships:hover {
+	opacity: 50%;
+}
+
+#random-ships > i {
+	margin-right: 8px;
+	color: var(--blue);
+}
+
+/* .text-container {
 	padding: 16px 0;
 	font-size: 1.15rem;
 	text-align: center;
-}
+} */
 
 /* SHIP CARDS */
 
@@ -131,10 +178,6 @@ h1 {
 /* BUTTONS */
 .btn-container {
 	margin: 0 auto;
-}
-
-button {
-	padding: 8px 24px;
 }
 
 /* GAME CONTAINER */
