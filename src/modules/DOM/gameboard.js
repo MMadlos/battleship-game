@@ -7,15 +7,18 @@ export function displayGrid(playerObject) {
 
 	const isGridOne = document.querySelector("#gameboard-one")
 	grid.id = isGridOne ? "gameboard-two" : "gameboard-one"
+	const isGridTwo = grid.id === "gameboard-two"
+	grid.classList.toggle("oppacity-20", isGridTwo)
 
 	const text = document.createElement("p")
 	text.className = "grid-title"
 	text.textContent = isGridOne ? "Enemy's grid" : "Your grid"
+	text.classList.toggle("oppacity-20", isGridTwo)
 
 	const section = document.createElement("section")
 	const gameContainer = document.querySelector(".game-container")
 
-	section.append(text, grid)
+	section.append(grid, text)
 	gameContainer.append(section)
 	return section
 }

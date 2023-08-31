@@ -51,8 +51,14 @@ i {
 	font-size: 1.125rem;
 }
 
+/* UTILITIES */
+
 .none {
 	display: none !important;
+}
+
+.oppacity-20 {
+	opacity: 20% !important;
 }
 
 /* HEADER */
@@ -86,12 +92,12 @@ h1 {
 	padding: 24px 16px;
 }
 
-.start-container {
+.instructions-container {
 	display: flex;
 	gap: 48px;
 }
 
-.instructions {
+.instructions-content {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -114,29 +120,30 @@ h1 {
 	padding-left: 24px;
 }
 
+.random {
+}
+
 #random-ships {
 	border: none;
 	background-color: transparent;
-	text-decoration: underline dashed 0.5px;
-	text-underline-offset: 8px;
-	color: var(--blue);
 	font-weight: 600;
+	text-align: left;
+	display: flex;
+	gap: 8px;
+}
+
+#random-ships > * {
+	color: var(--blue);
 }
 
 #random-ships:hover {
 	opacity: 50%;
 }
 
-#random-ships > i {
-	margin-right: 8px;
-	color: var(--blue);
+#random-ships > span {
+	text-decoration: underline dashed 1px;
+	text-underline-offset: 4px;
 }
-
-/* .text-container {
-	padding: 16px 0;
-	font-size: 1.15rem;
-	text-align: center;
-} */
 
 /* SHIP CARDS */
 
@@ -178,11 +185,6 @@ h1 {
 	opacity: 20%;
 }
 
-/* BUTTONS */
-.btn-container {
-	margin: 0 auto;
-}
-
 /* GAME CONTAINER */
 
 .game-container {
@@ -195,7 +197,7 @@ h1 {
 
 .grid-title {
 	text-align: center;
-	opacity: 40%;
+	margin-top: 16px;
 }
 
 .gameboard {
@@ -206,7 +208,7 @@ h1 {
 
 .cell {
 	min-width: 24px;
-	width: 32px;
+	width: 35px;
 	aspect-ratio: 1/1;
 	display: flex;
 	justify-content: center;
@@ -219,7 +221,6 @@ h1 {
 
 .ship-preview {
 	background-color: var(--green-ligth);
-	border: solid 1px var(--green);
 }
 
 .ship-placed {
@@ -227,7 +228,7 @@ h1 {
 }
 
 .hit {
-	background-color: lightgreen;
+	background-color: var(--green);
 }
 
 .missed {
@@ -236,7 +237,7 @@ h1 {
 
 .ship-placed.ship-preview,
 .not-possible {
-	background-color: red;
+	background-color: var(--red-light);
 }
 
 .game-over {
@@ -250,6 +251,23 @@ h1 {
 .coordY {
 	align-items: center;
 	justify-self: center;
+}
+
+/* BUTTONS */
+
+#start-game {
+	position: relative;
+	top: -50%;
+	left: 35%;
+
+	color: #2ca800;
+	padding: 16px 32px;
+	font-weight: 700;
+
+	border-radius: 4px;
+	border: 1px solid #2ca800;
+	background: #dcf0de;
+	box-shadow: 2px 2px 4px 0px rgba(44, 168, 0, 0.25);
 }
 
 /* Text messages */

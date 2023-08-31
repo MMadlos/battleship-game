@@ -19,10 +19,20 @@ initGame()
 
 function initGame() {
 	appendShipList()
+
 	displayGrid(playerOne)
 	displayGrid(playerTwo)
 	selectAndPlaceShip()
 	btnRandomShips()
+
+	// UI
+	const startBtn = document.createElement("button")
+	startBtn.id = "start-game"
+	startBtn.textContent = "Start game"
+
+	// APEND
+	const sectionTwo = document.querySelector("#gameboard-two").parentElement
+	sectionTwo.append(startBtn)
 }
 
 function selectAndPlaceShip() {
@@ -32,6 +42,8 @@ function selectAndPlaceShip() {
 	const shipList = document.querySelectorAll(".ship-card")
 	shipList.forEach((card) => {
 		card.onclick = () => {
+			if (card.classList.contains("placed")) return
+
 			shipCardStyle("selected", card)
 			shipSelected = card.dataset.ship
 		}
@@ -86,8 +98,6 @@ function btnRandomShips() {
 
 		const allShipCards = document.querySelectorAll(".ship-card")
 		allShipCards.forEach((card) => card.classList.add("placed"))
-
-		randomBtn.classList.add("none")
 	})
 
 	function styleGameBoard() {
@@ -105,7 +115,8 @@ function btnRandomShips() {
 
 function checkAndDisplayStartBtn() {
 	const allShipsPlaced = gameboardOne.checkAllShipsPlaced()
-	if (allShipsPlaced) displayStartBtn()
+
+	// if (allShipsPlaced) displayStartBtn()
 }
 
 function displayStartBtn() {
