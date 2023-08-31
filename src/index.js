@@ -4,6 +4,7 @@ import { PLAYER } from "./modules/player"
 import { setRandomShips, getRandomBetween } from "./modules/placeShipsRandom"
 import { setEnemyShips } from "./modules/defaultShips"
 
+import { appendInstructions } from "./modules/DOM/instructions"
 import { appendShipList, shipCardStyle } from "./modules/DOM/ship-list"
 import { displayGrid, addShipPreview, removeShipPreview, addShipToGrid, toggleGameContainer, removePreviousGameboard } from "./modules/DOM/gameboard"
 import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
@@ -18,17 +19,24 @@ const gameboardTwo = playerTwo.gameboard
 initGame()
 
 function initGame() {
+	// displayUI()
+	appendInstructions()
 	appendShipList()
 
 	displayGrid(playerOne)
 	displayGrid(playerTwo)
+	appendStartBtn()
+
 	selectAndPlaceShip()
 	btnRandomShips()
+}
 
+function appendStartBtn() {
 	// UI
 	const startBtn = document.createElement("button")
 	startBtn.id = "start-game"
 	startBtn.textContent = "Start game"
+	startBtn.className = "disabled"
 
 	// APEND
 	const sectionTwo = document.querySelector("#gameboard-two").parentElement
@@ -115,24 +123,26 @@ function btnRandomShips() {
 
 function checkAndDisplayStartBtn() {
 	const allShipsPlaced = gameboardOne.checkAllShipsPlaced()
-
-	// if (allShipsPlaced) displayStartBtn()
+	if (allShipsPlaced) displayStartBtn()
 }
 
 function displayStartBtn() {
 	const startBtn = document.getElementById("start-game")
-	startBtn.classList.remove("none")
+	startBtn.classList.remove("disabled")
 	startBtn.onclick = () => {
-		const shipList = document.querySelector(".ship-list")
+		const shipList = document.querySelector(".instructions-container")
 		shipList.remove()
-
-		const btnSetShipRandomly = document.getElementById("random-ships")
-		btnSetShipRandomly.classList.add("none")
-
-		startBtn.classList.add("none")
 
 		setEnemyShips(gameboardTwo)
 		enableAttackEnemy()
+
+		startBtn.remove()
+
+		const gridTwo = document.getElementById("gameboard-two")
+		gridTwo.classList.remove("opacity-20")
+
+		const gridTwoText = document.querySelector(".grid-title.opacity-20")
+		gridTwoText.classList.remove("opacity-20")
 	}
 }
 

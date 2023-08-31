@@ -3,7 +3,8 @@
 	--bg-grey-light: #f8f8f8;
 	--green: #2ca800;
 	--green-ligth: #dcf0de;
-	--blue: #0000ff;
+	--blue: rgb(0, 0, 255);
+	--blue-disabled: rgb(0, 0, 255, 0.2);
 	--blue-light: #f2f2ff;
 	--purple: #b4b4ff;
 	--red: #ff0000;
@@ -31,6 +32,7 @@ html {
 body {
 	font-family: "Inter", sans-serif;
 	padding: 0 8vw;
+	height: 100vh;
 }
 
 img,
@@ -57,7 +59,7 @@ i {
 	display: none !important;
 }
 
-.oppacity-20 {
+.opacity-20 {
 	opacity: 20% !important;
 }
 
@@ -66,8 +68,7 @@ header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-top: 1.5rem;
-	margin-bottom: 1.5rem;
+	padding: 1.5rem 0 1.5rem 0;
 }
 
 h1 {
@@ -87,7 +88,7 @@ h1 {
 
 /* TEXT SECTION */
 
-.text-section {
+.text-section:has(> *) {
 	background-color: var(--bg-grey-light);
 	padding: 24px 16px;
 }
@@ -104,7 +105,7 @@ h1 {
 	gap: 32px;
 }
 
-.manual {
+.manual-container {
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
@@ -191,6 +192,7 @@ h1 {
 	display: flex;
 	gap: 40px;
 	justify-content: space-evenly;
+	align-items: center;
 	flex-wrap: wrap;
 	margin-top: 40px;
 }
@@ -255,19 +257,33 @@ h1 {
 
 /* BUTTONS */
 
-#start-game {
+.game-container section:nth-child(2) {
 	position: relative;
-	top: -50%;
-	left: 35%;
+}
 
-	color: #2ca800;
+#start-game {
+	position: absolute;
+	top: 40%;
+	left: 30%;
+
+	color: var(--blue);
 	padding: 16px 32px;
 	font-weight: 700;
 
 	border-radius: 4px;
-	border: 1px solid #2ca800;
-	background: #dcf0de;
-	box-shadow: 2px 2px 4px 0px rgba(44, 168, 0, 0.25);
+	border: 1px solid var(--blue);
+	background: var(--white-ligth);
+	box-shadow: 2px 2px 4px 0px rgba(0, 0, 255, 0.25);
+}
+
+#start-game.disabled {
+	color: var(--blue-disabled) !important;
+	border-color: var(--blue-disabled) !important;
+}
+
+#start-game:not(.disabled):hover {
+	cursor: pointer;
+	background-color: var(--blue-light);
 }
 
 /* Text messages */
