@@ -4,7 +4,7 @@ import { PLAYER } from "./modules/player"
 import { setRandomShips, getRandomBetween } from "./modules/placeShipsRandom"
 import { setEnemyShips } from "./modules/defaultShips"
 
-import { appendInstructions, hideInstructions, showInstructions, appendAttackInstructions } from "./modules/DOM/instructions"
+import { appendInstructions, hideInstructions, showInstructions, appendAttackInstructions, hideAttackInstructions } from "./modules/DOM/instructions"
 import { appendShipList, shipCardStyle } from "./modules/DOM/ship-list"
 import { displayGrid, addShipPreview, removeShipPreview, addShipToGrid, toggleGameContainer, removePreviousGameboard } from "./modules/DOM/gameboard"
 import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
@@ -19,7 +19,6 @@ const gameboardTwo = playerTwo.gameboard
 initGame()
 
 function initGame() {
-	// displayUI()
 	appendInstructions()
 	appendShipList()
 
@@ -169,7 +168,10 @@ function enableAttackEnemy() {
 		cell.classList.add(gridTwo[coordX][coordY].toLowerCase())
 
 		// Check gameover for PlayerTwo
-		if (attack === "GameOver") return displayGameOver("Player")
+		if (attack === "GameOver") {
+			displayGameOver("Player")
+			return
+		}
 
 		// TODO -> Should show more stuff before the computer attacks the player (eg. animation )
 		// [...]
@@ -219,6 +221,7 @@ function computerAttacks(coords = [undefined, undefined]) {
 
 function displayGameOver(winner) {
 	toggleGameContainer()
+	hideAttackInstructions()
 	GameOverDOM(winner)
 	restartGame()
 }
@@ -228,20 +231,14 @@ function restartGame() {
 	const gameOverText = document.querySelector(".game-over")
 
 	restartBtn.addEventListener("click", () => {
-		// Check classes of game-container and how to init game
-
-		const textContainer = document.querySelector(".text-container")
-		textContainer.classList.remove("none")
+		showInstructions()
 
 		restartBtn.remove()
 		gameOverText.remove()
 
-		const btnSetShipRandomly = document.getElementById("random-ships")
-		btnSetShipRandomly.classList.remove("none")
-
 		gameboardOne.clearGameboard()
 		gameboardTwo.clearGameboard()
-		removePreviousGameboard()
-		initGame()
+
+		toggleGameContainer()
 	})
 }

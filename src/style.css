@@ -31,7 +31,7 @@ html {
 
 body {
 	font-family: "Inter", sans-serif;
-	padding: 0 8vw;
+	padding: 0 10vw;
 	height: 100vh;
 }
 
@@ -227,11 +227,11 @@ h1 {
 }
 
 .hit {
-	background-color: var(--green);
+	background-color: var(--green-ligth);
 }
 
 .missed {
-	background-color: lightcoral;
+	background-color: var(--red-light);
 }
 
 .ship-placed.ship-preview,
@@ -263,6 +263,13 @@ h1 {
 
 .attack-instructions > p {
 	line-height: 150%;
+}
+
+.attack-instructions > p:nth-child(3) {
+	color: var(--green);
+}
+.attack-instructions > p:nth-child(4) {
+	color: var(--red);
 }
 
 /* BUTTONS */

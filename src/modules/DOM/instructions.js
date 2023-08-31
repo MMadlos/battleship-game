@@ -87,3 +87,8 @@ export function appendAttackInstructions() {
 	attackInstructionsContainer.append(mainContainer, firstP, secondP, thirdP)
 	mainContainer.append(icon, mainP)
 }
+
+export function hideAttackInstructions() {
+	const attackInstructions = document.querySelector(".attack-instructions")
+	attackInstructions.classList.add("none")
+}
