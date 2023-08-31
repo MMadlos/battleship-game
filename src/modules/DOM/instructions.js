@@ -64,3 +64,26 @@ export function hideInstructions() {
 export function showInstructions() {
 	instructionsContainer.classList.remove("none")
 }
+
+export function appendAttackInstructions() {
+	const attackInstructionsContainer = document.createElement("div")
+	attackInstructionsContainer.className = "attack-instructions"
+
+	const mainContainer = document.createElement("div")
+	const icon = document.createElement("i")
+	icon.classList.add("fa-solid", "fa-bullseye")
+	const mainP = document.createElement("p")
+
+	const firstP = document.createElement("p")
+	const secondP = document.createElement("p")
+	const thirdP = document.createElement("p")
+
+	mainP.textContent = "Attack your enemy"
+	firstP.textContent = "Click on one cell of the enemy's grid to attack the area."
+	secondP.textContent = "- Green: you hit a ship."
+	thirdP.textContent = "- Red: you missed the shot"
+
+	textSection.append(attackInstructionsContainer)
+	attackInstructionsContainer.append(mainContainer, firstP, secondP, thirdP)
+	mainContainer.append(icon, mainP)
+}

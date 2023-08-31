@@ -4,7 +4,7 @@ import { PLAYER } from "./modules/player"
 import { setRandomShips, getRandomBetween } from "./modules/placeShipsRandom"
 import { setEnemyShips } from "./modules/defaultShips"
 
-import { appendInstructions } from "./modules/DOM/instructions"
+import { appendInstructions, hideInstructions, showInstructions, appendAttackInstructions } from "./modules/DOM/instructions"
 import { appendShipList, shipCardStyle } from "./modules/DOM/ship-list"
 import { displayGrid, addShipPreview, removeShipPreview, addShipToGrid, toggleGameContainer, removePreviousGameboard } from "./modules/DOM/gameboard"
 import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
@@ -130,8 +130,8 @@ function displayStartBtn() {
 	const startBtn = document.getElementById("start-game")
 	startBtn.classList.remove("disabled")
 	startBtn.onclick = () => {
-		const shipList = document.querySelector(".instructions-container")
-		shipList.remove()
+		hideInstructions()
+		appendAttackInstructions()
 
 		setEnemyShips(gameboardTwo)
 		enableAttackEnemy()

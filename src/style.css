@@ -121,9 +121,6 @@ h1 {
 	padding-left: 24px;
 }
 
-.random {
-}
-
 #random-ships {
 	border: none;
 	background-color: transparent;
@@ -253,6 +250,19 @@ h1 {
 .coordY {
 	align-items: center;
 	justify-self: center;
+}
+
+/* ATTACK INSTRUCTIONS */
+.attack-instructions > div {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	font-weight: 700;
+	margin-bottom: 12px;
+}
+
+.attack-instructions > p {
+	line-height: 150%;
 }
 
 /* BUTTONS */
