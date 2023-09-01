@@ -97,3 +97,16 @@ export function showAttackInstructions() {
 	const attackInstructions = document.querySelector(".attack-instructions")
 	attackInstructions.classList.remove("none")
 }
+
+function iconClose() {
+	const container = document.createElement("div")
+	const firstLine = document.createElement("div")
+	const secondLine = document.createElement("div")
+
+	container.className = "close-icon"
+	firstLine.className = "first-line"
+	secondLine.className = "second-line"
+
+	container.append(firstLine, secondLine)
+	return container
+}

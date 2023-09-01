@@ -346,3 +346,33 @@ h1 {
 		font-weight: 600;
 	}
 }
+
+/* TEST - CROSS ICON */
+.close-icon {
+	--side: 20px;
+	--line: 3px;
+
+	position: relative;
+	height: var(--side);
+	width: var(--side);
+	display: flex;
+	justify-content: center;
+
+	transform: translate(-100%, -100%);
+
+	.first-line,
+	.second-line {
+		position: absolute;
+		height: var(--line);
+		width: 100%;
+		background-color: var(--red);
+	}
+
+	.first-line {
+		transform: translateY(calc(var(--side) / 2)) rotate(45deg);
+	}
+
+	.second-line {
+		transform: translateY(calc(var(--side) / 2)) rotate(-45deg);
+	}
+}
