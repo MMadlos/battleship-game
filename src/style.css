@@ -283,24 +283,23 @@ h1 {
 	top: 40%;
 	left: 30%;
 
-	color: var(--blue);
+	color: var(--white-ligth);
 	padding: 16px 32px;
 	font-weight: 700;
 
 	border-radius: 4px;
 	border: 1px solid var(--blue);
-	background: var(--white-ligth);
+	background: var(--blue);
 	box-shadow: 2px 2px 4px 0px rgba(0, 0, 255, 0.25);
 }
 
 #start-game.disabled {
-	color: var(--blue-disabled) !important;
-	border-color: var(--blue-disabled) !important;
+	opacity: 25%;
 }
 
 #start-game:not(.disabled):hover {
 	cursor: pointer;
-	background-color: var(--blue-light);
+	opacity: 50%;
 }
 
 /* Text messages */

@@ -45,3 +45,8 @@ export function shipCardStyle(state, element) {
 		currentSelected.classList.add("placed")
 	}
 }
+
+export function resetShipList() {
+	const shipList = document.querySelectorAll(".ship-card")
+	shipList.forEach((ship) => ship.classList.remove("placed"))
+}

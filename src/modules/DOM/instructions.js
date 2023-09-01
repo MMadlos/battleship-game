@@ -1,3 +1,5 @@
+import { appendShipList } from "./ship-list"
+
 const textSection = document.querySelector(".text-section")
 
 const instructionsText = {
@@ -7,36 +9,38 @@ const instructionsText = {
 	paraTwo: `<p>- Press “R” while placing the ship in the grid to rotate it</p>`,
 }
 
-// CONTAINERS
+// Containers
 const instructionsContainer = document.createElement("div")
 const instructionsContent = document.createElement("div")
 const manualContainer = document.createElement("div")
+const shipList = document.createElement("div")
 
 instructionsContainer.className = "instructions-container"
 instructionsContent.className = "instructions-content"
 manualContainer.className = "manual-container"
+shipList.className = "ship-list"
+
+textSection.append(instructionsContainer)
+instructionsContainer.append(instructionsContent, shipList)
+instructionsContent.append(manualContainer)
+
+export function appendInstructions() {
+	addText()
+	addRandomBtn()
+	appendShipList()
+}
 
 const addText = () => {
 	const { icon, paraMain, paraOne, paraTwo } = instructionsText
 
-	// MANUAL TEXT
 	const manualText = document.createElement("div")
 	manualText.className = "manual-text"
 	manualText.innerHTML = icon + paraMain
 
-	// MANUAL DETAILS
 	const manualDetails = document.createElement("div")
 	manualDetails.className = "manual-details"
 	manualDetails.innerHTML = paraOne + paraTwo
 
-	//SHIPLIST CONTAINER
-	const shipList = document.createElement("div")
-	shipList.className = "ship-list"
-
-	// APEND
-	textSection.append(instructionsContainer)
-	instructionsContainer.append(instructionsContent, shipList)
-	instructionsContent.append(manualContainer)
 	manualContainer.append(manualText, manualDetails)
 }
 
@@ -52,17 +56,13 @@ const addRandomBtn = () => {
 	instructionsContent.append(randomBtn)
 }
 
-export function appendInstructions() {
-	addText()
-	addRandomBtn()
-}
-
-export function hideInstructions() {
-	instructionsContainer.classList.add("none")
+export function removeInstructions() {
+	instructionsContainer.remove()
 }
 
 export function showInstructions() {
-	instructionsContainer.classList.remove("none")
+	const textSection = document.querySelector(".text-section")
+	textSection.append(instructionsContainer)
 }
 
 export function appendAttackInstructions() {
@@ -88,7 +88,12 @@ export function appendAttackInstructions() {
 	mainContainer.append(icon, mainP)
 }
 
-export function hideAttackInstructions() {
+export function removeAttackInstructions() {
 	const attackInstructions = document.querySelector(".attack-instructions")
-	attackInstructions.classList.add("none")
+	attackInstructions.remove()
+}
+
+export function showAttackInstructions() {
+	const attackInstructions = document.querySelector(".attack-instructions")
+	attackInstructions.classList.remove("none")
 }

@@ -108,3 +108,19 @@ export function toggleGameContainer() {
 	const isHidden = container.classList.contains("none")
 	isHidden ? container.classList.remove("none") : container.classList.add("none")
 }
+
+export function appendStartBtn() {
+	const startBtn = document.createElement("button")
+	startBtn.id = "start-game"
+	startBtn.textContent = "Start game"
+	startBtn.className = "disabled"
+
+	const sectionTwo = document.querySelector("#gameboard-two").parentElement
+	sectionTwo.append(startBtn)
+}
+
+export function removeGameboards() {
+	const gameContainer = document.querySelector(".game-container")
+	const sections = gameContainer.querySelectorAll("section")
+	sections.forEach((section) => section.remove())
+}

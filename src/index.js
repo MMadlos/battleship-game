@@ -4,9 +4,18 @@ import { PLAYER } from "./modules/player"
 import { setRandomShips, getRandomBetween } from "./modules/placeShipsRandom"
 import { setEnemyShips } from "./modules/defaultShips"
 
-import { appendInstructions, hideInstructions, showInstructions, appendAttackInstructions, hideAttackInstructions } from "./modules/DOM/instructions"
-import { appendShipList, shipCardStyle } from "./modules/DOM/ship-list"
-import { displayGrid, addShipPreview, removeShipPreview, addShipToGrid, toggleGameContainer, removePreviousGameboard } from "./modules/DOM/gameboard"
+import { appendInstructions, removeInstructions, appendAttackInstructions, removeAttackInstructions, showInstructions } from "./modules/DOM/instructions"
+import { shipCardStyle, resetShipList } from "./modules/DOM/ship-list"
+import {
+	displayGrid,
+	addShipPreview,
+	removeShipPreview,
+	addShipToGrid,
+	toggleGameContainer,
+	removeGameboards,
+	removePreviousGameboard,
+	appendStartBtn,
+} from "./modules/DOM/gameboard"
 import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
 import { GameOverDOM } from "./modules/DOM/GameOver"
 import { BOARD_LIMIT } from "./modules/gameboard"
@@ -16,11 +25,15 @@ const playerTwo = PLAYER("Computer")
 const gameboardOne = playerOne.gameboard
 const gameboardTwo = playerTwo.gameboard
 
+// TODO - Check the flow of how elements are created.
+// At some points, they are appended then hidden. Some are removed and added again. Todo: unify system so they are not duplicated.
+
+// Idea: start with appendUI() then use hide() or show(). If so, they have to return to the initial state. For example: ship cards. Maybe use a reset() button / fn
+
 initGame()
 
 function initGame() {
 	appendInstructions()
-	appendShipList()
 
 	displayGrid(playerOne)
 	displayGrid(playerTwo)
@@ -28,18 +41,6 @@ function initGame() {
 
 	selectAndPlaceShip()
 	btnRandomShips()
-}
-
-function appendStartBtn() {
-	// UI
-	const startBtn = document.createElement("button")
-	startBtn.id = "start-game"
-	startBtn.textContent = "Start game"
-	startBtn.className = "disabled"
-
-	// APEND
-	const sectionTwo = document.querySelector("#gameboard-two").parentElement
-	sectionTwo.append(startBtn)
 }
 
 function selectAndPlaceShip() {
@@ -98,26 +99,31 @@ function btnRandomShips() {
 	const randomBtn = document.getElementById("random-ships")
 	randomBtn.addEventListener("click", () => {
 		gameboardOne.clearGameboard()
-
 		setRandomShips(playerOne)
-		styleGameBoard()
+		styleGameBoard(gameboardOne)
 		checkAndDisplayStartBtn()
 
 		const allShipCards = document.querySelectorAll(".ship-card")
 		allShipCards.forEach((card) => card.classList.add("placed"))
 	})
+}
 
-	function styleGameBoard() {
-		const grid = gameboardOne.getGrid()
-		grid.forEach((row, rowIndex) => {
-			row.forEach((col, colIndex) => {
-				const div = document.querySelector(`#gameboard-one > [data-row="${rowIndex}"][data-col="${colIndex}"]`)
+function styleGameBoard(playerGameboard) {
+	const grid = playerGameboard.getGrid()
 
-				const isNotEmpty = col !== "Empty"
-				div.classList.toggle("ship-placed", isNotEmpty)
-			})
+	const gameboardID = playerGameboard === gameboardOne ? "#gameboard-one" : "#gameboard-two"
+
+	grid.forEach((row, rowIndex) => {
+		row.forEach((col, colIndex) => {
+			const div = document.querySelector(`${gameboardID} > [data-row="${rowIndex}"][data-col="${colIndex}"]`)
+
+			if (div.classList.contains("missed")) div.classList.remove("missed")
+			if (div.classList.contains("hit")) div.classList.remove("hit")
+
+			const isNotEmpty = col !== "Empty"
+			div.classList.toggle("ship-placed", isNotEmpty)
 		})
-	}
+	})
 }
 
 function checkAndDisplayStartBtn() {
@@ -129,7 +135,7 @@ function displayStartBtn() {
 	const startBtn = document.getElementById("start-game")
 	startBtn.classList.remove("disabled")
 	startBtn.onclick = () => {
-		hideInstructions()
+		removeInstructions()
 		appendAttackInstructions()
 
 		setEnemyShips(gameboardTwo)
@@ -221,7 +227,7 @@ function computerAttacks(coords = [undefined, undefined]) {
 
 function displayGameOver(winner) {
 	toggleGameContainer()
-	hideAttackInstructions()
+	removeAttackInstructions()
 	GameOverDOM(winner)
 	restartGame()
 }
@@ -231,14 +237,19 @@ function restartGame() {
 	const gameOverText = document.querySelector(".game-over")
 
 	restartBtn.addEventListener("click", () => {
-		showInstructions()
-
 		restartBtn.remove()
 		gameOverText.remove()
+		removeGameboards()
 
 		gameboardOne.clearGameboard()
 		gameboardTwo.clearGameboard()
 
+		showInstructions()
+		resetShipList()
 		toggleGameContainer()
+		displayGrid(playerOne)
+		displayGrid(playerTwo)
+		selectAndPlaceShip()
+		appendStartBtn()
 	})
 }
