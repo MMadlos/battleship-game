@@ -26,7 +26,7 @@ function GAMEBOARD() {
 			isHorizontal ? (grid[coordX][i] = shipName) : (grid[i][coordY] = shipName)
 		}
 
-		ships[shipName].isPlaced = true
+		ships[shipName].setIsPlaced()
 
 		return true
 	}
@@ -61,9 +61,10 @@ function GAMEBOARD() {
 	}
 
 	const checkAllShipsPlaced = () => {
+		console.log(ships) // All ships true
 		for (const ship in ships) {
-			const { isPlaced } = ships[ship]
-			if (!isPlaced) return false
+			const isShipPlaced = ships[ship].getIsPlaced()
+			if (!isShipPlaced) return false
 		}
 		return true
 	}
