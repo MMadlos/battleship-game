@@ -7,20 +7,21 @@ export function displayErrorMessage(errorMessage) {
 	const isErrorDisplayed = document.querySelector(".text-container.errorMsg")
 	const app = document.querySelector("#app")
 
+	const textContainer = document.createElement("div")
+	const icon = document.createElement("i")
+	const textP = document.createElement("p")
+
+	textContainer.classList.add("text-container", "errorMsg")
+	icon.classList.add("fa-solid", "fa-circle-exclamation")
+	textP.textContent = messages[errorMessage]
+
 	if (!isErrorDisplayed) {
-		const textContainer = document.createElement("div")
-		const textP = document.createElement("p")
-
-		textContainer.classList.add("text-container", "errorMsg")
-
-		textP.textContent = messages[errorMessage]
-
 		app.append(textContainer)
-		textContainer.append(textP)
+		textContainer.append(icon, textP)
 	}
 
 	if (isErrorDisplayed) {
-		const textError = document.querySelector(".errorMsg")
+		const textError = document.querySelector(".errorMsg > p")
 		textError.textContent = messages[errorMessage]
 	}
 

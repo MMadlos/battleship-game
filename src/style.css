@@ -331,11 +331,18 @@ h1 {
 }
 
 /* Text messages */
-.text-container.errorMsg {
-	background-color: rgba(228, 228, 228, 0.5);
-	border-radius: 8px;
-}
 .errorMsg {
-	color: red;
-	font-weight: 500;
+	background-color: var(--red);
+	border-radius: 8px;
+
+	display: flex;
+	gap: 16px;
+	padding: 12px 24px;
+	margin: 32px auto;
+	width: fit-content;
+
+	> * {
+		color: var(--white-ligth);
+		font-weight: 600;
+	}
 }
