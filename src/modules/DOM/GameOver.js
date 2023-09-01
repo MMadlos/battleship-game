@@ -1,6 +1,6 @@
 export function GameOverDOM(winner) {
 	const gameOverText = document.createElement("p")
-	gameOverText.textContent = winner === "Computer" ? "You lose :(" : "You win :)"
+	gameOverText.textContent = winner === "Computer" ? "You lose :(" : "You won :)"
 	gameOverText.className = "game-over"
 
 	const textSection = document.querySelector(".text-section")
