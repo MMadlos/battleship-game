@@ -6,7 +6,6 @@ export function GameOverDOM(winner) {
 	const textSection = document.querySelector(".text-section")
 	textSection.append(gameOverText)
 
-	// Add restart button
 	const restartBtn = document.createElement("button")
 	restartBtn.textContent = "Play again"
 	restartBtn.id = "restart-btn"

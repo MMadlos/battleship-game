@@ -3,32 +3,18 @@ import "./style.css"
 import { PLAYER } from "./modules/player"
 import { setRandomShips, getRandomBetween } from "./modules/placeShipsRandom"
 import { setEnemyShips } from "./modules/defaultShips"
+import { BOARD_LIMIT } from "./modules/gameboard"
 
-import { appendInstructions, removeInstructions, appendAttackInstructions, removeAttackInstructions, showInstructions } from "./modules/DOM/instructions"
+import { appendInstructions, removeInstructions, showInstructions, appendAttackInstructions, removeAttackInstructions } from "./modules/DOM/instructions"
 import { shipCardStyle, resetShipList } from "./modules/DOM/ship-list"
-import {
-	displayGrid,
-	addShipPreview,
-	removeShipPreview,
-	addShipToGrid,
-	toggleGameContainer,
-	removeGameboards,
-	removePreviousGameboard,
-	appendStartBtn,
-} from "./modules/DOM/gameboard"
+import { displayGrid, addShipPreview, removeShipPreview, addShipToGrid, toggleGameContainer, removeGameboards, appendStartBtn } from "./modules/DOM/gameboard"
 import { displayErrorMessage, removeErrorMessage } from "./modules/DOM/messages"
 import { GameOverDOM } from "./modules/DOM/GameOver"
-import { BOARD_LIMIT } from "./modules/gameboard"
 
 const playerOne = PLAYER("Player 1")
 const playerTwo = PLAYER("Computer")
 const gameboardOne = playerOne.gameboard
 const gameboardTwo = playerTwo.gameboard
-
-// TODO - Check the flow of how elements are created.
-// At some points, they are appended then hidden. Some are removed and added again. Todo: unify system so they are not duplicated.
-
-// Idea: start with appendUI() then use hide() or show(). If so, they have to return to the initial state. For example: ship cards. Maybe use a reset() button / fn
 
 initGame()
 
@@ -173,14 +159,10 @@ function enableAttackEnemy() {
 		const attack = playerOne.attack(playerTwo, coordinates)
 		cell.classList.add(gridTwo[coordX][coordY].toLowerCase())
 
-		// Check gameover for PlayerTwo
 		if (attack === "GameOver") {
 			displayGameOver("Player")
 			return
 		}
-
-		// TODO -> Should show more stuff before the computer attacks the player (eg. animation )
-		// [...]
 
 		setTimeout(computerAttacks, 500)
 	})
@@ -208,7 +190,7 @@ function computerAttacks(coords = [undefined, undefined]) {
 	}
 
 	if (!canAttack) {
-		// It first searches if there's a spot that can be attacked in the same row. If not, it searches the first spot in the  gameboard.
+		// It first searches if there's a spot that can be attacked in the same row. If not, it searches the first spot in the gameboard.
 
 		const currentRow = gridOne[coordX]
 		const canAttackCell = (element) => element !== "Hit" && element !== "Missed"
@@ -229,10 +211,10 @@ function displayGameOver(winner) {
 	toggleGameContainer()
 	removeAttackInstructions()
 	GameOverDOM(winner)
-	restartGame()
+	btnRestartEventListener()
 }
 
-function restartGame() {
+function btnRestartEventListener() {
 	const restartBtn = document.getElementById("restart-btn")
 	const gameOverText = document.querySelector(".game-over")
 

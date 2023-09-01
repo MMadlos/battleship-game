@@ -10,6 +10,8 @@
 	--red: #ff0000;
 	--red-light: #ffaeae;
 	--white-ligth: #fafafa;
+
+	--hover-cursor: pointer;
 }
 
 *,
@@ -63,31 +65,30 @@ i {
 	opacity: 20% !important;
 }
 
-/* HEADER */
+/* HEADER SECTION */
 header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	padding: 1.5rem 0 1.5rem 0;
-}
 
-h1 {
-	font-size: 2rem;
-	font-weight: 700;
-}
+	> h1 {
+		font-size: 2rem;
+		font-weight: 700;
+	}
 
-.fa-github {
-	font-size: 1.5rem;
-}
+	.fa-github {
+		font-size: 1.5rem;
+	}
 
-.link-github {
-	display: flex;
-	gap: 8px;
-	align-items: center;
+	.link-github {
+		display: flex;
+		gap: 8px;
+		align-items: center;
+	}
 }
 
 /* TEXT SECTION */
-
 .text-section {
 	background-color: var(--bg-grey-light);
 
@@ -150,16 +151,36 @@ h1 {
 				text-decoration: underline dashed 1px;
 				text-underline-offset: 4px;
 			}
+		}
+		#random-ships:hover {
+			opacity: 50%;
+		}
+	}
+}
 
-			:hover {
-				opacity: 50%;
-			}
+.attack-instructions {
+	> div {
+		display: flex;
+		gap: 8px;
+		align-items: center;
+		font-weight: 700;
+		margin-bottom: 12px;
+	}
+
+	> p {
+		line-height: 150%;
+
+		&:nth-child(3) {
+			color: var(--green);
+		}
+
+		&:nth-child(4) {
+			color: var(--red);
 		}
 	}
 }
 
 /* SHIP CARDS */
-
 .ship-list {
 	display: flex;
 	justify-content: center;
@@ -178,28 +199,27 @@ h1 {
 
 	display: flex;
 	gap: 8px;
-}
 
-.ship-card > p {
-	color: var(--blue);
-}
+	> p {
+		color: var(--blue);
 
-.ship-card > p:not(.ship-length) {
-	font-weight: 700;
-}
+		&:not(.ship-length) {
+			font-weight: 700;
+		}
+	}
 
-.ship-card:not(.placed):hover,
-.ship-card.selected {
-	cursor: pointer;
-	background-color: var(--blue-light);
-}
+	&:not(.placed):hover,
+	&.selected {
+		cursor: pointer;
+		border: 2px solid var(--blue);
+	}
 
-.ship-card.placed {
-	opacity: 20%;
+	&.placed {
+		opacity: 20%;
+	}
 }
 
 /* GAME CONTAINER */
-
 .game-container {
 	display: flex;
 	gap: 40px;
@@ -267,45 +287,35 @@ h1 {
 	justify-self: center;
 }
 
-/* ATTACK INSTRUCTIONS */
-.attack-instructions > div {
-	display: flex;
-	gap: 8px;
-	align-items: center;
-	font-weight: 700;
-	margin-bottom: 12px;
-}
-
-.attack-instructions > p {
-	line-height: 150%;
-}
-
-.attack-instructions > p:nth-child(3) {
-	color: var(--green);
-}
-.attack-instructions > p:nth-child(4) {
-	color: var(--red);
-}
-
-/* BUTTONS */
-
 .game-container section:nth-child(2) {
 	position: relative;
 }
+
+/* BUTTONS */
 
 #start-game {
 	position: absolute;
 	top: 40%;
 	left: 30%;
 
-	color: var(--white-ligth);
 	padding: 16px 32px;
 	font-weight: 700;
 
+	color: var(--white-ligth);
+	background-color: var(--blue);
+
 	border-radius: 4px;
 	border: 1px solid var(--blue);
-	background: var(--blue);
 	box-shadow: 2px 2px 4px 0px rgba(0, 0, 255, 0.25);
+
+	&.disabled {
+		opacity: 25%;
+	}
+
+	&:not(.disabled):hover {
+		cursor: var(--hover-cursor);
+		opacity: 50%;
+	}
 }
 
 #restart-btn {
@@ -318,61 +328,26 @@ h1 {
 	box-shadow: 2px 2px 4px 0px rgba(0, 0, 255, 0.25);
 
 	margin: 32px 0;
+
+	&:hover {
+		cursor: var(--hover-cursor);
+		opacity: 50%;
+	}
 }
 
-#start-game.disabled {
-	opacity: 25%;
-}
-
-#start-game:not(.disabled):hover,
-#restart-btn:hover {
-	cursor: pointer;
-	opacity: 50%;
-}
-
-/* Text messages */
+/* TEXT MESSAGE */
 .errorMsg {
+	padding: 12px 24px;
+	margin: 32px auto;
 	background-color: var(--red);
 	border-radius: 8px;
+	font-weight: 600;
 
 	display: flex;
 	gap: 16px;
-	padding: 12px 24px;
-	margin: 32px auto;
 	width: fit-content;
 
 	> * {
 		color: var(--white-ligth);
-		font-weight: 600;
-	}
-}
-
-/* TEST - CROSS ICON */
-.close-icon {
-	--side: 20px;
-	--line: 3px;
-
-	position: relative;
-	height: var(--side);
-	width: var(--side);
-	display: flex;
-	justify-content: center;
-
-	transform: translate(-100%, -100%);
-
-	.first-line,
-	.second-line {
-		position: absolute;
-		height: var(--line);
-		width: 100%;
-		background-color: var(--red);
-	}
-
-	.first-line {
-		transform: translateY(calc(var(--side) / 2)) rotate(45deg);
-	}
-
-	.second-line {
-		transform: translateY(calc(var(--side) / 2)) rotate(-45deg);
 	}
 }
